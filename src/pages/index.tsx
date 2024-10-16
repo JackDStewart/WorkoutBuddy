@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import '../app/globals.css';
 import { useEffect, useState } from 'react';
 import HomePage from './home';
+import LoginPage from './login';
 
 
 export default function App() { 
@@ -18,8 +19,7 @@ export default function App() {
   
     return (
       <div>
-        <Header></Header>
-        <HomePage></HomePage>
+        <LoginPage></LoginPage>
       </div>
     );
 }
