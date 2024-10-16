@@ -20,20 +20,20 @@ const Header = () => {
   };
 
   return (
-    <div className="bg-gray-200 p-4 flex justify-between items-center">
-      <div>Logo/Brand</div>
+    <div className="bg- p-4 flex justify-between items-center">
+      <div className="text-white">Logo/Brand</div>
       <div className="flex space-x-4">
         <Link
           href="/"
           passHref
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-purple hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           Home
         </Link>
         <Link
           href="/about"
           passHref
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-purple hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           About
         </Link>
