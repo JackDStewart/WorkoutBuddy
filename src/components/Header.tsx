@@ -20,32 +20,42 @@ const Header = () => {
   };
 
   return (
-    <div className="bg- p-4 flex justify-between items-center">
-      <div className="text-white">Logo/Brand</div>
-      <div className="flex space-x-4">
+    <div id="header" className="pr-20 pl-20 pt-10">
+      <h1 className="text-4xl font-bold text-center">Workout Buddy</h1>
+      <div
+        id="buttons"
+        className="pt-6 w-full flex items-left justify-center text-l"
+      >
         <Link
-          href="/"
-          passHref
-          className="bg-purple hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          href={"/home"}
+          className="border border-none bg-purple w-[180px] p-2 rounded-full text-center mx-1.5"
         >
-          Home
+          Dashboard
         </Link>
         <Link
-          href="/about"
-          passHref
-          className="bg-purple hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          href={"/create"}
+          className="border border-none bg-purple w-[180px] p-2 rounded-full text-center mx-1.5"
         >
-          About
+          Create Workout
         </Link>
-        {isLoggedIn && (
-          <Link
-            href="/dashboard"
-            passHref
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Dashboard
-          </Link>
-        )}
+        <Link
+          href={"/social"}
+          className="border border-none bg-purple w-[180px] p-2 rounded-full text-center mx-1.5"
+        >
+          Social
+        </Link>
+        <Link
+          href={"/progess"}
+          className="border border-none bg-purple w-[180px] p-2 rounded-full text-center mx-1.5"
+        >
+          Progess{" "}
+        </Link>
+        <Link
+          href={"/explore"}
+          className="border border-none bg-purple w-[180px] p-2 rounded-full text-center mx-1.5"
+        >
+          Explore Workouts{" "}
+        </Link>
       </div>
     </div>
   );
