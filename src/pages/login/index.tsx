@@ -28,7 +28,7 @@ export default function LoginPage() {
               href={"/home"}
               passHref
               type="submit"
-              className="flex w-1/4 justify-center bg-purple text-white text-l font-bold p-2.5 rounded-lg hover:bg-darkPurple transition duration-300 mt-4"
+              className="flex w-1/4 justify-center bg-purple text-white text-l font-bold p-2.5 rounded-lg hover:bg-transitionPurple transition duration-300 mt-4"
             >
               {" "}
               Login
