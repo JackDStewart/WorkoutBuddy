@@ -6,7 +6,7 @@ interface WorkoutCardProps {
 
 const WorkoutCard: React.FC<WorkoutCardProps> = ({ name }) => {
   return (
-    <div className="bg-black text-gray-300 rounded-lg shadow-lg p-6 w-">
+    <div className="bg-black text-gray-300 rounded-lg shadow-left-purple p-6">
       <h2 className="text-white text-xl font-bold mb-4">{name}</h2>
       <ul className="space-y-2 text-gray-400">
         <li>Barbell Squat</li>

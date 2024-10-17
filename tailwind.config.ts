@@ -14,6 +14,9 @@ const config: Config = {
         purple: "#BB86FC",
         darkPurple:"#1F1B24"
       },
+      boxShadow: {
+        'left-purple': '-4px 0 0px rgba(77, 54, 77, 0.5)', // Adjust values as needed
+      },
     },
   },
   plugins: [],
