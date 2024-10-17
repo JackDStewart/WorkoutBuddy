@@ -12,6 +12,10 @@ export default function HomePage() {
   const workouts = getWorkouts();
   const workoutNames = workouts.map(workout => workout.name);
   workoutNames.push("Start a new workout");
+  /*workouts.push({
+    name: "Start a new workout",
+    exercises: [],
+  });*/
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
