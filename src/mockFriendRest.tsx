@@ -1,12 +1,6 @@
 import internal from "stream";
-import { Exercise } from "./mockRest";
-
-type Friend = {
-  name: string;
-  active: boolean;
-  lastLogged: number;
-  favExercise: Exercise;
-};
+import { Exercise } from "./types";
+import { Friend } from "./types";
 
 export const getFriends = (): Friend[] => {
   return [
@@ -20,7 +14,7 @@ export const getFriends = (): Friend[] => {
       name: "Noah",
       active: false,
       lastLogged: 1,
-      favExercise: { name: "Bulgarian Split Squats" },
+      favExercise: { name: "Hip Adductors" },
     },
   ];
 };

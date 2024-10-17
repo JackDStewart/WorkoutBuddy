@@ -47,11 +47,11 @@ const Header = () => {
       <h1 className="text-4xl font-medium text-center">Workout Buddy</h1>
       <div
         id="buttons"
-        className="pt-6 w-full flex items-left justify-center text-l"
+        className="pt-6 w-full flex items-left justify-center text-l "
       >
         <Link
           href={"/home"}
-          className={`border border-none bg-purple w-[180px] p-2 rounded-full text-center mx-1.5 ${
+          className={`border border-none bg-purple w-[180px] p-2 rounded-full text-center mx-1.5 hover:bg-transitionPurple ${
             isActiveLink("/home") ? "font-bold text-black" : ""
           }`}
         >
@@ -59,7 +59,7 @@ const Header = () => {
         </Link>
         <Link
           href={"/create"}
-          className={`border border-none bg-purple w-[180px] p-2 rounded-full text-center mx-1.5 ${
+          className={`border border-none bg-purple w-[180px] p-2 rounded-full text-center mx-1.5 hover:bg-transitionPurple ${
             isActiveLink("/create") ? "font-bold text-black" : ""
           }`}
         >
@@ -67,7 +67,7 @@ const Header = () => {
         </Link>
         <Link
           href={"/social"}
-          className={`border border-none bg-purple w-[180px] p-2 rounded-full text-center mx-1.5 ${
+          className={`border border-none bg-purple w-[180px] p-2 rounded-full text-center mx-1.5 hover:bg-transitionPurple ${
             isActiveLink("/social") ? "font-bold text-black" : ""
           }`}
         >
@@ -75,7 +75,7 @@ const Header = () => {
         </Link>
         <Link
           href={"/progress"}
-          className={`border border-none bg-purple w-[180px] p-2 rounded-full text-center mx-1.5 ${
+          className={`border border-none bg-purple w-[180px] p-2 rounded-full text-center mx-1.5 hover:bg-transitionPurple ${
             isActiveLink("/progress") ? "font-bold text-black" : ""
           }`}
         >
@@ -83,7 +83,7 @@ const Header = () => {
         </Link>
         <Link
           href={"/explore"}
-          className={`border border-none bg-purple w-[180px] p-2 rounded-full text-center mx-1.5 ${
+          className={`border border-none bg-purple w-[180px] p-2 rounded-full text-center mx-1.5 hover:bg-transitionPurple ${
             isActiveLink("/explore") ? "font-bold text-black" : ""
           }`}
         >
@@ -95,7 +95,7 @@ const Header = () => {
         <Link
           href="/"
           passHref
-          className="absolute top-0 right-0 bg-purple hover:bg-purple-600 text-white font-bold py-2 px-4 rounded"
+          className="absolute top-0 right-0 bg-purple hover:bg-purple-600 text-white font-bold py-2 px-4 rounded hover:bg-transitionPurple"
         >
           Log Out
         </Link>

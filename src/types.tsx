@@ -16,9 +16,20 @@ export interface Workout {
 }
 
 export interface DashboardProps {
-  workouts: Workout[]
+  workouts: Workout[];
 }
 
 export interface RadioProps {
-  workouts: string[]
+  workouts: string[];
 }
+
+export interface FriendCardProps {
+  friend: Friend;
+}
+
+export type Friend = {
+  name: string;
+  active: boolean;
+  lastLogged: number;
+  favExercise: Exercise;
+};

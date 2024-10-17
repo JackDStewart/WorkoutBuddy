@@ -18,10 +18,15 @@
   font-family: 'Inter', sans-serif;
   font-weight: 300;
 }
+
 body {
   color: var(--foreground);
   background: var(--background);
 
+}
+
+button:hover, Link:hover {
+  background-color: #9f54fb
 }
 
 @layer utilities {

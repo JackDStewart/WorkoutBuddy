@@ -1,10 +1,11 @@
-import React from 'react';
-import Header from '@/components/Header';
+import React from "react";
+import Header from "@/components/Header";
 import FriendCard from "@/components/FriendCard";
+import { FriendCardProps } from "@/types";
+import { getFriends } from "@/mockFriendRest";
 
-const Social = () => {
-  const friends = ['Mateen', 'Jack', 'Noah', 'Owen']; 
-
+const Social: React.FC<FriendCardProps> = () => {
+  const friends = getFriends();
   return (
     <div>
       <Header />
@@ -18,9 +19,10 @@ const Social = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
-          {friends.map((friend) => (
-            <FriendCard key={friend} name={friend} />
-          ))}
+          {friends &&
+            friends.map((friend) => (
+              <FriendCard key={friend.name} friend={friend} />
+            ))}
         </div>
       </div>
     </div>
