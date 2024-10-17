@@ -5,7 +5,6 @@ import { getWorkouts } from "../../mockRest";
 
 const Dashboard = () => {
   const workouts = getWorkouts();
-  console.log(workouts);
 
   return (
     <div>

@@ -1,7 +1,10 @@
 import React from 'react';
 import '../../app/globals.css';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export default function LoginPage() {
+
   return (
     <div>
       <div className="flex flex-col items-center mt-8"> 
@@ -20,11 +23,13 @@ export default function LoginPage() {
           placeholder='password'
           className='w-3/4 p-2 border border-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-purple mb-4'
         />       
-        <button 
+        <Link 
+          href={"/home"}
+          passHref
           type="submit" 
           className="w-1/2 bg-purple text-white p-2.5 rounded-lg hover:bg-darkPurple transition duration-300 mt-4"
         > Login
-        </button>
+        </Link>
         
         </form>
         </div>
