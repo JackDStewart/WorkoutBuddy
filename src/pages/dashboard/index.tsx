@@ -2,9 +2,10 @@ import React from "react";
 import Link from "next/link";
 import WorkoutCard from "@/components/WorkoutCard";
 import { getWorkouts } from "../../mockRest";
+import {DashboardProps} from '../../types'
 
-const Dashboard = () => {
-  const workouts = getWorkouts();
+
+const Dashboard: React.FC<DashboardProps> = ({ workouts }) => {
 
   return (
     <div>

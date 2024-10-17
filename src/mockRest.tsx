@@ -1,11 +1,4 @@
-type Exercise = {
-  name: string;
-};
-
-type Workout = {
-  name: string;
-  exercises: Exercise[];
-};
+import {Workout, Exercise} from '@/types'
 
 export const getWorkouts = (): Workout[] => {
   return [

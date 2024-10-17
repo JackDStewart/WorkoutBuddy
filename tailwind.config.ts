@@ -15,7 +15,9 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
         purple: "#BB86FC",
-        darkPurple: "#1F1B24",
+        transitionPurple: '#9f54fb',
+        shadowPurple: '#4D364D',
+        darkPurple:"#1F1B24"
       },
       boxShadow: {
         "left-purple": "-4px 0 0px rgba(77, 54, 77, 0.5)", // Adjust values as needed
