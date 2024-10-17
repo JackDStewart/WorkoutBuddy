@@ -1,8 +1,12 @@
 import React from "react";
 import Link from "next/link";
 import WorkoutCard from "@/components/WorkoutCard";
+import { getWorkouts } from "../../mockRest";
 
 const Dashboard = () => {
+  const workouts = getWorkouts();
+  console.log(workouts);
+
   return (
     <div>
       <div className="relative bg-darkPurple top-10 rounded-lg p-6 ml-20 mr-20">
@@ -14,9 +18,10 @@ const Dashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
-          <WorkoutCard name="Workout A" />
-          <WorkoutCard name="Workout B" />
-          <WorkoutCard name="Workout C" />
+          {workouts &&
+            workouts.map((data) => (
+              <WorkoutCard key={data.name} name={data.name} />
+            ))}
         </div>
       </div>
     </div>

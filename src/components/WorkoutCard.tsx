@@ -1,10 +1,11 @@
-import React from 'react';
+import React from "react";
 
 interface WorkoutCardProps {
-    name: string;
-  }
+  name: string;
+}
 
 const WorkoutCard: React.FC<WorkoutCardProps> = ({ name }) => {
+
   return (
     <div className="bg-black text-gray-300 rounded-lg shadow-left-purple p-6">
       <h2 className="text-white text-xl font-bold mb-4">{name}</h2>

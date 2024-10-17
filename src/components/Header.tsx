@@ -17,7 +17,7 @@ const Header = () => {
         return "Create Workout";
       case "/social":
         return "Connect with Others";
-      case "/progess":
+      case "/progress":
         return "Track Your Progress";
       case "/explore":
         return "Explore New Workouts";
