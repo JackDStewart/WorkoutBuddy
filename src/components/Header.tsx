@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
-  
+
   const getGreetingText = () => {
     const route = router.pathname;
 
@@ -45,7 +44,7 @@ const Header = () => {
 
   return (
     <div id="header" className="pr-20 pl-20 pt-10">
-      <h1 className="text-4xl font-bold text-center">Workout Buddy</h1>
+      <h1 className="text-4xl font-medium text-center">Workout Buddy</h1>
       <div
         id="buttons"
         className="pt-6 w-full flex items-left justify-center text-l"
