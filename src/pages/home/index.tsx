@@ -15,7 +15,7 @@ export default function HomePage() {
   /*workouts.push({
     name: "Start a new workout",
     exercises: [],
-  });*/
+  });*/ 
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);

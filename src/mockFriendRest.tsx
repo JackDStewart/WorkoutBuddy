@@ -14,7 +14,7 @@ export const getFriends = (): Friend[] => {
       name: "Noah",
       active: false,
       lastLogged: 1,
-      favExercise: { name: "Hip Adductors" },
+      favExercise: { name: "Hip Abductors" },
     },
   ];
 };

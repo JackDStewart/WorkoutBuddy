@@ -25,6 +25,8 @@ export interface RadioProps {
 
 export interface FriendCardProps {
   friend: Friend;
+  onClick: () => void;
+  className?: string;
 }
 
 export type Friend = {
