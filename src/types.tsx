@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import internal from "stream";
 
 export interface ModalProps {
   isOpen: boolean;
@@ -13,6 +14,21 @@ export interface Exercise {
 export interface Workout {
   name: string;
   exercises: Exercise[];
+}
+
+export interface SetLog {
+  weight: number;
+  reps: number;
+}
+
+export interface ExerciseLog {
+  exercise: Exercise;
+  sets: SetLog[];
+}
+
+export interface ExerciseCardProps {
+  exerciseLog: ExerciseLog;
+  onSetChange: (newSetLogs: SetLog[]) => void;
 }
 
 export interface DashboardProps {
