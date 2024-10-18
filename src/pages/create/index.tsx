@@ -23,14 +23,8 @@ const Create = () => {
 
   return (
     <div>
-      <Header />
-      <div className="relative bg-darkPurple top-10 rounded-lg p-6 ml-20 mr-20">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-white text-2xl">Create Workout</h2>
-          <button className="bg-purple text-white py-2 px-4 rounded hover:bg-purple-600">
-            View All
-          </button>
-        </div>
+      <Header/>
+      <div className="relative bg-darkPurple top-5 rounded-lg p-6 ml-20 mr-20">
         <div className="flex">
           <div className="w-1/2 p-4">
             <label className="block text-white text-sm mb-2">
