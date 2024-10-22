@@ -11,19 +11,14 @@ interface SingleAutocompleteProps extends AutocompleteProps {
 const SingleAutocomplete: React.FC<SingleAutocompleteProps> = ({
   label,
   data,
-<<<<<<< Updated upstream
   onExerciseChange,
-=======
-  width,
-  onChange,
->>>>>>> Stashed changes
 }) => {
   return (
     <Autocomplete
       className="mt-5 color-white"
       disablePortal
       options={data}
-      onChange={(event, value) => onExerciseChange(value)} // Call the callback when the value changes
+      // onChange={(event, value) => onExerciseChange(value)} // Call the callback when the value changes
       slotProps={{
         paper: {
           sx: {
@@ -85,9 +80,9 @@ const SingleAutocomplete: React.FC<SingleAutocompleteProps> = ({
           },
         },
       }}
-      onChange={(_, newValue) => {
-        if (onChange) {
-          onChange(newValue); // Notify parent with the new value
+      onChange={(_: any, newValue: string | null) => {
+        if (onExerciseChange) {
+          onExerciseChange(newValue); // Notify parent with the new value
         }
       }}
       renderInput={(params) => (
@@ -105,10 +100,7 @@ const SingleAutocomplete: React.FC<SingleAutocompleteProps> = ({
   );
 };
 
-const MultipleAutocomplete: React.FC<AutocompleteProps> = ({
-  label,
-  data,
-}) => {
+const MultipleAutocomplete: React.FC<AutocompleteProps> = ({ label, data }) => {
   return (
     <Autocomplete
       className="mt-5 color-white"

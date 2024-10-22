@@ -35,7 +35,11 @@ const Current = (/*workout: Workout*/) => {
   };
 
   const [exerciseList, setExerciseList] = useState<ExerciseLog[]>(
-    workout.exercises.map((exercise) => ({ exercise, sets: [] }))
+    workout.exercises.map((exercise) => ({
+      exercise,
+      sets: [],
+      date: new Date(),
+    }))
   );
   //let exerciseList = workout.exercises;
 
@@ -47,8 +51,10 @@ const Current = (/*workout: Workout*/) => {
     const newExercise: ExerciseLog = {
       exercise: { name: exerciseStr }, // Default values for the new set
       sets: [],
+      date: new Date(),
     };
     setExerciseList((prev) => [...prev, newExercise]);
+    closeModal();
   };
 
   const updateSets = (index: number, newSetLogs: SetLog[]) => {
@@ -88,8 +94,7 @@ const Current = (/*workout: Workout*/) => {
           <SingleAutocomplete
             label="Exercise"
             data={["exercise1", "exercise2"]} //implement api call to get all exercises here
-            width={350}
-            onChange={handleChange}
+            onExerciseChange={handleChange}
           ></SingleAutocomplete>
           <br />
           <div className="flex justify-center">
