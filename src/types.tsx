@@ -7,6 +7,7 @@ export interface Exercise {
 export interface Workout {
   name: string;
   exercises: Exercise[];
+  isFavorite: boolean
 }
 
 export interface SetLog {
@@ -44,6 +45,7 @@ export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
+  width: string
 }
 
 export interface FriendCardProps {

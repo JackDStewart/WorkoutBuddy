@@ -42,7 +42,7 @@ const Social: React.FC<FriendCardProps> = () => {
             ))}
         </div>
       </div>
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
+      <Modal isOpen={isModalOpen} onClose={closeModal} width="w-[400px]">
         {selectedFriend && (
           <div>
             <h2 className="text-xl font-bold mb-4">Friend Details</h2>

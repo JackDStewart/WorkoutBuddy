@@ -33,7 +33,7 @@ export default function HomePage() {
         Start Workout
       </button>
 
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
+      <Modal isOpen={isModalOpen} onClose={closeModal} width="w-[400px]">
         <h2 className="text-xl font-bold mb-4">Start Workout</h2>
         <p>Choose Workout</p>
         <Radio workouts={workoutNames}></Radio>

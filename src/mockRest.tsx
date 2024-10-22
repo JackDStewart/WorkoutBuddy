@@ -11,6 +11,7 @@ export const getWorkouts = (): Workout[] => {
         { name: "Lat Pulldown" },
         { name: "Bicep Curls" },
       ],
+      isFavorite: true,
     },
     {
       name: "Push A",
@@ -19,6 +20,128 @@ export const getWorkouts = (): Workout[] => {
         { name: "Shoulder Press" },
         { name: "Push-ups" },
       ],
+      isFavorite: true,
+    },
+    {
+      name: "Pull A",
+      exercises: [
+        { name: "Dumbbell Rows" },
+        { name: "Pull Ups" },
+        { name: "Bicep Curls" },
+        { name: "Hammer Curls" },
+        { name: "Lat Pulldowns" },
+      ],
+      isFavorite: false,
+    },
+    {
+      name: "Pull B",
+      exercises: [
+        { name: "Barbell Rows" },
+        { name: "Pull Ups" },
+        { name: "Bicep Curls" },
+        { name: "Hammer Curls" },
+        { name: "Lat Pulldowns" },
+      ],
+      isFavorite: false,
+    },
+    {
+      name: "Legs",
+      exercises: [
+        { name: "Squats" },
+        { name: "Lunges" },
+        { name: "Leg Press" },
+        { name: "Calf Raises" },
+        { name: "Deadlifts" },
+      ],
+      isFavorite: false,
+    },
+    {
+      name: "Full Body",
+      exercises: [
+        { name: "Burpees" },
+        { name: "Kettlebell Swings" },
+        { name: "Push-Ups" },
+        { name: "Mountain Climbers" },
+        { name: "Plank" },
+      ],
+      isFavorite: false,
+    },
+    {
+      name: "Cardio Blast",
+      exercises: [
+        { name: "Running" },
+        { name: "Cycling" },
+        { name: "Jump Rope" },
+        { name: "Rowing Machine" },
+        { name: "Box Jumps" },
+      ],
+      isFavorite: true,
+    },
+    {
+      name: "Core Workout",
+      exercises: [
+        { name: "Crunches" },
+        { name: "Russian Twists" },
+        { name: "Plank" },
+        { name: "Leg Raises" },
+        { name: "Bicycle Crunches" },
+      ],
+      isFavorite: false,
+    },
+    {
+      name: "Yoga Flow",
+      exercises: [
+        { name: "Downward Dog" },
+        { name: "Warrior II" },
+        { name: "Child's Pose" },
+        { name: "Tree Pose" },
+        { name: "Cobra Pose" },
+      ],
+      isFavorite: true,
+    },
+    {
+      name: "HIIT Circuit",
+      exercises: [
+        { name: "High Knees" },
+        { name: "Burpees" },
+        { name: "Squat Jumps" },
+        { name: "Jumping Jacks" },
+        { name: "Plank Jacks" },
+      ],
+      isFavorite: false,
+    },
+    {
+      name: "Strength Training",
+      exercises: [
+        { name: "Squats" },
+        { name: "Deadlifts" },
+        { name: "Bench Press" },
+        { name: "Pull-Ups" },
+        { name: "Overhead Press" },
+      ],
+      isFavorite: true,
+    },
+    {
+      name: "Upper Body",
+      exercises: [
+        { name: "Push-Ups" },
+        { name: "Tricep Extensions" },
+        { name: "Chest Fly" },
+        { name: "Dumbbell Rows" },
+        { name: "Front Raises" },
+      ],
+      isFavorite: false,
+    },
+    {
+      name: "Lower Body",
+      exercises: [
+        { name: "Leg Extensions" },
+        { name: "Leg Curls" },
+        { name: "Glute Bridges" },
+        { name: "Hip Thrusts" },
+        { name: "Side Lunges" },
+      ],
+      isFavorite: true,
     },
   ];
 };
