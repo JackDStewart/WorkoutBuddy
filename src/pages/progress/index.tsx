@@ -22,11 +22,6 @@ const Progress = () => {
           data={exercises}
           width={500}
         ></SingleAutocomplete>
-        <MultipleAutocomplete
-          label="Exercise"
-          data={exercises}
-          width={500}
-        ></MultipleAutocomplete>
       </div>
     </div>
   );

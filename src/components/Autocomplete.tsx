@@ -68,6 +68,12 @@ const SingleAutocomplete: React.FC<AutocompleteProps> = ({
           "& .MuiAutocomplete-option": {
             color: "#BB86FC",
           },
+          "& .MuiAutocomplete-clearIndicator": {
+            color: "white",
+          },
+          "& .MuiAutocomplete-popupIndicator": {
+            color: "white",
+          },
         },
       }}
       renderInput={(params) => (
@@ -173,6 +179,12 @@ const MultipleAutocomplete: React.FC<AutocompleteProps> = ({
           },
           "& .MuiAutocomplete-option": {
             color: "#BB86FC",
+          },
+          "& .MuiAutocomplete-clearIndicator": {
+            color: "white",
+          },
+          "& .MuiAutocomplete-popupIndicator": {
+            color: "white",
           },
         },
       }}
