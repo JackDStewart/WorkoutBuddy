@@ -52,6 +52,7 @@ export interface FriendCardProps {
   className?: string;
 }
 
+<<<<<<< Updated upstream
 export interface AutocompleteProps {
   label: string;
   data: string[];
@@ -61,3 +62,22 @@ export interface ProgressChartProps {
   xAxis: string[];
   yAxis: number[];
 }
+=======
+export type Friend = {
+  name: string;
+  active: boolean;
+  lastLogged: number;
+  favExercise: Exercise;
+};
+
+export interface AutocompleteProps<T = string> {
+  label: string;
+  data: T[];
+  width: number;
+  onChange?: OnChangeHandler<T>; //optional handler, added to extract data from textbox
+}
+
+export type OnChangeHandler<T> = (
+  value: T | null // The selected value, which can be null
+) => void;
+>>>>>>> Stashed changes

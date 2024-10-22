@@ -11,7 +11,12 @@ interface SingleAutocompleteProps extends AutocompleteProps {
 const SingleAutocomplete: React.FC<SingleAutocompleteProps> = ({
   label,
   data,
+<<<<<<< Updated upstream
   onExerciseChange,
+=======
+  width,
+  onChange,
+>>>>>>> Stashed changes
 }) => {
   return (
     <Autocomplete
@@ -79,6 +84,11 @@ const SingleAutocomplete: React.FC<SingleAutocompleteProps> = ({
             color: "white",
           },
         },
+      }}
+      onChange={(_, newValue) => {
+        if (onChange) {
+          onChange(newValue); // Notify parent with the new value
+        }
       }}
       renderInput={(params) => (
         <TextField
