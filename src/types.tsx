@@ -1,11 +1,4 @@
 import { ReactNode } from "react";
-import internal from "stream";
-
-export interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  children: ReactNode;
-}
 
 export interface Exercise {
   name: string;
@@ -24,7 +17,15 @@ export interface SetLog {
 export interface ExerciseLog {
   exercise: Exercise;
   sets: SetLog[];
+  date: Date
 }
+
+export type Friend = {
+  name: string;
+  active: boolean;
+  lastLogged: number;
+  favExercise: Exercise;
+};
 
 export interface ExerciseCardProps {
   exerciseLog: ExerciseLog;
@@ -39,21 +40,24 @@ export interface RadioProps {
   workouts: string[];
 }
 
+export interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: ReactNode;
+}
+
 export interface FriendCardProps {
   friend: Friend;
   onClick: () => void;
   className?: string;
 }
 
-export type Friend = {
-  name: string;
-  active: boolean;
-  lastLogged: number;
-  favExercise: Exercise;
-};
-
 export interface AutocompleteProps {
   label: string;
-  data: string[]
-  width: number
+  data: string[];
+}
+
+export interface ProgressChartProps {
+  xAxis: string[];
+  yAxis: number[];
 }

@@ -4,16 +4,21 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Chip from "@mui/material/Chip";
 
-const SingleAutocomplete: React.FC<AutocompleteProps> = ({
+interface SingleAutocompleteProps extends AutocompleteProps {
+  onExerciseChange: (exercise: string | null) => void; // Callback for parent
+}
+
+const SingleAutocomplete: React.FC<SingleAutocompleteProps> = ({
   label,
   data,
-  width,
+  onExerciseChange,
 }) => {
   return (
     <Autocomplete
       className="mt-5 color-white"
       disablePortal
       options={data}
+      onChange={(event, value) => onExerciseChange(value)} // Call the callback when the value changes
       slotProps={{
         paper: {
           sx: {
@@ -45,7 +50,6 @@ const SingleAutocomplete: React.FC<AutocompleteProps> = ({
         },
       }}
       sx={{
-        width: width,
         "& label.Mui-focused": {
           color: "#BB86FC",
         },
@@ -94,7 +98,6 @@ const SingleAutocomplete: React.FC<AutocompleteProps> = ({
 const MultipleAutocomplete: React.FC<AutocompleteProps> = ({
   label,
   data,
-  width,
 }) => {
   return (
     <Autocomplete
@@ -157,7 +160,6 @@ const MultipleAutocomplete: React.FC<AutocompleteProps> = ({
         },
       }}
       sx={{
-        width: width,
         "& label.Mui-focused": {
           color: "#BB86FC",
         },
