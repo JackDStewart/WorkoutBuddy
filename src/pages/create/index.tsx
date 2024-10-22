@@ -42,18 +42,18 @@ const Create = () => {
             </label>
 
             {/* Input container with selected options inside */}
-            <div className="flex flex-wrap bg-darkPurple p-2 border border-white rounded-lg focus:outline-none focus:ring-2 focus:border-transparent focus:ring-purple mb-6">
+            <div className="flex flex-wrap bg-darkPurple p-2 border border-white rounded-lg focus:outline-none focus:ring-2 focus:border-transparent focus:ring-purple mb-4">
               
               {/* Render selected options as bubbles */}
               <div className="flex flex-wrap">
                 {selectedOptions.map((option) => (
                   <div
                     key={option}
-                    className="flex items-center text-white rounded-lg px-3 py-1 mr-2 mb-1 mt-1 border"
+                    className="flex items-center text-white rounded-full px-3 py-1 mr-2 mb-1 mt-1 border"
                   >
                     <span className="mr-2">{option}</span>
                     <button
-                      className="text-white hover:text-gray-300"
+                      className="text-white hover:bg-transparent hover:text-purple"
                       onClick={() => handleRemoveOption(option)}
                     >
                       &times;
@@ -68,22 +68,28 @@ const Create = () => {
                   type="text"
                   placeholder="Select Muscle Groups Below"
                   className="bg-transparent outline-none flex-grow text-white"
+                  readOnly
                 />
               )}
             </div>
 
             {/* Dropdown or list of options */}
             <div className="mt-4">
-              {options.map((option) => (
-                <button
-                  key={option}
-                  className="bg-darkPurple text-white rounded-lg px-4 py-2 mr-2 mb-2 hover:bg-white hover:text-black transition border"
-                  onClick={() => handleSelectOption(option)}
-                >
-                  {option}
-                </button>
+              {options
+                .filter(option => !selectedOptions.includes(option)) // Filter out selected options
+                .map((option) => (
+                  <button
+                    key={option}
+                    className="bg-darkPurple text-white rounded-full px-4 py-2 mr-2 mb-2 hover:bg-white hover:text-black transition border"
+                    onClick={() => handleSelectOption(option)}
+                  >
+                    {option}
+                  </button>
               ))}
             </div>
+            <button className="bg-purple font-bold text-white p-3 rounded-lg mt-4">
+              Add Exercises
+            </button>
           </div>
 
           {/* Right Column for Added Exercises */}

@@ -95,7 +95,7 @@ const Header = () => {
         <Link
           href="/"
           passHref
-          className="absolute top-0 right-0 bg-purple hover:bg-purple-600 text-white font-bold py-2 px-4 rounded hover:bg-transitionPurple"
+          className="absolute top-0 right-0 bg-purple hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-transitionPurple"
         >
           Log Out
         </Link>
