@@ -51,3 +51,9 @@ export type Friend = {
   lastLogged: number;
   favExercise: Exercise;
 };
+
+export interface AutocompleteProps {
+  label: string;
+  data: string[]
+  width: number
+}
