@@ -15,7 +15,7 @@ const SingleAutocomplete: React.FC<SingleAutocompleteProps> = ({
 }) => {
   return (
     <Autocomplete
-      className="mt-5 color-white"
+      className=" color-white"
       disablePortal
       options={data}
       // onChange={(event, value) => onExerciseChange(value)} // Call the callback when the value changes

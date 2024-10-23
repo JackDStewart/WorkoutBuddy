@@ -28,6 +28,12 @@ export type Friend = {
   favExercise: Exercise;
 };
 
+export interface AddedExerciseProps {
+  exercises: string[];
+  addedList: string[];
+  setter: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
 export interface ExerciseCardProps {
   exerciseLog: ExerciseLog;
   onSetChange: (newSetLogs: SetLog[]) => void;
