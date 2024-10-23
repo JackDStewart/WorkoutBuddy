@@ -4,6 +4,7 @@ import React, { useState } from "react";
 const ExerciseCard: React.FC<ExerciseCardProps> = ({
   exerciseLog,
   onSetChange,
+  onDelete,
 }) => {
   const [setList, setSetList] = useState<SetLog[]>(exerciseLog.sets);
 
@@ -16,15 +17,13 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
     setSetList(updatedSetList); // Update local state
     onSetChange(updatedSetList); // Notify parent about the change
   };
-
   const delSet = (index: number) => {
     const updatedSetList = setList.filter((_, i) => index !== i);
     setSetList(updatedSetList);
     onSetChange(updatedSetList);
   };
-
   return (
-    <div className="flex-shrink-0 flex-col bg-black text-gray-300 rounded-lg shadow-left-purple p-6 h-full">
+    <div className="relative flex-shrink-0 flex-col bg-black text-gray-300 rounded-lg shadow-left-purple p-6 h-full">
       <h2 className="text-white text-xl font-bold mb-4">
         {exerciseLog.exercise.name}
       </h2>
@@ -33,6 +32,12 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
       >
         Last Weight: {"50lbs"}
       </h3>
+      <button
+        className="absolute top-[1.5rem] right-[1.5rem] text-white rounded-full hover:text-red-500 hover:bg-transparent"
+        onClick={() => onDelete(exerciseLog)} // Add functionality to delete a set
+      >
+        ✕
+      </button>
       <ul className="space-y-2 text-gray-400 mb-4">
         {exerciseLog.sets.map((_, index) => (
           <li key={index}>
@@ -73,7 +78,7 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
               {/* Push X button to the right */}
               <button
-                className="ml-auto py-1 px-3 mb-4 mt-0 rounded-full hover:text-red-500 hover:bg-transparent"
+                className="relative bottom-[.5rem] left-[2rem]  rounded-full hover:text-red-500 hover:bg-transparent"
                 onClick={() => delSet(index)} // Add functionality to delete a set
               >
                 ✕

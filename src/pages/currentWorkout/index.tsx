@@ -28,6 +28,7 @@ const Current = (/*workout: Workout*/) => {
       { name: "Lat Pulldown" },
       { name: "Bicep Curls" },
     ],
+    isFavorite: false,
   };
   let cur: string | null = null;
   const handleChange = (newValue: string | null) => {
@@ -57,6 +58,10 @@ const Current = (/*workout: Workout*/) => {
     closeModal();
   };
 
+  const delExercise = (exercise: ExerciseLog) => {
+    setExerciseList(exerciseList.filter((x) => x != exercise));
+  };
+
   const updateSets = (index: number, newSetLogs: SetLog[]) => {
     const updatedExerciseLogs = [...exerciseList];
     updatedExerciseLogs[index] = {
@@ -64,6 +69,15 @@ const Current = (/*workout: Workout*/) => {
       sets: newSetLogs,
     };
     setExerciseList(updatedExerciseLogs);
+  };
+  const getButtonClasses = () => {
+    if (exerciseList.length % 3 === 0) {
+      return "col-start-1 col-span-3";
+    } else if (exerciseList.length === 1) {
+      return "col-start-2 col-span-1";
+    } else if (exerciseList.length === 2) {
+      return "col-start-3 col-span-1";
+    }
   };
   return (
     <div>
@@ -78,17 +92,23 @@ const Current = (/*workout: Workout*/) => {
               key={exerciseLog.exercise.name}
               exerciseLog={exerciseLog}
               onSetChange={(newSetLogs) => updateSets(index, newSetLogs)}
+              onDelete={(exercise: ExerciseLog) => delExercise(exercise)}
             />
           ))}
+          {exerciseList.length === 0 && (
+            <div className="justify-center place-self-center col-start-2 text-grey">
+              <p className="text-grey-800 text-xl">Add an exercise!</p>
+            </div>
+          )}
           <button
-            className="bg-purple text-4xl font-medium place-self-center text-black py-4 px-6 rounded-full"
+            className={`${getButtonClasses()} bg-purple text-4xl font-medium place-self-center text-black py-4 px-6 rounded-full`}
             onClick={() => openModal()} //modal pop-up
           >
             +
           </button>
         </div>
       </div>
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
+      <Modal isOpen={isModalOpen} onClose={closeModal} width={"w-[350px]"}>
         <div>
           <h2 className="text-xl font-bold mb-4">Add an Excersise:</h2>
           <SingleAutocomplete
@@ -99,7 +119,7 @@ const Current = (/*workout: Workout*/) => {
           <br />
           <div className="flex justify-center">
             <button
-              className="bg-purple text-lg font-medium text-black py-2 px-4 rounded-full w-1/2"
+              className="bg-purple text-lg font-medium text-black py-2 px-4 rounded-full w-1/2 }"
               onClick={() => addNewExercise(cur)}
             >
               Add Exercise

@@ -7,7 +7,7 @@ export interface Exercise {
 export interface Workout {
   name: string;
   exercises: Exercise[];
-  isFavorite: boolean
+  isFavorite: boolean;
 }
 
 export interface SetLog {
@@ -31,6 +31,7 @@ export type Friend = {
 export interface ExerciseCardProps {
   exerciseLog: ExerciseLog;
   onSetChange: (newSetLogs: SetLog[]) => void;
+  onDelete: (exercise: ExerciseLog) => void;
 }
 
 export interface DashboardProps {
@@ -45,7 +46,7 @@ export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
-  width: string
+  width: string;
 }
 
 export interface FriendCardProps {
