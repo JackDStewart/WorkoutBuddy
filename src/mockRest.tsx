@@ -8,7 +8,7 @@ const workouts: Workout[] = [
   {
     name: "Full Body Workout",
     exercises: [
-      { name: "Push-up" },
+      { name: "Push-ups" },
       { name: "Squat" },
       { name: "Plank" },
       { name: "Lat Pulldown" },
@@ -63,7 +63,7 @@ const workouts: Workout[] = [
     exercises: [
       { name: "Burpees" },
       { name: "Kettlebell Swings" },
-      { name: "Push-Ups" },
+      { name: "Push-ups" },
       { name: "Mountain Climbers" },
       { name: "Plank" },
     ],
@@ -127,7 +127,7 @@ const workouts: Workout[] = [
   {
     name: "Upper Body",
     exercises: [
-      { name: "Push-Ups" },
+      { name: "Push-ups" },
       { name: "Tricep Extensions" },
       { name: "Chest Fly" },
       { name: "Dumbbell Rows" },

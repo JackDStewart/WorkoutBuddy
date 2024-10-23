@@ -33,9 +33,10 @@ const Progress = () => {
   };
 
   const workouts = getWorkouts();
-  const exercises = workouts.flatMap((workout) =>
+  let exercises = workouts.flatMap((workout) =>
     workout.exercises.map((exercise) => exercise.name)
   );
+  exercises = Array.from(new Set(exercises));
 
   const handleExerciseChange = (exercise: string | null) => {
     setSelectedExercise(exercise);

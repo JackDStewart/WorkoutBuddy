@@ -23,10 +23,12 @@ const Create = () => {
   
   const workouts = getWorkouts();
   // const workoutNames = workouts.map(workout => workout.name);
-  const exercises = workouts.flatMap((workout) =>
-    workout.exercises.map((exercise) => exercise)
+  let exerciseNames = workouts.flatMap((workout) =>
+    workout.exercises.map((exercise) => exercise.name)
   );
-  const exerciseNames = exercises.map((exercise) => exercise.name);
+  exerciseNames = Array.from(new Set(exerciseNames));
+
+  //const exerciseNames = exercises.map((exercise) => exercise.name);
   
   const handleMuscleSelectOption = (option: string) => {
     // Add the option to the selected muscleGroups list if it's not already there
