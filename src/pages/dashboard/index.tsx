@@ -1,18 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import WorkoutCard from "@/components/WorkoutCard";
-import { getWorkouts } from "../../mockRest";
-import { DashboardProps } from "../../types";
+import { getWorkouts, toggleFavoriteWorkout } from "../../mockRest";
+import { DashboardProps, Workout } from "../../types";
 import Modal from "@/components/Modal";
 
 const Dashboard: React.FC<DashboardProps> = () => {
+  const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const workouts = getWorkouts();
+  useEffect(() => {
+    const fetchWorkouts = async () => {
+      const data = getWorkouts();
+      setWorkouts(data);
+    };
+
+    fetchWorkouts();
+  }, []);
+
   const favWorkouts = workouts.filter((workout) => workout.isFavorite);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  // Function to handle updating the favorite status
+  const handleUpdateFavorite = (workoutName: string, isFavorite: boolean) => {
+
+    toggleFavoriteWorkout(workoutName)
+
+    setWorkouts((prevWorkouts) =>
+      prevWorkouts.map((workout) =>
+        workout.name === workoutName ? { ...workout, isFavorite } : workout
+      )
+    );
+  };
 
   return (
     <div>
@@ -30,7 +51,11 @@ const Dashboard: React.FC<DashboardProps> = () => {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
           {favWorkouts &&
             favWorkouts.map((workout) => (
-              <WorkoutCard key={workout.name} workout={workout} />
+              <WorkoutCard
+                key={workout.name}
+                workout={workout}
+                onUpdateFavorite={handleUpdateFavorite} // Pass the function down
+              />
             ))}
         </div>
       </div>
@@ -41,7 +66,11 @@ const Dashboard: React.FC<DashboardProps> = () => {
           <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
             {workouts &&
               workouts.map((workout) => (
-                <WorkoutCard key={workout.name} workout={workout} />
+                <WorkoutCard
+                  key={workout.name}
+                  workout={workout}
+                  onUpdateFavorite={handleUpdateFavorite} // Pass the function down here too
+                />
               ))}
           </div>
         </div>
