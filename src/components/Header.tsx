@@ -18,8 +18,6 @@ const Header = () => {
         return "Connect with Others";
       case "/progress":
         return "Track Your Progress";
-      case "/explore":
-        return "Explore New Workouts";
       default:
         return "Hello, user";
     }
@@ -80,14 +78,6 @@ const Header = () => {
           }`}
         >
           Progress
-        </Link>
-        <Link
-          href={"/explore"}
-          className={`border border-none bg-purple w-[180px] p-2 rounded-full text-center mx-1.5 hover:bg-transitionPurple ${
-            isActiveLink("/explore") ? "font-bold text-black" : ""
-          }`}
-        >
-          Explore Workouts
         </Link>
       </div>
       <div className="relative">
