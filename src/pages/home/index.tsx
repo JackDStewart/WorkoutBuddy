@@ -10,12 +10,12 @@ import Radio from "@/components/Radio";
 export default function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const workouts = getWorkouts();
-  const workoutNames = workouts.map(workout => workout.name);
+  const workoutNames = workouts.map((workout) => workout.name);
   workoutNames.push("Start a new workout");
   /*workouts.push({
     name: "Start a new workout",
     exercises: [],
-  });*/ 
+  });*/
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -34,9 +34,11 @@ export default function HomePage() {
       </button>
 
       <Modal isOpen={isModalOpen} onClose={closeModal} width="w-[400px]">
-        <h2 className="text-xl font-bold mb-4">Start Workout</h2>
-        <p>Choose Workout</p>
-        <Radio workouts={workoutNames}></Radio>
+        <div className="max-h-[80vh] overflow-y-auto p-4">
+          <h2 className="text-xl font-bold mb-4">Start Workout</h2>
+          <p>Choose Workout</p>
+          <Radio workouts={workoutNames}></Radio>
+        </div>
       </Modal>
     </div>
   );
