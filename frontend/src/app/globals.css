@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+:root {
+  --background: #1F1F1F;
+  --foreground: #ededed;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #121212;
+    --foreground: #ededed;
+  }
+}
+* {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+
+}
+
+button:hover, Link:hover {
+  background-color: #9f54fb
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
