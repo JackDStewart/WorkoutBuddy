@@ -8,6 +8,25 @@ import { getWorkouts } from "../../mockRest";
 import Radio from "@/components/Radio";
 
 export default function HomePage() {
+
+  const fetchWorkoutLogs = async () => {
+    fetch("http://localhost:8080/demo/all")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json(); // Ensure you parse the response as JSON
+      })
+      .then((data) => {
+        console.log(data); // This should log { message: "Hello from the backend!" }
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
+
+  fetchWorkoutLogs();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const workouts = getWorkouts();
   const workoutNames = workouts.map((workout) => workout.name);
