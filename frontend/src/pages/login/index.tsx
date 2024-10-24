@@ -20,7 +20,7 @@ export default function LoginPage() {
           <h3 className="code-font text-gray mb-4">
             Sign in to your account to continue
           </h3>
-          <form className="flex flex-col w-full max-w-md">
+          <form className="flex flex-col w-full max-w-md"> 
             <input
               type="email"
               placeholder="email"
@@ -46,7 +46,7 @@ export default function LoginPage() {
               Don’t have an account?&nbsp;
             </span>
             <a
-              href = {"/home"}
+              href = "/api/auth/login?screen_hint=signup"
               className="text-white text-l underline transition duration-300"
             >
               Signup
