@@ -4,11 +4,12 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 export default function LoginPage() {
-  const auth0Domain = "dev-tl8gmur5p3a4r3sh.us.auth0.com";
+  /* const auth0Domain = "dev-tl8gmur5p3a4r3sh.us.auth0.com";
   const clientId = "UueqTuat9GR9sZ17gSXSRjYiFF6WXqkC";
   const callbackUrl = "http://localhost:3000/api/auth/callback";
 
   const signupUrl = `https://${auth0Domain}/authorize?client_id=${clientId}&redirect_uri=${callbackUrl}&response_type=code&scope=openid profile email&screen_hint=signup`;
+  */
 
   return (
     <div>
@@ -45,7 +46,7 @@ export default function LoginPage() {
               Don’t have an account?&nbsp;
             </span>
             <a
-              href = {signupUrl}
+              href = {"/home"}
               className="text-white text-l underline transition duration-300"
             >
               Signup
