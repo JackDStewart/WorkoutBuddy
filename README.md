@@ -3,7 +3,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Running Backend
 
-###Starting Docker
+### Starting Docker
 First, run the docker (make sure your cd'd into the backend directory):
 
 ```bash
