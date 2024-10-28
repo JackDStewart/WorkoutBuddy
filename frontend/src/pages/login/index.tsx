@@ -1,15 +1,24 @@
 import React from "react";
 import "../../app/globals.css";
-import { useRouter } from "next/router";
-import Link from "next/link";
+import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0 hook
+import Link from "next/link"; // Import Link from Next.js
 
 export default function LoginPage() {
-  /* const auth0Domain = "dev-tl8gmur5p3a4r3sh.us.auth0.com";
-  const clientId = "UueqTuat9GR9sZ17gSXSRjYiFF6WXqkC";
-  const callbackUrl = "http://localhost:3000/api/auth/callback";
+  const { loginWithRedirect } = useAuth0(); // Get loginWithRedirect function
 
-  const signupUrl = `https://${auth0Domain}/authorize?client_id=${clientId}&redirect_uri=${callbackUrl}&response_type=code&scope=openid profile email&screen_hint=signup`;
-  */
+  const handleLogin = async () => {
+    // Call loginWithRedirect to log in the user
+    await loginWithRedirect({
+      appState: {
+        targetUrl: '/home', // This is the target URL to redirect after login
+      },
+    });
+  };
+
+  const handleSignup = () => {
+    // Directly navigate to the Auth0 signup URL
+    window.location.href = `https://dev-tl8gmur5p3a4r3sh.us.auth0.com/authorize?client_id=wJdnyIJSDQaQaptdE7aqe2jF7wCUdxSS&redirect_uri=${encodeURIComponent('http://localhost:3000/home')}&response_type=code&scope=openid profile email&screen_hint=signup`;
+  };
 
   return (
     <div>
@@ -20,7 +29,7 @@ export default function LoginPage() {
           <h3 className="code-font text-gray mb-4">
             Sign in to your account to continue
           </h3>
-          <form className="flex flex-col w-full max-w-md"> 
+          <form className="flex flex-col w-full max-w-md" onSubmit={(e) => e.preventDefault()}>
             <input
               type="email"
               placeholder="email"
@@ -40,18 +49,18 @@ export default function LoginPage() {
               {" "}
               Login
             </Link>
-            </form>
+          </form>
           <div className="flex justify-center mt-8">
-          <span className="text-white text-l"> 
+            <span className="text-white text-l">
               Don’t have an account?&nbsp;
             </span>
-            <a
-              href = "/api/auth/login?screen_hint=signup"
+            <button
+              onClick={handleSignup} // Call handleSignup on click
               className="text-white text-l underline transition duration-300"
             >
               Signup
-            </a>
-            </div>
+            </button>
+          </div>
         </div>
       </div>
     </div>
