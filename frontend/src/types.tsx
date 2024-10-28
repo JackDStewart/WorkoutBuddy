@@ -75,3 +75,8 @@ export interface AutocompleteProps<T = string> {
 export type OnChangeHandler<T> = (
   value: T | null // The selected value, which can be null
 ) => void;
+
+export interface WorkoutLog {
+  name: string;
+  exercises: ExerciseLog[];
+}

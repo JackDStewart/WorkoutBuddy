@@ -17,21 +17,19 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
     setSetList(updatedSetList); // Update local state
     onSetChange(updatedSetList); // Notify parent about the change
   };
+
   const delSet = (index: number) => {
     const updatedSetList = setList.filter((_, i) => index !== i);
     setSetList(updatedSetList);
     onSetChange(updatedSetList);
   };
+
   return (
     <div className="relative flex-shrink-0 flex-col bg-black text-gray-300 rounded-lg shadow-left-purple p-6 h-full">
       <h2 className="text-white text-xl font-bold mb-4">
         {exerciseLog.exercise.name}
       </h2>
-      <h3
-        className="text-gray-400 font-bold mb-4" /*call database for most recent weight*/
-      >
-        Last Weight: {"50lbs"}
-      </h3>
+      <h3 className="text-gray-400 font-bold mb-4">Last Weight: {"50lbs"}</h3>
       <button
         className="absolute top-[1.5rem] right-[1.5rem] text-white rounded-full hover:text-red-500 hover:bg-transparent"
         onClick={() => onDelete(exerciseLog)} // Add functionality to delete a set
@@ -39,46 +37,52 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
         ✕
       </button>
       <ul className="space-y-2 text-gray-400 mb-4">
-        {exerciseLog.sets.map((_, index) => (
+        {setList.map((_, index) => (
           <li key={index}>
-            <div className="flex space-x-4">
-              <div className="mt-4 mb-2">Set: {index + 1}</div>
-              <input
-                type="text"
-                className="text-white bg-darkPurple p-2 border border-white rounded-lg focus:outline-none focus:ring-2 focus:border-transparent focus:ring-purple mb-6 mt-2 w-16"
-                value={exerciseLog.sets[index].weight} // Manage weight input
-                onChange={(e) => {
-                  const newWeight = Number(e.target.value);
-                  const updatedSets = [...exerciseLog.sets];
-                  updatedSets[index] = {
-                    ...updatedSets[index],
-                    weight: newWeight,
-                  };
-                  setSetList(updatedSets);
-                  onSetChange(updatedSets);
-                }}
-              />
-              <span className="mt-4 mb-2">lbs.</span>
-              <input
-                type="text"
-                className="text-white bg-darkPurple p-2 border border-white rounded-lg focus:outline-none focus:ring-2 focus:border-transparent focus:ring-purple mb-6 mt-2 w-16"
-                value={exerciseLog.sets[index].reps} // Manage reps input
-                onChange={(e) => {
-                  const newReps = Number(e.target.value);
-                  const updatedSets = [...exerciseLog.sets];
-                  updatedSets[index] = {
-                    ...updatedSets[index],
-                    reps: newReps,
-                  };
-                  setSetList(updatedSets);
-                  onSetChange(updatedSets);
-                }}
-              />
-              <span className="mt-4 mb-2">reps</span>
-
-              {/* Push X button to the right */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="mr-2">Set: {index + 1}</div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="number"
+                  min="0"
+                  className="text-white bg-darkPurple p-2 border border-white rounded-lg focus:outline-none focus:ring-2 focus:border-transparent focus:ring-purple w-24" // Adjust width for better responsiveness
+                  value={setList[index].weight} // Manage weight input
+                  onChange={(e) => {
+                    const newWeight = Number(e.target.value);
+                    const updatedSets = [...setList];
+                    updatedSets[index] = {
+                      ...updatedSets[index],
+                      weight: newWeight,
+                    };
+                    setSetList(updatedSets);
+                    onSetChange(updatedSets);
+                  }}
+                />
+                <span>lbs.</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="number"
+                  min="0"
+                  className="text-white bg-darkPurple p-2 border border-white rounded-lg focus:outline-none focus:ring-2 focus:border-transparent focus:ring-purple w-24" // Adjust width for better responsiveness
+                  value={setList[index].reps} // Manage reps input
+                  onChange={(e) => {
+                    const newReps = Number(e.target.value);
+                    const updatedSets = [...setList];
+                    updatedSets[index] = {
+                      ...updatedSets[index],
+                      reps: newReps,
+                    };
+                    setSetList(updatedSets);
+                    onSetChange(updatedSets);
+                  }}
+                />
+                <span>reps</span>
+              </div>
               <button
-                className="relative bottom-[.5rem] left-[2rem]  rounded-full hover:text-red-500 hover:bg-transparent"
+                className="text-red-500 hover:bg-transparent rounded-full"
                 onClick={() => delSet(index)} // Add functionality to delete a set
               >
                 ✕
@@ -87,7 +91,7 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
           </li>
         ))}
       </ul>
-      <div className="footer flex relative justify-around mt-auto ">
+      <div className="footer flex justify-center mt-auto">
         <button
           className="bg-purple text-xl font-semibold text-black py-1 px-3 rounded-full"
           onClick={addNewSet} //create new SetLog in the Exercise Log

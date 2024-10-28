@@ -4,17 +4,26 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Modal from "@/components/Modal"; // need modal component for popup
 import { SingleAutocomplete } from "@/components/Autocomplete";
-import { Workout, SetLog, ExerciseLog, Exercise } from "@/types";
+import { Workout, SetLog, ExerciseLog, WorkoutLog } from "@/types";
 import ExerciseCard from "@/components/ExerciseCard";
 
 const Current = (/*workout: Workout*/) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => {
-    setIsModalOpen(true);
+  const [isModal1Open, setIsModal1Open] = useState(false);
+  const openModal1 = () => {
+    setIsModal1Open(true);
   };
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const closeModal1 = () => {
+    setIsModal1Open(false);
   };
+
+  const [isModal2Open, setIsModal2Open] = useState(false);
+  const openModal2 = () => {
+    setIsModal2Open(true);
+  };
+  const closeModal2 = () => {
+    setIsModal2Open(false);
+  };
+  const [cur, setCur] = useState<string | null>(null);
 
   const router = useRouter();
   //let { workout } = router.query; // Get the selected workout from query parameters
@@ -29,10 +38,6 @@ const Current = (/*workout: Workout*/) => {
       { name: "Bicep Curls" },
     ],
     isFavorite: false,
-  };
-  let cur: string | null = null;
-  const handleChange = (newValue: string | null) => {
-    cur = newValue;
   };
 
   const [exerciseList, setExerciseList] = useState<ExerciseLog[]>(
@@ -55,7 +60,7 @@ const Current = (/*workout: Workout*/) => {
       date: new Date(),
     };
     setExerciseList((prev) => [...prev, newExercise]);
-    closeModal();
+    closeModal1();
   };
 
   const delExercise = (exercise: ExerciseLog) => {
@@ -70,7 +75,9 @@ const Current = (/*workout: Workout*/) => {
     };
     setExerciseList(updatedExerciseLogs);
   };
+
   const getButtonClasses = () => {
+    //places add exercise button in correct position
     if (exerciseList.length % 3 === 0) {
       return "col-start-1 col-span-3";
     } else if (exerciseList.length === 1) {
@@ -79,6 +86,31 @@ const Current = (/*workout: Workout*/) => {
       return "col-start-3 col-span-1";
     }
   };
+
+  const postWorkoutLog = async (workoutLog: WorkoutLog) => {
+    fetch("api.address.here", {
+      //inset API address
+      method: "post",
+      body: JSON.stringify(workoutLog),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json(); // Ensure you parse the response as JSON
+      })
+      .then((response) => response.json())
+      .then((json) => console.log(json));
+  };
+
+  const saveWorkoutLog = () => {
+    let newWorkoutLog: WorkoutLog = {
+      name: workout.name,
+      exercises: exerciseList,
+    };
+    postWorkoutLog(newWorkoutLog);
+  };
+
   return (
     <div>
       <Header />
@@ -86,7 +118,7 @@ const Current = (/*workout: Workout*/) => {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-white text-2xl">{workout.name}</h2>
         </div>
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
+        <div className="grid grid-cols-2 gap-10 ">
           {exerciseList.map((exerciseLog, index) => (
             <ExerciseCard
               key={exerciseLog.exercise.name}
@@ -102,19 +134,31 @@ const Current = (/*workout: Workout*/) => {
           )}
           <button
             className={`${getButtonClasses()} bg-purple text-4xl font-medium place-self-center text-black py-4 px-6 rounded-full`}
-            onClick={() => openModal()} //modal pop-up
+            onClick={() => openModal1()} //modal pop-up
           >
             +
           </button>
         </div>
+        <div className="mt-5 place-items-center">
+          <button
+            //accumulate data into WorkoutLog and POST
+            onClick={openModal2}
+            className="flex justify-center self-center
+        w-[350px] pt-2 pb-2 rounded-full text-2xl bg-purple border-none transition-transform
+        duration-500 hover:bg-transitionPurple hover:scale-125"
+          >
+            Finish Workout
+          </button>
+        </div>
       </div>
-      <Modal isOpen={isModalOpen} onClose={closeModal} width={"w-[350px]"}>
+      //modal1, for selecting exercise to add
+      <Modal isOpen={isModal1Open} onClose={closeModal1} width={"w-[350px]"}>
         <div>
           <h2 className="text-xl font-bold mb-4">Add an Excersise:</h2>
           <SingleAutocomplete
             label="Exercise"
             data={["exercise1", "exercise2"]} //implement api call to get all exercises here
-            onExerciseChange={handleChange}
+            onExerciseChange={setCur}
           ></SingleAutocomplete>
           <br />
           <div className="flex justify-center">
@@ -125,6 +169,20 @@ const Current = (/*workout: Workout*/) => {
               Add Exercise
             </button>
           </div>
+        </div>
+      </Modal>
+      //Modal2, for confirming workout save
+      <Modal isOpen={isModal2Open} onClose={closeModal2} width={"w-[350px]"}>
+        <div className="flex flex-col justify-center items-center h-full">
+          <h2 className="text-xl font-bold mb-4 text-center">
+            Are you sure you want to finish?
+          </h2>
+          <button
+            className="bg-purple text-lg font-medium text-black py-2 px-4 rounded-full w-1/2"
+            onClick={saveWorkoutLog}
+          >
+            Confirm
+          </button>
         </div>
       </Modal>
     </div>
