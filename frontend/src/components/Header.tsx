@@ -14,6 +14,8 @@ const Header = () => {
         return "Hello, user";
       case "/create":
         return "Create Workout";
+      case "/generate":
+        return "Generate Workout";
       case "/social":
         return "Connect with Others";
       case "/progress":
@@ -62,6 +64,14 @@ const Header = () => {
           }`}
         >
           Create Workout
+        </Link>
+        <Link
+          href={"/generate"}
+          className={`border border-none bg-purple w-[180px] p-2 rounded-full text-center mx-1.5 hover:bg-transitionPurple ${
+            isActiveLink("/generate") ? "font-bold text-black" : ""
+          }`}
+        >
+          Generate Workout
         </Link>
         <Link
           href={"/social"}
