@@ -14,9 +14,9 @@ const EquipmentSelector: React.FC<EquipmentSelectorProps> = ({
   onRemove,
 }) => (
   <div>
-    <label className="block text-white text-sm mb-1 mt-8">
+    <h2 className="block text-white text-sm mb-1 mt-8">
       Filter Exercises By Equipment
-    </label>
+    </h2>
     <div className="flex flex-wrap bg-darkPurple p-2 border border-white rounded-lg mb-4">
       <div className="flex flex-wrap">
         {selectedEquipment.map((option) => (

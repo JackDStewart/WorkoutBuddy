@@ -128,9 +128,7 @@ const Create = () => {
       <div className="relative bg-darkPurple top-5 rounded-lg p-6 ml-20 mr-20">
         <div className="flex">
           <div className="w-1/2 p-4">
-            <label className="block text-white text-sm mb-1">
-              Workout Name
-            </label>
+            <h2 className="block text-white text-sm mb-1">Workout Name</h2>
             <input
               type="text"
               placeholder="Ex: Chest and Back Day"
@@ -151,9 +149,9 @@ const Create = () => {
               onRemove={handleEquipmentRemoveOption}
             />
 
-            <label className="block text-white text-sm mb-1 mt-8">
+            <h2 className="block text-white text-sm mb-1 mt-8">
               Search and Add Exercises
-            </label>
+            </h2>
             <div className="w-full">
               <SingleAutocomplete
                 label="Exercise"
@@ -183,7 +181,7 @@ const Create = () => {
       <Modal isOpen={isModalOpen} onClose={closeModal} width="w-[400px]">
         <div>
           <h2 className="font-bold text-xl mb-4">Create Custom Exercise</h2>
-          <label className="block text-white text-sm mb-1">Exercise Name</label>
+          <h2 className="block text-white text-sm mb-1">Exercise Name</h2>
           <input
             type="text"
             placeholder="Ex: Oscillating Owens"

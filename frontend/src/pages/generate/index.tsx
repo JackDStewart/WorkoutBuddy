@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import { Exercise } from "../../types";
-import Link from "next/link";
 import Header from "@/components/Header";
-
-import { SingleAutocomplete } from "@/components/Autocomplete";
-
 import AddedExercise from "@/components/AddedExercise";
 import { getWorkouts } from "../../mockRest";
 
@@ -25,7 +20,7 @@ const Generate = () => {
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<string[]>(
     []
   );
-  const [selectedEquipment, setSelectedequipment] = useState<string[]>([]);
+  const [selectedEquipment, setSelectedEquipment] = useState<string[]>([]);
   const [numExercises, setNumExercises] = useState<number>(6);
 
   const workouts = getWorkouts();
@@ -54,13 +49,13 @@ const Generate = () => {
   const handleEquipmentSelectOption = (option: string) => {
     // Add the option to the selected muscleGroups list if it's not already there
     if (!selectedEquipment.includes(option)) {
-      setSelectedequipment([...selectedEquipment, option]);
+      setSelectedEquipment([...selectedEquipment, option]);
     }
   };
 
   const handleEquipmentRemoveOption = (option: string) => {
     // Remove the option from the selected muscleGroups list
-    setSelectedequipment(
+    setSelectedEquipment(
       selectedEquipment.filter((selected) => selected !== option)
     );
   };
@@ -82,9 +77,7 @@ const Generate = () => {
       <div className="relative bg-darkPurple top-5 rounded-lg p-6 ml-20 mr-20">
         <div className="flex">
           <div className="w-1/2 p-4">
-            <label className="block text-white text-sm mb-1">
-              Workout Name
-            </label>
+            <h2 className="block text-white text-sm mb-1">Workout Name</h2>
             <input
               type="text"
               placeholder="Ex: Chest and Back Day"
@@ -92,9 +85,9 @@ const Generate = () => {
             />
 
             {/* Muscle Groups */}
-            <label className="block text-white text-sm mb-1 mt-8">
+            <h2 className="block text-white text-sm mb-1 mt-8">
               Filter Exercises By Muscle Groups
-            </label>
+            </h2>
 
             {/* Input container with selected muscleGroups inside */}
             <div className="flex flex-wrap bg-darkPurple p-2 border border-white rounded-lg focus:outline-none focus:ring-2 focus:border-transparent focus:ring-purple mb-4">
@@ -143,9 +136,9 @@ const Generate = () => {
             </div>
             {/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */}
             {/* Equipment */}
-            <label className="block text-white text-sm mb-1 mt-8">
+            <h2 className="block text-white text-sm mb-1 mt-8">
               Filter Exercises By Equipment
-            </label>
+            </h2>
 
             {/* Input container with selected muscleGroups inside */}
             <div className="flex flex-wrap bg-darkPurple p-2 border border-white rounded-lg focus:outline-none focus:ring-2 focus:border-transparent focus:ring-purple mb-4">

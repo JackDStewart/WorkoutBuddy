@@ -170,7 +170,7 @@ const Progress = () => {
     <div>
       <Header />
       <div className="relative bg-darkPurple top-10 rounded-lg p-6 ml-20 mr-20">
-        <label className="text-white text-2xl mb-6">Workout Name</label>
+        <h1 className="text-white text-2xl mb-6">Workout Name</h1>
         <div className="w-3/6 mt-5">
           <SingleAutocomplete
             label="Exercise"
