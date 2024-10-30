@@ -34,3 +34,10 @@ button:hover, Link:hover {
     text-wrap: balance;
   }
 }
+
+.bg-login {
+  background-image: url('/le.jpg'); /* Ensure this is the correct path to your image */
+  background-size: cover; /* Ensure the image covers the entire area */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+}
