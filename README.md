@@ -3,6 +3,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Running Backend
 
+Add variables for username, password, and url to environment. 
+
 Run the BackendApplication.java class
 
 
