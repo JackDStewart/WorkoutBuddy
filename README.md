@@ -10,7 +10,12 @@ Run the BackendApplication.java class
 
 ## Running Frontend
 
-First, run the development server:
+First install the packages,
+```bash
+npm install
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
