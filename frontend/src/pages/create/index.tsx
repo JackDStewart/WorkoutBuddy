@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Exercise } from "../../types";
-import Link from "next/link";
 import Header from "@/components/Header";
 import Modal from "@/components/Modal";
 import { SingleAutocomplete } from "@/components/Autocomplete";
@@ -26,10 +24,9 @@ const Create = () => {
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<string[]>(
     []
   );
-  const [selectedEquipment, setSelectedEquipement] = useState<string[]>([]);
+  const [selectedEquipment, setSelectedEquipment] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [customExerciseName, setCustomExerciseName] = useState<string>("");
-
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -54,12 +51,12 @@ const Create = () => {
 
   const handleEquipmentSelectOption = (option: string) => {
     if (!selectedEquipment.includes(option)) {
-      setSelectedEquipement([...selectedEquipment, option]);
+      setSelectedEquipment([...selectedEquipment, option]);
     }
   };
 
   const handleEquipmentRemoveOption = (option: string) => {
-    setSelectedEquipement(
+    setSelectedEquipment(
       selectedEquipment.filter((selected) => selected !== option)
     );
   };
