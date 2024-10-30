@@ -76,16 +76,13 @@ const Current = (/*workout: Workout*/) => {
   };
 
   const getButtonClasses = () => {
-    //places add exercise button in correct position
-    if (exerciseList.length % 3 === 0) {
-      return "col-start-1 col-span-3";
-    } else if (exerciseList.length === 1) {
-      return "col-start-2 col-span-1";
-    } else if (exerciseList.length === 2) {
-      return "col-start-3 col-span-1";
+    // Check if the list is odd or even and assign column start accordingly
+    if (exerciseList.length % 2 === 0) {
+      return "col-span-2 justify-self-center"; // Centers the button across both columns
+    } else {
+      return "col-start-2"; // Places button in the second column
     }
   };
-
   const postWorkoutLog = async (workoutLog: WorkoutLog) => {
     fetch("api.address.here", {
       //inset API address
@@ -138,12 +135,13 @@ const Current = (/*workout: Workout*/) => {
             +
           </button>
         </div>
+        <br />
         <div className="mt-5 place-items-center">
           <button
             //accumulate data into WorkoutLog and POST
             onClick={openModal2}
             className="flex justify-center self-center
-        w-[350px] pt-2 pb-2 rounded-full text-2xl bg-purple border-none transition-transform
+        w-[350px] pt-2 pb-2 rounded-full text-2xl mt-5 bg-purple border-none transition-transform
         duration-500 hover:bg-transitionPurple hover:scale-125"
           >
             Finish Workout
