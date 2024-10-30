@@ -1,4 +1,4 @@
-import { ExerciseLog, Workout, ExerciseCardProps, SetLog } from "@/types";
+import { ExerciseCardProps, SetLog } from "@/types";
 import React, { useState } from "react";
 
 const ExerciseCard: React.FC<ExerciseCardProps> = ({

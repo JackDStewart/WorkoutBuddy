@@ -32,14 +32,13 @@ const Social: React.FC<FriendCardProps> = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
-          {friends &&
-            friends.map((friend) => (
-              <FriendCard
-                key={friend.name}
-                friend={friend}
-                onClick={() => openModal(friend)}
-              />
-            ))}
+          {friends?.map((friend) => (
+            <FriendCard
+              key={friend.name}
+              friend={friend}
+              onClick={() => openModal(friend)}
+            />
+          ))}
         </div>
       </div>
       <Modal isOpen={isModalOpen} onClose={closeModal} width="w-[400px]">

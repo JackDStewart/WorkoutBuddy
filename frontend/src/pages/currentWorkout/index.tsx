@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import Header from "@/components/Header";
 import Modal from "@/components/Modal"; // need modal component for popup
 import { SingleAutocomplete } from "@/components/Autocomplete";
@@ -151,7 +150,7 @@ const Current = (/*workout: Workout*/) => {
           </button>
         </div>
       </div>
-      //modal1, for selecting exercise to add
+      {/*modal1, for selecting exercise to add */}
       <Modal isOpen={isModal1Open} onClose={closeModal1} width={"w-[350px]"}>
         <div>
           <h2 className="text-xl font-bold mb-4">Add an Excersise:</h2>
@@ -171,7 +170,7 @@ const Current = (/*workout: Workout*/) => {
           </div>
         </div>
       </Modal>
-      //Modal2, for confirming workout save
+      {/* Modal2, for confirming workout save */}
       <Modal isOpen={isModal2Open} onClose={closeModal2} width={"w-[350px]"}>
         <div className="flex flex-col justify-center items-center h-full">
           <h2 className="text-xl font-bold mb-4 text-center">

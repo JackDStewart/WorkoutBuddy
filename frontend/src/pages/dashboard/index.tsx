@@ -25,8 +25,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
 
   // Function to handle updating the favorite status
   const handleUpdateFavorite = (workoutName: string, isFavorite: boolean) => {
-
-    toggleFavoriteWorkout(workoutName)
+    toggleFavoriteWorkout(workoutName);
 
     setWorkouts((prevWorkouts) =>
       prevWorkouts.map((workout) =>
@@ -49,14 +48,13 @@ const Dashboard: React.FC<DashboardProps> = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
-          {favWorkouts &&
-            favWorkouts.map((workout) => (
-              <WorkoutCard
-                key={workout.name}
-                workout={workout}
-                onUpdateFavorite={handleUpdateFavorite} // Pass the function down
-              />
-            ))}
+          {favWorkouts?.map((workout) => (
+            <WorkoutCard
+              key={workout.name}
+              workout={workout}
+              onUpdateFavorite={handleUpdateFavorite} // Pass the function down
+            />
+          ))}
         </div>
       </div>
 
@@ -64,14 +62,13 @@ const Dashboard: React.FC<DashboardProps> = () => {
         <div className="max-h-[80vh] overflow-y-auto p-4">
           <h2 className="text-xl font-bold mb-4">My Workouts</h2>
           <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
-            {workouts &&
-              workouts.map((workout) => (
-                <WorkoutCard
-                  key={workout.name}
-                  workout={workout}
-                  onUpdateFavorite={handleUpdateFavorite} // Pass the function down here too
-                />
-              ))}
+            {workouts?.map((workout) => (
+              <WorkoutCard
+                key={workout.name}
+                workout={workout}
+                onUpdateFavorite={handleUpdateFavorite} // Pass the function down here too
+              />
+            ))}
           </div>
         </div>
       </Modal>

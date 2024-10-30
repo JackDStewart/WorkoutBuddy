@@ -8,20 +8,26 @@ import { SingleAutocomplete } from "@/components/Autocomplete";
 import AddedExercise from "@/components/AddedExercise";
 import { getWorkouts } from "../../mockRest";
 
-
 const Generate = () => {
   const [muscleGroups] = useState<string[]>([
-    "Chest", "Back", "Shoulders", "Biceps", "Triceps",
-    "Quads", "Hamstrings", "Calves", "Cardio"
+    "Chest",
+    "Back",
+    "Shoulders",
+    "Biceps",
+    "Triceps",
+    "Quads",
+    "Hamstrings",
+    "Calves",
+    "Cardio",
   ]);
-  const [equipment] = useState<string[]>([
-    "Barbell", "Dumbells", "Machine"
-  ]);
+  const [equipment] = useState<string[]>(["Barbell", "Dumbells", "Machine"]);
   const [addedExercises, setAddedExercises] = useState<string[]>([]);
-  const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<string[]>([]);
-  const [selectedEquipment, setSelectedEquipement] = useState<string[]>([]);
+  const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<string[]>(
+    []
+  );
+  const [selectedEquipment, setSelectedequipment] = useState<string[]>([]);
   const [numExercises, setNumExercises] = useState<number>(6);
-  
+
   const workouts = getWorkouts();
   // const workoutNames = workouts.map(workout => workout.name);
   let exerciseNames = workouts.flatMap((workout) =>
@@ -30,7 +36,7 @@ const Generate = () => {
   exerciseNames = Array.from(new Set(exerciseNames));
 
   //const exerciseNames = exercises.map((exercise) => exercise.name);
-  
+
   const handleMuscleSelectOption = (option: string) => {
     // Add the option to the selected muscleGroups list if it's not already there
     if (!selectedMuscleGroups.includes(option)) {
@@ -40,19 +46,23 @@ const Generate = () => {
 
   const handleMuscleRemoveOption = (option: string) => {
     // Remove the option from the selected muscleGroups list
-    setSelectedMuscleGroups(selectedMuscleGroups.filter((selected) => selected !== option));
+    setSelectedMuscleGroups(
+      selectedMuscleGroups.filter((selected) => selected !== option)
+    );
   };
 
   const handleEquipmentSelectOption = (option: string) => {
     // Add the option to the selected muscleGroups list if it's not already there
     if (!selectedEquipment.includes(option)) {
-      setSelectedEquipement([...selectedEquipment, option]);
+      setSelectedequipment([...selectedEquipment, option]);
     }
   };
 
   const handleEquipmentRemoveOption = (option: string) => {
     // Remove the option from the selected muscleGroups list
-    setSelectedEquipement(selectedEquipment.filter((selected) => selected !== option));
+    setSelectedequipment(
+      selectedEquipment.filter((selected) => selected !== option)
+    );
   };
 
   const getRandomUniqueSelections = (numSelections: number) => {
@@ -68,7 +78,7 @@ const Generate = () => {
 
   return (
     <div>
-      <Header/>
+      <Header />
       <div className="relative bg-darkPurple top-5 rounded-lg p-6 ml-20 mr-20">
         <div className="flex">
           <div className="w-1/2 p-4">
@@ -88,7 +98,6 @@ const Generate = () => {
 
             {/* Input container with selected muscleGroups inside */}
             <div className="flex flex-wrap bg-darkPurple p-2 border border-white rounded-lg focus:outline-none focus:ring-2 focus:border-transparent focus:ring-purple mb-4">
-              
               {/* Render selected muscleGroups as bubbles */}
               <div className="flex flex-wrap">
                 {selectedMuscleGroups.map((option) => (
@@ -121,7 +130,7 @@ const Generate = () => {
             {/* Dropdown or list of muscleGroups */}
             <div className="mt-4">
               {muscleGroups
-                .filter(option => !selectedMuscleGroups.includes(option)) // Filter out selected muscleGroups
+                .filter((option) => !selectedMuscleGroups.includes(option)) // Filter out selected muscleGroups
                 .map((option) => (
                   <button
                     key={option}
@@ -130,7 +139,7 @@ const Generate = () => {
                   >
                     {option}
                   </button>
-              ))}
+                ))}
             </div>
             {/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */}
             {/* Equipment */}
@@ -140,7 +149,6 @@ const Generate = () => {
 
             {/* Input container with selected muscleGroups inside */}
             <div className="flex flex-wrap bg-darkPurple p-2 border border-white rounded-lg focus:outline-none focus:ring-2 focus:border-transparent focus:ring-purple mb-4">
-              
               {/* Render selected muscleGroups as bubbles */}
               <div className="flex flex-wrap">
                 {selectedEquipment.map((option) => (
@@ -173,7 +181,7 @@ const Generate = () => {
             {/* Dropdown or list of equipment */}
             <div className="mt-4">
               {equipment
-                .filter(option => !selectedEquipment.includes(option)) // Filter out selected equipment
+                .filter((option) => !selectedEquipment.includes(option)) // Filter out selected equipment
                 .map((option) => (
                   <button
                     key={option}
@@ -182,29 +190,32 @@ const Generate = () => {
                   >
                     {option}
                   </button>
-              ))}
+                ))}
             </div>
             <div className="flex items-center space-x-4 space-y-6">
-                <button 
-                    className="bg-purple font-bold text-white p-3 rounded-lg mt-6"
-                    onClick={() => handleGenerate()}
-                    >
+              <button
+                className="bg-purple font-bold text-white p-3 rounded-lg mt-6"
+                onClick={() => handleGenerate()}
+              >
                 Generate Workout
-                </button>
-                <input
-                    type="number"
-                    min="0"
-                    placeholder="Number of Exercises"
-                    onChange={(e) => setNumExercises(Number(e.target.value))}
-                    className="text-white bg-darkPurple p-3 border border-white rounded-lg focus:outline-none focus:ring-2 focus:border-transparent focus:ring-purple"
-                />
+              </button>
+              <input
+                type="number"
+                min="0"
+                placeholder="Number of Exercises"
+                onChange={(e) => setNumExercises(Number(e.target.value))}
+                className="text-white bg-darkPurple p-3 border border-white rounded-lg focus:outline-none focus:ring-2 focus:border-transparent focus:ring-purple"
+              />
             </div>
-
           </div>
           {/* Right Column for Added Exercises */}
           <div className="w-1/2 p-4 ml-auto">
             <h2 className="font-bold text-2xl border-b-2">Added Exercises</h2>
-            <AddedExercise exercises={addedExercises} addedList={addedExercises} setter={setAddedExercises}></AddedExercise>
+            <AddedExercise
+              exercises={addedExercises}
+              addedList={addedExercises}
+              setter={setAddedExercises}
+            ></AddedExercise>
           </div>
         </div>
       </div>
