@@ -8,141 +8,393 @@ const workouts: Workout[] = [
   {
     name: "Full Body Workout",
     exercises: [
-      { name: "Push-ups" },
-      { name: "Squat" },
-      { name: "Plank" },
-      { name: "Lat Pulldown" },
-      { name: "Bicep Curls" },
+      {
+        name: "Push-ups",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Squat",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Plank",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Lat Pulldown",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Bicep Curls",
+        equipment: "",
+        muscleGroup: "",
+      },
     ],
     isFavorite: true,
   },
   {
     name: "Push A",
     exercises: [
-      { name: "Bench Press" },
-      { name: "Shoulder Press" },
-      { name: "Push-ups" },
+      {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Shoulder Press",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Push-ups",
+        equipment: "",
+        muscleGroup: "",
+      },
     ],
     isFavorite: true,
   },
   {
     name: "Pull A",
     exercises: [
-      { name: "Dumbbell Rows" },
-      { name: "Pull Ups" },
-      { name: "Bicep Curls" },
-      { name: "Hammer Curls" },
-      { name: "Lat Pulldowns" },
+      {
+        name: "Dumbbell Rows",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Pull Ups",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Bicep Curls",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Hammer Curls",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Lat Pulldowns",
+        equipment: "",
+        muscleGroup: "",
+      },
     ],
     isFavorite: false,
   },
   {
     name: "Pull B",
     exercises: [
-      { name: "Barbell Rows" },
-      { name: "Pull Ups" },
-      { name: "Bicep Curls" },
-      { name: "Hammer Curls" },
-      { name: "Lat Pulldowns" },
+      {
+        name: "Barbell Rows",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Pull Ups",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Bicep Curls",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Hammer Curls",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Lat Pulldowns",
+        equipment: "",
+        muscleGroup: "",
+      },
     ],
     isFavorite: false,
   },
   {
     name: "Legs",
     exercises: [
-      { name: "Squats" },
-      { name: "Lunges" },
-      { name: "Leg Press" },
-      { name: "Calf Raises" },
-      { name: "Deadlifts" },
+      {
+        name: "Squats",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Lunges",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Leg Press",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Calf Raises",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Deadlifts",
+        equipment: "",
+        muscleGroup: "",
+      },
     ],
     isFavorite: false,
   },
   {
     name: "Full Body",
     exercises: [
-      { name: "Burpees" },
-      { name: "Kettlebell Swings" },
-      { name: "Push-ups" },
-      { name: "Mountain Climbers" },
-      { name: "Plank" },
+      {
+        name: "Burpees",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Kettlebell Swings",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Push-ups",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Mountain Climbers",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Plank",
+        equipment: "",
+        muscleGroup: "",
+      },
     ],
     isFavorite: false,
   },
   {
     name: "Cardio Blast",
     exercises: [
-      { name: "Running" },
-      { name: "Cycling" },
-      { name: "Jump Rope" },
-      { name: "Rowing Machine" },
-      { name: "Box Jumps" },
+      {
+        name: "Running",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Cycling",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Jump Rope",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Rowing Machine",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Box Jumps",
+        equipment: "",
+        muscleGroup: "",
+      },
     ],
     isFavorite: true,
   },
   {
     name: "Core Workout",
     exercises: [
-      { name: "Crunches" },
-      { name: "Russian Twists" },
-      { name: "Plank" },
-      { name: "Leg Raises" },
-      { name: "Bicycle Crunches" },
+      {
+        name: "Crunches",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Russian Twists",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Plank",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Leg Raises",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Bicycle Crunches",
+        equipment: "",
+        muscleGroup: "",
+      },
     ],
     isFavorite: false,
   },
   {
     name: "Yoga Flow",
     exercises: [
-      { name: "Downward Dog" },
-      { name: "Warrior II" },
-      { name: "Child's Pose" },
-      { name: "Tree Pose" },
-      { name: "Cobra Pose" },
+      {
+        name: "Downward Dog",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Warrior II",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Child's Pose",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Tree Pose",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Cobra Pose",
+        equipment: "",
+        muscleGroup: "",
+      },
     ],
     isFavorite: true,
   },
   {
     name: "HIIT Circuit",
     exercises: [
-      { name: "High Knees" },
-      { name: "Burpees" },
-      { name: "Squat Jumps" },
-      { name: "Jumping Jacks" },
-      { name: "Plank Jacks" },
+      {
+        name: "High Knees",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Burpees",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Squat Jumps",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Jumping Jacks",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Plank Jacks",
+        equipment: "",
+        muscleGroup: "",
+      },
     ],
     isFavorite: false,
   },
   {
     name: "Strength Training",
     exercises: [
-      { name: "Squats" },
-      { name: "Deadlifts" },
-      { name: "Bench Press" },
-      { name: "Pull-Ups" },
-      { name: "Overhead Press" },
+      {
+        name: "Squats",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Deadlifts",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Pull-Ups",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Overhead Press",
+        equipment: "",
+        muscleGroup: "",
+      },
     ],
     isFavorite: true,
   },
   {
     name: "Upper Body",
     exercises: [
-      { name: "Push-ups" },
-      { name: "Tricep Extensions" },
-      { name: "Chest Fly" },
-      { name: "Dumbbell Rows" },
-      { name: "Front Raises" },
+      {
+        name: "Push-ups",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Tricep Extensions",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Chest Fly",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Dumbbell Rows",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Front Raises",
+        equipment: "",
+        muscleGroup: "",
+      },
     ],
     isFavorite: false,
   },
   {
     name: "Lower Body",
     exercises: [
-      { name: "Leg Extensions" },
-      { name: "Leg Curls" },
-      { name: "Glute Bridges" },
-      { name: "Hip Thrusts" },
-      { name: "Side Lunges" },
+      {
+        name: "Leg Extensions",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Leg Curls",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Glute Bridges",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Hip Thrusts",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Side Lunges",
+        equipment: "",
+        muscleGroup: "",
+      },
     ],
     isFavorite: true,
   },
@@ -151,7 +403,11 @@ const workouts: Workout[] = [
 export const getExerciseLogs = (): ExerciseLog[] => {
   return [
     {
-      exercise: { name: "Squat" },
+      exercise: {
+        name: "Squat",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 100, reps: 10 },
         { weight: 105, reps: 8 },
@@ -160,7 +416,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2024-01-01"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 100, reps: 10 },
         { weight: 105, reps: 8 },
@@ -169,7 +429,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2024-01-01"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 115, reps: 8 },
         { weight: 120, reps: 7 },
@@ -178,7 +442,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2024-02-01"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 130, reps: 8 },
         { weight: 135, reps: 5 },
@@ -187,7 +455,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2024-03-01"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 145, reps: 7 },
         { weight: 150, reps: 5 },
@@ -196,7 +468,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2024-04-01"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 160, reps: 8 },
         { weight: 165, reps: 5 },
@@ -205,7 +481,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2024-05-01"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 175, reps: 5 },
         { weight: 180, reps: 6 },
@@ -214,7 +494,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2024-06-01"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 190, reps: 6 },
         { weight: 195, reps: 4 },
@@ -223,7 +507,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2024-07-01"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 205, reps: 6 },
         { weight: 210, reps: 4 },
@@ -232,7 +520,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2024-08-01"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 220, reps: 6 },
         { weight: 225, reps: 5 },
@@ -241,7 +533,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2024-09-01"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 235, reps: 6 },
         { weight: 240, reps: 5 },
@@ -250,7 +546,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2024-10-01"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 250, reps: 6 },
         { weight: 255, reps: 5 },
@@ -259,7 +559,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2024-11-01"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 265, reps: 6 },
         { weight: 270, reps: 5 },
@@ -268,7 +572,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2024-12-01"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 265, reps: 6 },
         { weight: 270, reps: 5 },
@@ -277,7 +585,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2024-12-02"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 50, reps: 6 },
         { weight: 50, reps: 5 },
@@ -286,7 +598,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2023-01-02"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 60, reps: 6 },
         { weight: 60, reps: 5 },
@@ -295,7 +611,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2023-02-02"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 60, reps: 6 },
         { weight: 60, reps: 5 },
@@ -304,7 +624,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2023-03-02"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 60, reps: 6 },
         { weight: 60, reps: 5 },
@@ -313,7 +637,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2023-04-02"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 60, reps: 6 },
         { weight: 60, reps: 5 },
@@ -322,7 +650,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2023-05-02"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 60, reps: 6 },
         { weight: 60, reps: 5 },
@@ -331,7 +663,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2023-06-02"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 60, reps: 6 },
         { weight: 60, reps: 5 },
@@ -340,7 +676,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2023-07-02"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 60, reps: 6 },
         { weight: 60, reps: 5 },
@@ -349,7 +689,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2023-07-02"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 60, reps: 6 },
         { weight: 60, reps: 5 },
@@ -358,7 +702,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2023-09-02"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 60, reps: 6 },
         { weight: 60, reps: 5 },
@@ -367,7 +715,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2023-10-02"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 60, reps: 6 },
         { weight: 60, reps: 5 },
@@ -376,7 +728,11 @@ export const getExerciseLogs = (): ExerciseLog[] => {
       date: new Date("2023-11-02"),
     },
     {
-      exercise: { name: "Bench Press" },
+      exercise: {
+        name: "Bench Press",
+        equipment: "",
+        muscleGroup: "",
+      },
       sets: [
         { weight: 60, reps: 6 },
         { weight: 60, reps: 5 },

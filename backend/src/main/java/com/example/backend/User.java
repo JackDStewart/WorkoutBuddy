@@ -1,9 +1,9 @@
 package com.example.backend;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
+import java.util.Set;
 
 @Entity // This tells Hibernate to make a table out of this class
 public class User {
@@ -14,7 +14,14 @@ public class User {
 	private String name;
 
 	private String email;
-	private String username;
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "exerciseLog_id") // Foreign key in SetLog table
+	private Set<ExerciseLog> exerciseLogs;
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "workout_id") // Foreign key in SetLog table
+	private Set<Workout> workouts;
 
 	public Integer getId() {
 		return id;

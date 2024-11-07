@@ -163,7 +163,7 @@ const Create = () => {
             </div>
             <button
               onClick={openModal}
-              className="flex items-center text-white rounded-full px-3 py-1 mr-2 mb-1 mt-1 border hover:text-black hover:bg-white mt-10"
+              className="flex items-center text-white rounded-full px-3 py-1 mr-2 mb-1 border hover:text-black hover:bg-white mt-10"
             >
               Create Custom Exercise
             </button>

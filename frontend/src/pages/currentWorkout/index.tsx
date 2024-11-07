@@ -30,11 +30,31 @@ const Current = (/*workout: Workout*/) => {
   let workout: Workout = {
     name: "Full Body Workout",
     exercises: [
-      { name: "Push-up" },
-      { name: "Squat" },
-      { name: "Plank" },
-      { name: "Lat Pulldown" },
-      { name: "Bicep Curls" },
+      {
+        name: "Push-up",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Squat",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Plank",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Lat Pulldown",
+        equipment: "",
+        muscleGroup: "",
+      },
+      {
+        name: "Bicep Curls",
+        equipment: "",
+        muscleGroup: "",
+      },
     ],
     isFavorite: false,
   };
@@ -54,7 +74,11 @@ const Current = (/*workout: Workout*/) => {
     }
     //search database for matching exercise name and use that as input to exerciseLog.exercise
     const newExercise: ExerciseLog = {
-      exercise: { name: exerciseStr }, // Default values for the new set
+      exercise: {
+        name: exerciseStr,
+        equipment: "",
+        muscleGroup: "",
+      }, // Default values for the new set
       sets: [],
       date: new Date(),
     };

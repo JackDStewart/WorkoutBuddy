@@ -2,6 +2,8 @@ import { ReactNode } from "react";
 
 export interface Exercise {
   name: string;
+  equipment: string;
+  muscleGroup: string;
 }
 
 export interface Workout {
