@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../app/globals.css";
 import Dashboard from "../dashboard";
 import Header from "@/components/Header";
@@ -8,9 +8,18 @@ import { getWorkouts } from "../../mockRest";
 import Radio from "@/components/Radio";
 import { useUser } from '@auth0/nextjs-auth0/client';
 import ProfileClient from "@/components/ProfileClient";
+import {syncUser} from '@/api/userApi'
 
 
 export default function HomePage() {
+
+  const { user, isLoading } = useUser();
+
+  useEffect(() => {
+    if (!isLoading && user) {
+      syncUser(user).catch(console.error);
+    }
+  }, [isLoading, user]);
 
   const fetchWorkoutLogs = async () => {
     fetch("http://localhost:8080/demo/all")

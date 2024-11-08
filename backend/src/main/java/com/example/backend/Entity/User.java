@@ -1,4 +1,5 @@
 package com.example.backend.Entity;
+import java.math.BigInteger;
 
 import jakarta.persistence.*;
 
@@ -7,8 +8,7 @@ import java.util.Set;
 @Entity // This tells Hibernate to make a table out of this class
 public class User {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+	private BigInteger id;
 
 	private String name;
 
@@ -22,11 +22,11 @@ public class User {
 	@JoinColumn(name = "workout_id")
 	private Set<Workout> workouts;
 
-	public Long getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 
