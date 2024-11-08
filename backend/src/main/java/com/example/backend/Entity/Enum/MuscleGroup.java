@@ -1,4 +1,4 @@
-package com.example.backend;
+package com.example.backend.Entity.Enum;
 
 public enum MuscleGroup {
     ABS("Abs"),

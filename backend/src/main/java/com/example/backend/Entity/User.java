@@ -1,15 +1,14 @@
-package com.example.backend;
+package com.example.backend.Entity;
 
 import jakarta.persistence.*;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity // This tells Hibernate to make a table out of this class
 public class User {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer id;
+	private Long id;
 
 	private String name;
 
@@ -23,11 +22,11 @@ public class User {
 	@JoinColumn(name = "workout_id") // Foreign key in SetLog table
 	private Set<Workout> workouts;
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

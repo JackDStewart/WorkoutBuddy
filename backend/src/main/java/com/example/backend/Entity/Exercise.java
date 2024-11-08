@@ -1,5 +1,7 @@
-package com.example.backend;
+package com.example.backend.Entity;
 
+import com.example.backend.Entity.Enum.Equipment;
+import com.example.backend.Entity.Enum.MuscleGroup;
 import jakarta.persistence.*;
 
 @Entity // This tells Hibernate to make a table out of this class
