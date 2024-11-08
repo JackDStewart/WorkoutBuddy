@@ -36,6 +36,10 @@ export default function LoginPage() {
         >
           Login/Signup
         </button>
+
+        <a href="/api/auth/login?returnTo=/home">Log in</a>
+        <a href="/api/auth/logout">Log out</a>
+
       </div>
 
       {/* Centered Title */}

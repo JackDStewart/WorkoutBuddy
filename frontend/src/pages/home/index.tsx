@@ -6,6 +6,9 @@ import Link from "next/link";
 import Modal from "@/components/Modal";
 import { getWorkouts } from "../../mockRest";
 import Radio from "@/components/Radio";
+import { useUser } from '@auth0/nextjs-auth0/client';
+import ProfileClient from "@/components/ProfileClient";
+
 
 export default function HomePage() {
 
@@ -25,7 +28,7 @@ export default function HomePage() {
       });
   };
 
-  fetchWorkoutLogs();
+  //fetchWorkoutLogs();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const workouts = getWorkouts();
@@ -42,6 +45,7 @@ export default function HomePage() {
   return (
     <div>
       <Header></Header>
+      <ProfileClient></ProfileClient>
       <Dashboard workouts={workouts}></Dashboard>
       <button
         onClick={openModal}
