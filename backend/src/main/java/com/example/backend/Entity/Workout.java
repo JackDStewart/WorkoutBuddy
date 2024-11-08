@@ -1,4 +1,4 @@
-package com.example.backend;
+package com.example.backend.Entity;
 
 import jakarta.persistence.*;
 
@@ -15,7 +15,6 @@ public class Workout {
     private boolean favorite;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "workout_id") // Foreign key in SetLog table
     private Set<Exercise> exercises;
 
     public Workout() {}
