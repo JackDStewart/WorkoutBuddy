@@ -13,16 +13,13 @@ public class ExerciseLog {
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "exercise_log_id") // Foreign key in SetLog table
     private Set<SetLog> sets;
 
     @Temporal(TemporalType.DATE)
     private Date date;
 
     @ManyToOne
-    private User user;
-
-    @ManyToOne
+    @JoinColumn(name = "exercise_id") // Foreign key in ExerciseLog table
     private Exercise exercise;
 
     public ExerciseLog() {}

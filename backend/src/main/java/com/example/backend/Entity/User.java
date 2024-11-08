@@ -19,7 +19,7 @@ public class User {
 	private Set<ExerciseLog> exerciseLogs;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "workout_id") // Foreign key in SetLog table
+	@JoinColumn(name = "workout_id")
 	private Set<Workout> workouts;
 
 	public Long getId() {
