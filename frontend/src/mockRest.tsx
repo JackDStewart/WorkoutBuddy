@@ -34,15 +34,15 @@ const workouts: Workout[] = [
         muscleGroup: "",
       },
     ],
-    isFavorite: true,
+    favorite: true,
   },
   {
     name: "Push A",
     exercises: [
       {
         name: "Bench Press",
-        equipment: "",
-        muscleGroup: "",
+        equipment: "Barbell",
+        muscleGroup: "Chest",
       },
       {
         name: "Shoulder Press",
@@ -55,7 +55,7 @@ const workouts: Workout[] = [
         muscleGroup: "",
       },
     ],
-    isFavorite: true,
+    favorite: true,
   },
   {
     name: "Pull A",
@@ -86,7 +86,7 @@ const workouts: Workout[] = [
         muscleGroup: "",
       },
     ],
-    isFavorite: false,
+    favorite: false,
   },
   {
     name: "Pull B",
@@ -117,7 +117,7 @@ const workouts: Workout[] = [
         muscleGroup: "",
       },
     ],
-    isFavorite: false,
+    favorite: false,
   },
   {
     name: "Legs",
@@ -148,7 +148,7 @@ const workouts: Workout[] = [
         muscleGroup: "",
       },
     ],
-    isFavorite: false,
+    favorite: false,
   },
   {
     name: "Full Body",
@@ -179,7 +179,7 @@ const workouts: Workout[] = [
         muscleGroup: "",
       },
     ],
-    isFavorite: false,
+    favorite: false,
   },
   {
     name: "Cardio Blast",
@@ -210,7 +210,7 @@ const workouts: Workout[] = [
         muscleGroup: "",
       },
     ],
-    isFavorite: true,
+    favorite: true,
   },
   {
     name: "Core Workout",
@@ -241,7 +241,7 @@ const workouts: Workout[] = [
         muscleGroup: "",
       },
     ],
-    isFavorite: false,
+    favorite: false,
   },
   {
     name: "Yoga Flow",
@@ -272,7 +272,7 @@ const workouts: Workout[] = [
         muscleGroup: "",
       },
     ],
-    isFavorite: true,
+    favorite: true,
   },
   {
     name: "HIIT Circuit",
@@ -303,7 +303,7 @@ const workouts: Workout[] = [
         muscleGroup: "",
       },
     ],
-    isFavorite: false,
+    favorite: false,
   },
   {
     name: "Strength Training",
@@ -334,7 +334,7 @@ const workouts: Workout[] = [
         muscleGroup: "",
       },
     ],
-    isFavorite: true,
+    favorite: true,
   },
   {
     name: "Upper Body",
@@ -365,7 +365,7 @@ const workouts: Workout[] = [
         muscleGroup: "",
       },
     ],
-    isFavorite: false,
+    favorite: false,
   },
   {
     name: "Lower Body",
@@ -396,7 +396,7 @@ const workouts: Workout[] = [
         muscleGroup: "",
       },
     ],
-    isFavorite: true,
+    favorite: true,
   },
 ];
 
@@ -746,7 +746,7 @@ export const getExerciseLogs = (): ExerciseLog[] => {
 export const toggleFavoriteWorkout = (workoutName: string): void => {
   const workout = workouts.find((w) => w.name === workoutName);
   if (workout) {
-    workout.isFavorite = !workout.isFavorite;
+    workout.favorite = !workout.favorite;
   } else {
     console.log(`Workout with name "${workoutName}" not found.`);
   }

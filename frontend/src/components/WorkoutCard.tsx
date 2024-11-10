@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 interface WorkoutCardProps {
   workout: Workout;
-  onUpdateFavorite: (workoutName: string, isFavorite: boolean) => void;
+  onUpdateFavorite: (workoutId: number) => void;
 }
 
 const WorkoutCard: React.FC<WorkoutCardProps> = ({
@@ -11,18 +11,14 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({
   onUpdateFavorite,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(workout.isFavorite);
 
-  // Handle favorite toggle
   const toggleFavorite = () => {
-    const newFavoriteStatus = !isFavorite;
-    setIsFavorite(newFavoriteStatus);
-
-    onUpdateFavorite(workout.name, newFavoriteStatus);
+    if(workout.id){
+      onUpdateFavorite(workout.id);
+    }
   };
 
   let exercises = workout.exercises;
-
   return (
     <div className="relative flex flex-col bg-black text-gray-300 rounded-lg shadow-left-purple p-4 md:p-6 lg:p-8 h-full max-w-full md:max-w-md lg:max-w-lg">
       <h2 className="text-white text-lg md:text-xl lg:text-2xl font-bold mb-2 md:mb-4">
@@ -38,7 +34,7 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({
             cursor: "pointer",
           }}
         >
-          {isHovered || isFavorite ? (
+          {isHovered || workout.favorite ? (
             <svg
               className="text-red-400 w-6 h-auto fill-current"
               xmlns="http://www.w3.org/2000/svg"

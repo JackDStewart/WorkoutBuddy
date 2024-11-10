@@ -56,7 +56,7 @@ const Current = (/*workout: Workout*/) => {
         muscleGroup: "",
       },
     ],
-    isFavorite: false,
+    favorite: false,
   };
 
   const [exerciseList, setExerciseList] = useState<ExerciseLog[]>(

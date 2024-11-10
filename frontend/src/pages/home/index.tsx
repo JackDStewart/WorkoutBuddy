@@ -4,16 +4,17 @@ import Dashboard from "../dashboard";
 import Header from "@/components/Header";
 import Link from "next/link";
 import Modal from "@/components/Modal";
-import { getWorkouts } from "../../mockRest";
 import Radio from "@/components/Radio";
-import { useUser } from '@auth0/nextjs-auth0/client';
+import { useUser } from "@auth0/nextjs-auth0/client";
 import ProfileClient from "@/components/ProfileClient";
-import {syncUser} from '@/api/userApi'
-
+import { syncUser } from "@/api/userApi";
+import { createWorkout, fetchWorkouts } from "@/api/workoutApi";
+import { Workout } from "@/types";
 
 export default function HomePage() {
-
   const { user, isLoading } = useUser();
+  const [workouts, setWorkouts] = useState<Workout[]>([]); // State to store workouts
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (!isLoading && user) {
@@ -21,55 +22,64 @@ export default function HomePage() {
     }
   }, [isLoading, user]);
 
-  const fetchWorkoutLogs = async () => {
-    fetch("http://localhost:8080/demo/all")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json(); // Ensure you parse the response as JSON
-      })
-      .then((data) => {
-        console.log(data); // This should log { message: "Hello from the backend!" }
-      })
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
-      });
+  // Fetch workouts and store in state
+  const getWorkoutsList = async () => {
+    if (user?.sub) {
+      const fetchedWorkouts = await fetchWorkouts(user.sub.substring(14)); // Assuming `fetchWorkouts` fetches the workouts correctly
+      setWorkouts(fetchedWorkouts); // Store fetched workouts in state
+    }
   };
 
-  //fetchWorkoutLogs();
+  // Create a new workout
+  const create = async () => {
+    if (user?.sub) {
+      const workout: Workout = {
+        name: "Full Body Workout",
+        exercises: [
+          {
+            name: "Push-ups",
+            equipment: "None",
+            muscleGroup: "Chest",
+          },
+        ],
+        favorite: true,
+        auth0id: user?.sub
+      };
+      await createWorkout(workout); // Assuming this function creates a workout
+    }
+  };
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const workouts = getWorkouts();
+  // Run the getWorkoutsList when the component is mounted or user changes
+  useEffect(() => {
+    getWorkoutsList();
+  }, [user]);
+
   const workoutNames = workouts.map((workout) => workout.name);
   workoutNames.push("Start a new workout");
-  /*workouts.push({
-    name: "Start a new workout",
-    exercises: [],
-  });*/
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
   return (
     <div>
-      <Header></Header>
-      <ProfileClient></ProfileClient>
-      <Dashboard workouts={workouts}></Dashboard>
+      <Header />
+      <ProfileClient />
+      
+      {user && user.sub && <Dashboard id={user.sub.substring(14)} workouts={workouts} />}
       <button
         onClick={openModal}
-        className="fixed bottom-5 right-6 flex justify-center items-center
-        w-[180px] p-2 rounded-full text-l bg-purple border-none transition-transform
-        duration-500 hover:bg-transitionPurple hover:scale-125"
+        className="fixed bottom-5 right-6 flex justify-center items-center w-[180px] p-2 rounded-full text-l bg-purple border-none transition-transform duration-500 hover:bg-transitionPurple hover:scale-125"
       >
         Start Workout
       </button>
+
+      <button onClick={create}>Create</button>
 
       <Modal isOpen={isModalOpen} onClose={closeModal} width="w-[400px]">
         <div className="max-h-[80vh] overflow-y-auto p-4">
           <h2 className="text-xl font-bold mb-4">Start Workout</h2>
           <p>Choose Workout</p>
-          <Radio workouts={workoutNames}></Radio>
+          <Radio workouts={workoutNames} />
         </div>
       </Modal>
     </div>

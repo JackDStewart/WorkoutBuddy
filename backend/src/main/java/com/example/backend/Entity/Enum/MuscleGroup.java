@@ -27,4 +27,13 @@ public enum MuscleGroup {
         public String getDisplayName() {
             return displayName;
         }
+
+    public static MuscleGroup fromDisplayName(String displayName) {
+        for (MuscleGroup muscleGroup : values()) {
+            if (muscleGroup.getDisplayName().equalsIgnoreCase(displayName)) {
+                return muscleGroup;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant with display name " + displayName);
+    }
 }

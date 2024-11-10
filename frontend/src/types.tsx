@@ -7,9 +7,11 @@ export interface Exercise {
 }
 
 export interface Workout {
+  id?: number
   name: string;
   exercises: Exercise[];
-  isFavorite: boolean;
+  favorite: boolean;
+  auth0id?: string
 }
 
 export interface SetLog {
@@ -43,6 +45,7 @@ export interface ExerciseCardProps {
 }
 
 export interface DashboardProps {
+  id: string
   workouts: Workout[];
 }
 

@@ -19,7 +19,6 @@ public class User {
 	private Set<ExerciseLog> exerciseLogs;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "workout_id")
 	private Set<Workout> workouts;
 
 	public BigInteger getId() {

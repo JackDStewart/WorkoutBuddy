@@ -1,38 +1,53 @@
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import WorkoutCard from "@/components/WorkoutCard";
-import { getWorkouts, toggleFavoriteWorkout } from "../../mockRest";
+import { fetchWorkouts, toggleFavoriteWorkout } from "@/api/workoutApi";
 import { DashboardProps, Workout } from "../../types";
 import Modal from "@/components/Modal";
 
-const Dashboard: React.FC<DashboardProps> = () => {
+const Dashboard: React.FC<DashboardProps> = ({ id }) => {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const getWorkouts = async () => {
+    if (id) {
+      const fetchedWorkouts = await fetchWorkouts(id);
+      setWorkouts(fetchedWorkouts);
+    }
+  };
+
   useEffect(() => {
-    const fetchWorkouts = async () => {
-      const data = getWorkouts();
-      setWorkouts(data);
-    };
+    getWorkouts();
+  }, [id]);
 
-    fetchWorkouts();
-  }, []);
+  const handleUpdateFavorite = async (workoutId: number) => {
+    setWorkouts((prevWorkouts) =>
+      prevWorkouts.map((workout) =>
+        workout.id === workoutId
+          ? { ...workout, favorite: !workout.favorite }
+          : workout
+      )
+    );
 
-  const favWorkouts = workouts.filter((workout) => workout.isFavorite);
+    // Call the API and handle any errors
+    try {
+      await toggleFavoriteWorkout(workoutId);
+    } catch (error) {
+      console.error("Failed to update favorite status:", error);
+      // Revert UI update if API call fails
+      setWorkouts((prevWorkouts) =>
+        prevWorkouts.map((workout) =>
+          workout.id === workoutId
+            ? { ...workout, favorite: !workout.favorite }
+            : workout
+        )
+      );
+    }
+  };
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  // Function to handle updating the favorite status
-  const handleUpdateFavorite = (workoutName: string, isFavorite: boolean) => {
-    toggleFavoriteWorkout(workoutName);
-
-    setWorkouts((prevWorkouts) =>
-      prevWorkouts.map((workout) =>
-        workout.name === workoutName ? { ...workout, isFavorite } : workout
-      )
-    );
-  };
+  const favWorkouts = workouts.filter((workout) => workout.favorite);
 
   return (
     <div>
@@ -50,9 +65,9 @@ const Dashboard: React.FC<DashboardProps> = () => {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
           {favWorkouts?.map((workout) => (
             <WorkoutCard
-              key={workout.name}
+              key={workout.id}
               workout={workout}
-              onUpdateFavorite={handleUpdateFavorite} // Pass the function down
+              onUpdateFavorite={handleUpdateFavorite}
             />
           ))}
         </div>
@@ -64,9 +79,9 @@ const Dashboard: React.FC<DashboardProps> = () => {
           <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
             {workouts?.map((workout) => (
               <WorkoutCard
-                key={workout.name}
+                key={workout.id}
                 workout={workout}
-                onUpdateFavorite={handleUpdateFavorite} // Pass the function down here too
+                onUpdateFavorite={handleUpdateFavorite}
               />
             ))}
           </div>

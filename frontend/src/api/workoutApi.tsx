@@ -1,0 +1,76 @@
+import { Workout } from "@/types";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import { useAuth0 } from "@auth0/auth0-react";
+
+export async function createWorkout(workout: Workout) {
+  console.log("here");
+
+  const name = workout.name;
+  const exercises = workout.exercises.map((exercise) => ({
+    name: exercise.name,
+    equipment: exercise.equipment, // Ensure these fields match the backend ExerciseDTO
+    muscleGroup: exercise.muscleGroup, // Ensure this is properly formatted
+  }));
+  const favorite = workout.favorite;
+  const userAuth0Id = workout.auth0id;
+
+  try {
+    const response = await fetch("http://localhost:8080/workout/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        favorite,
+        exercises,
+        userAuth0Id,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to create workout: ${errorData.message || response.statusText}`);
+    }
+
+    const result = await response.json();
+    console.log("Workout created:", result);
+  } catch (error) {
+    console.error("Error creating workout:", error);
+  }
+}
+
+export async function fetchWorkouts(auth0Id: string) {
+  try {
+    const response = await fetch(`http://localhost:8080/workout/user/${auth0Id}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch workouts");
+    }
+    const workouts = await response.json();
+    console.log("Fetched workouts:", workouts);
+    return workouts;
+  } catch (error) {
+    console.error("Error fetching workouts:", error);
+    return [];
+  }
+}
+
+export async function toggleFavoriteWorkout(workoutId: number) {
+  try {
+    const response = await fetch(`http://localhost:8080/workout/${workoutId}/toggleFavorite`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to toggle favorite status");
+    }
+
+    const updatedWorkout = await response.json();
+    return updatedWorkout;
+  } catch (error) {
+    console.error("Error toggling favorite status:", error);
+  }
+}

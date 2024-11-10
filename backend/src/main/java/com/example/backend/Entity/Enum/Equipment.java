@@ -20,5 +20,14 @@ public enum Equipment {
     public String getDisplayName() {
         return displayName;
     }
+
+    public static Equipment fromDisplayName(String displayName) {
+        for (Equipment equipment : values()) {
+            if (equipment.getDisplayName().equalsIgnoreCase(displayName)) {
+                return equipment;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant with display name " + displayName);
+    }
 }
 

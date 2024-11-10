@@ -6,8 +6,13 @@ import AddedExercise from "@/components/AddedExercise";
 import { getWorkouts } from "../../mockRest";
 import MuscleGroupSelector from "@/components/MuscleGroupSelector";
 import EquipmentSelector from "@/components/EquipmentSelector";
+import { createWorkout } from "@/api/workoutApi";
+import { useUser } from "@auth0/nextjs-auth0/client";
+
 
 const Create = () => {
+  const { user, isLoading } = useUser();
+
   const [muscleGroups] = useState<string[]>([
     "Chest",
     "Back",
@@ -32,6 +37,8 @@ const Create = () => {
   const closeModal = () => setIsModalOpen(false);
 
   const workouts = getWorkouts();
+  const exercises = workouts.flatMap((workout) => workout.exercises);
+
   let exerciseNames = workouts.flatMap((workout) =>
     workout.exercises.map((exercise) => exercise.name)
   );
@@ -117,10 +124,54 @@ const Create = () => {
     setAddedExercises([...addedExercises, customExerciseName]);
     console.log("Saved Custom Exercise:", customExercise);
 
-    // make an API call here to save the exercise
+    // Optionally make an API call to save the custom exercise
 
     closeModal();
   };
+
+  const handleSaveWorkout = () => {
+    // Safely cast the input field to HTMLInputElement to access the 'value' property
+    const workoutName = (document.querySelector('input[type="text"]') as HTMLInputElement)?.value;
+  
+    if (!workoutName || workoutName.trim() === "") {
+      alert("Please enter a workout name.");
+      return;
+    }
+  
+    const workoutExercises = addedExercises
+      .map((exerciseName) => {
+        const matchedExercise = workouts
+          .flatMap((workout) => workout.exercises)
+          .find((exercise) => exercise.name === exerciseName);
+  
+        if (matchedExercise) {
+          return {
+            name: exerciseName,
+            equipment: matchedExercise.equipment,
+            muscleGroup: matchedExercise.muscleGroup,
+          };
+        }
+        return undefined;
+      })
+      .filter((exercise) => exercise !== undefined) as { name: string; equipment: string; muscleGroup: string }[];
+  
+    if (workoutExercises.length === 0) {
+      alert("No valid exercises added.");
+      return;
+    }
+
+    if(user?.sub){
+      const workout = {
+        name: workoutName,
+        exercises: workoutExercises,
+        favorite: false,
+        auth0id: user?.sub
+      };
+    
+      createWorkout(workout);
+    }
+  };
+  
 
   return (
     <div>
@@ -167,6 +218,13 @@ const Create = () => {
             >
               Create Custom Exercise
             </button>
+
+            <button
+              onClick={handleSaveWorkout} // Save the workout when clicking this button
+              className="bg-purple hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-lg mt-5"
+            >
+              Save Workout
+            </button>
           </div>
           <div className="w-1/2 p-4 ml-auto">
             <h2 className="font-bold text-2xl border-b-2">Added Exercises</h2>
@@ -190,26 +248,23 @@ const Create = () => {
             onChange={(e) => setCustomExerciseName(e.target.value)}
           />
 
-          {/* Independent MuscleGroupSelector for the modal */}
           <MuscleGroupSelector
             selectedMuscleGroups={modalSelectedMuscleGroups}
-            muscleGroups={muscleGroups} // Use the same muscle groups array
+            muscleGroups={muscleGroups}
             onSelect={handleModalMuscleSelectOption}
             onRemove={handleModalMuscleRemoveOption}
           />
 
-          {/* Independent EquipmentSelector for the modal */}
           <EquipmentSelector
             selectedEquipment={modalSelectedEquipment}
-            equipment={equipment} // Use the same equipment array
+            equipment={equipment}
             onSelect={handleModalEquipmentSelectOption}
             onRemove={handleModalEquipmentRemoveOption}
           />
 
-          {/* Additional modal content goes here */}
           <button
             onClick={handleSaveExercise}
-            className="bg-purple hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-transitionPurple mt-5"
+            className="bg-purple hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-lg mt-5"
           >
             Save Exercise
           </button>
