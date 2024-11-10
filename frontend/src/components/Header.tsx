@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useUser } from "@auth0/nextjs-auth0/client"; // Import useUser
+
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+  const { user, isLoading, error } = useUser(); // Use the useUser hook to get user data
+
 
   const getGreetingText = () => {
     const route = router.pathname;
 
     switch (route) {
       case "/home":
-        return "Hello, user";
+        return user ? `Hello, ${user.name}` : "Hello, user";
       case "/create":
         return "Create Workout";
       case "/generate":
@@ -92,13 +96,12 @@ const Header = () => {
       </div>
       <div className="relative">
         <h1 className="code-font text-4xl mt-10">{getGreetingText()}</h1>
-        <Link
-          href="/"
-          passHref
+        <a
+          href="/api/auth/logout"
           className="absolute top-0 right-0 bg-purple hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-transitionPurple"
         >
           Log Out
-        </Link>
+        </a>
       </div>
     </div>
   );

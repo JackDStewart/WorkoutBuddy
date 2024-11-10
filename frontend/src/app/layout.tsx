@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { UserProvider } from '@auth0/nextjs-auth0/client';
+import ProfileClient from '../components/ProfileClient'; // Import your ProfileClient component
 import "./globals.css";
 
 const geistSans = localFont({
@@ -28,6 +29,8 @@ export default function RootLayout({
     <html lang="en">
       <UserProvider>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          {/* all pages now */}
+          <ProfileClient />
           {children}
         </body>
       </UserProvider>

@@ -9,12 +9,21 @@ export default function ProfileClient() {
   if (error) return <div>{error.message}</div>;
 
   console.log("user: ", user)
+  const profileImage =  '/white_db2.png'; // user?.picture ||
+
 
   return (
     user && (
-      <div>
-        <h2>{user.name}</h2>
-        <p>{user.email}</p>
+      <div className="absolute top-5 right-5 flex items-center space-x-2">
+        {/* Display the user's profile image */}
+       
+          <img
+            src={profileImage}
+            alt="Profile"
+            className="w-10 h-10 rounded-full"
+          />
+        {/* Display the user's name */}
+        {user.name && <p className="text-white">{user.name}</p>}
       </div>
     )
   );

@@ -30,15 +30,14 @@ export default function LoginPage() {
             </span>
           </Link>
 
-        <button
-          onClick={handleSignup}
-          className="bg-purple text-white py-2 px-4 rounded hover:bg-purple-600"
-        >
-          Login/Signup
-        </button>
+        
 
-        <a href="/api/auth/login?returnTo=/home">Log in</a>
-        <a href="/api/auth/logout">Log out</a>
+        <a 
+          href="/api/auth/login?returnTo=/home"
+          className="bg-purple text-white py-2 px-4 rounded hover:bg-purple-600"
+          >Log In/Sign Up
+        </a>
+        {/*<a href="/api/auth/logout">Log out</a>*/}
 
       </div>
 
