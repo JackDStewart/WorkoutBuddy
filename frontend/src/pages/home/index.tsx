@@ -30,25 +30,6 @@ export default function HomePage() {
     }
   };
 
-  // Create a new workout
-  const create = async () => {
-    if (user?.sub) {
-      const workout: Workout = {
-        name: "Full Body Workout",
-        exercises: [
-          {
-            name: "Push-ups",
-            equipment: "None",
-            muscleGroup: "Chest",
-          },
-        ],
-        favorite: true,
-        auth0id: user?.sub
-      };
-      await createWorkout(workout); // Assuming this function creates a workout
-    }
-  };
-
   // Run the getWorkoutsList when the component is mounted or user changes
   useEffect(() => {
     getWorkoutsList();
@@ -72,8 +53,6 @@ export default function HomePage() {
       >
         Start Workout
       </button>
-
-      <button onClick={create}>Create</button>
 
       <Modal isOpen={isModalOpen} onClose={closeModal} width="w-[400px]">
         <div className="max-h-[80vh] overflow-y-auto p-4">

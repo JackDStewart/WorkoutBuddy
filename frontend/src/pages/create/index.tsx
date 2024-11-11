@@ -1,3 +1,4 @@
+// Import necessary modules and hooks
 import React, { useState } from "react";
 import Header from "@/components/Header";
 import Modal from "@/components/Modal";
@@ -8,23 +9,41 @@ import MuscleGroupSelector from "@/components/MuscleGroupSelector";
 import EquipmentSelector from "@/components/EquipmentSelector";
 import { createWorkout } from "@/api/workoutApi";
 import { useUser } from "@auth0/nextjs-auth0/client";
-
+import { useRouter } from "next/router";
 
 const Create = () => {
   const { user, isLoading } = useUser();
+  const router = useRouter();
 
   const [muscleGroups] = useState<string[]>([
-    "Chest",
-    "Back",
-    "Shoulders",
+    "Abs",
+    "Adductors",
+    "Abductors",
     "Biceps",
-    "Triceps",
-    "Quads",
-    "Hamstrings",
     "Calves",
-    "Cardio",
+    "Chest",
+    "Forearms",
+    "Glutes",
+    "Hamstrings",
+    "Lats",
+    "Lower Back",
+    "Middle Back",
+    "Traps",
+    "Quads",
+    "Shoulders",
+    "Triceps",
   ]);
-  const [equipment] = useState<string[]>(["Barbell", "Dumbells", "Machine"]);
+  const [equipmentOptions] = useState<string[]>([
+    "None",
+    "Barbell",
+    "Dumbbell",
+    "Kettlebell",
+    "Medicine Ball",
+    "Machine",
+    "Resistance Band",
+    "Cable",
+    "Other",
+  ]);
   const [addedExercises, setAddedExercises] = useState<string[]>([]);
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<string[]>(
     []
@@ -33,17 +52,22 @@ const Create = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [customExerciseName, setCustomExerciseName] = useState<string>("");
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  // Modal state
+  const [modalSelectedMuscleGroups, setModalSelectedMuscleGroups] = useState<
+    string[]
+  >([]);
+  const [modalSelectedEquipment, setModalSelectedEquipment] = useState<
+    string[]
+  >([]);
 
+  // Fetch workouts and exercises
   const workouts = getWorkouts();
   const exercises = workouts.flatMap((workout) => workout.exercises);
-
-  let exerciseNames = workouts.flatMap((workout) =>
-    workout.exercises.map((exercise) => exercise.name)
+  let exerciseNames = Array.from(
+    new Set(exercises.map((exercise) => exercise.name))
   );
-  exerciseNames = Array.from(new Set(exerciseNames));
 
+  // Handler functions for muscle groups and equipment
   const handleMuscleSelectOption = (option: string) => {
     if (!selectedMuscleGroups.includes(option)) {
       setSelectedMuscleGroups([...selectedMuscleGroups, option]);
@@ -68,6 +92,7 @@ const Create = () => {
     );
   };
 
+  // Handler to add exercises
   const handleExerciseAdd = (exercise: string | null) => {
     if (exercise && !addedExercises.includes(exercise)) {
       setAddedExercises([...addedExercises, exercise]);
@@ -75,13 +100,7 @@ const Create = () => {
     }
   };
 
-  const [modalSelectedMuscleGroups, setModalSelectedMuscleGroups] = useState<
-    string[]
-  >([]);
-  const [modalSelectedEquipment, setModalSelectedEquipment] = useState<
-    string[]
-  >([]);
-
+  // Handlers for modal selections
   const handleModalMuscleSelectOption = (option: string) => {
     if (!modalSelectedMuscleGroups.includes(option)) {
       setModalSelectedMuscleGroups([...modalSelectedMuscleGroups, option]);
@@ -106,6 +125,7 @@ const Create = () => {
     );
   };
 
+  // Handler to save custom exercise
   const handleSaveExercise = () => {
     const selectedMuscleGroups = modalSelectedMuscleGroups;
     const selectedEquipment = modalSelectedEquipment;
@@ -115,63 +135,96 @@ const Create = () => {
       return;
     }
 
+    // Ensure muscle groups and equipment are valid
+    const validatedMuscleGroups = selectedMuscleGroups.filter((mg) =>
+      muscleGroups.includes(mg)
+    );
+    const validatedEquipment = selectedEquipment.filter((eq) =>
+      equipmentOptions.includes(eq)
+    );
+
     const customExercise = {
       name: customExerciseName,
-      muscleGroups: selectedMuscleGroups,
-      equipment: selectedEquipment,
+      muscleGroup:
+        validatedMuscleGroups.length > 0
+          ? validatedMuscleGroups.join(", ")
+          : "Other",
+      equipment:
+        validatedEquipment.length > 0 ? validatedEquipment.join(", ") : "None",
     };
 
     setAddedExercises([...addedExercises, customExerciseName]);
     console.log("Saved Custom Exercise:", customExercise);
 
-    // Optionally make an API call to save the custom exercise
+    // Optionally make an API call to save the custom exercise here
 
-    closeModal();
+    //closeModal();
   };
 
-  const handleSaveWorkout = () => {
-    // Safely cast the input field to HTMLInputElement to access the 'value' property
-    const workoutName = (document.querySelector('input[type="text"]') as HTMLInputElement)?.value;
-  
+  const handleSaveWorkout = async () => {
+    const workoutName = (
+      document.querySelector('input[type="text"]') as HTMLInputElement
+    )?.value;
+
     if (!workoutName || workoutName.trim() === "") {
       alert("Please enter a workout name.");
       return;
     }
-  
+
     const workoutExercises = addedExercises
       .map((exerciseName) => {
         const matchedExercise = workouts
           .flatMap((workout) => workout.exercises)
           .find((exercise) => exercise.name === exerciseName);
-  
+
         if (matchedExercise) {
+          // Validate muscleGroup
+          const muscleGroup = muscleGroups.includes(matchedExercise.muscleGroup)
+            ? matchedExercise.muscleGroup
+            : "Other";
+
+          // Validate equipment
+          const equipment = equipmentOptions.includes(matchedExercise.equipment)
+            ? matchedExercise.equipment
+            : "None";
+
           return {
             name: exerciseName,
-            equipment: matchedExercise.equipment,
-            muscleGroup: matchedExercise.muscleGroup,
+            equipment: equipment,
+            muscleGroup: muscleGroup,
           };
         }
         return undefined;
       })
-      .filter((exercise) => exercise !== undefined) as { name: string; equipment: string; muscleGroup: string }[];
-  
+      .filter((exercise) => exercise !== undefined) as {
+      name: string;
+      equipment: string;
+      muscleGroup: string;
+    }[];
+
     if (workoutExercises.length === 0) {
       alert("No valid exercises added.");
       return;
     }
 
-    if(user?.sub){
+    if (user?.sub) {
       const workout = {
         name: workoutName,
         exercises: workoutExercises,
-        favorite: false,
-        auth0id: user?.sub
+        favorite: true,
+        auth0id: user?.sub,
       };
-    
-      createWorkout(workout);
+
+      try {
+        await createWorkout(workout);
+        alert("Workout saved successfully!");
+        router.push("/home");
+      } catch (error) {
+        console.error("Error saving workout:", error);
+        alert("There was an error saving your workout. Please try again.");
+      }
     }
   };
-  
 
   return (
     <div>
@@ -195,7 +248,7 @@ const Create = () => {
 
             <EquipmentSelector
               selectedEquipment={selectedEquipment}
-              equipment={equipment}
+              equipment={equipmentOptions}
               onSelect={handleEquipmentSelectOption}
               onRemove={handleEquipmentRemoveOption}
             />
@@ -213,7 +266,7 @@ const Create = () => {
               />
             </div>
             <button
-              onClick={openModal}
+              onClick={() => setIsModalOpen(true)}
               className="flex items-center text-white rounded-full px-3 py-1 mr-2 mb-1 border hover:text-black hover:bg-white mt-10"
             >
               Create Custom Exercise
@@ -236,7 +289,11 @@ const Create = () => {
           </div>
         </div>
       </div>
-      <Modal isOpen={isModalOpen} onClose={closeModal} width="w-[400px]">
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        width="w-[400px]"
+      >
         <div>
           <h2 className="font-bold text-xl mb-4">Create Custom Exercise</h2>
           <h2 className="block text-white text-sm mb-1">Exercise Name</h2>
@@ -257,7 +314,7 @@ const Create = () => {
 
           <EquipmentSelector
             selectedEquipment={modalSelectedEquipment}
-            equipment={equipment}
+            equipment={equipmentOptions}
             onSelect={handleModalEquipmentSelectOption}
             onRemove={handleModalEquipmentRemoveOption}
           />

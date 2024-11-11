@@ -16,6 +16,7 @@ public enum MuscleGroup {
     TRAPS("Traps"),
     QUADS("Quads"),
     SHOULDERS("Shoulders"),
+    OTHER("Other"),
     TRICEPS("Triceps");
 
         private final String displayName;

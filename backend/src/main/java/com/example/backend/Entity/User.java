@@ -15,7 +15,7 @@ public class User {
 	private String email;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "exerciseLog_id") // Foreign key in SetLog table
+	@JoinColumn(name = "user_id") // Foreign key in SetLog table
 	private Set<ExerciseLog> exerciseLogs;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
