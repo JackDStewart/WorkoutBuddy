@@ -22,6 +22,17 @@ public class ExerciseLog {
     @JoinColumn(name = "exercise_id") // Foreign key in ExerciseLog table
     private Exercise exercise;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public ExerciseLog() {}
 
     public ExerciseLog(Exercise exercise, Set<SetLog> sets, Date date) {
@@ -52,5 +63,13 @@ public class ExerciseLog {
 
     public Long getId() {
         return id;
+    }
+
+    public Exercise getExercise() {
+        return exercise;
+    }
+
+    public void setExercise(Exercise exercise) {
+        this.exercise = exercise;
     }
 }

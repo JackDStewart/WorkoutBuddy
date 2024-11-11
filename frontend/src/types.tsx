@@ -23,6 +23,7 @@ export interface ExerciseLog {
   exercise: Exercise;
   sets: SetLog[];
   date: Date;
+  userAuth0Id?: string
 }
 
 export type Friend = {

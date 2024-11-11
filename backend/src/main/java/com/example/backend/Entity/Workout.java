@@ -1,13 +1,13 @@
 package com.example.backend.Entity;
 
 import jakarta.persistence.*;
-
 import java.util.Set;
 
 @Entity
 public class Workout {
+
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
@@ -17,11 +17,11 @@ public class Workout {
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})  // Avoid PERSIST to prevent duplication
     @JoinTable(
-            name = "workout_exercises", // Name of the join table
-            joinColumns = @JoinColumn(name = "workout_id"), // Foreign key in join table for Workout
-            inverseJoinColumns = @JoinColumn(name = "exercises_id") // Foreign key in join table for Exercise
+            name = "workout_exercises",  // Name of the join table
+            joinColumns = @JoinColumn(name = "workout_id"),  // Foreign key column in join table for Workout
+            inverseJoinColumns = @JoinColumn(name = "exercise_id")  // Foreign key column in join table for Exercise
     )
     private Set<Exercise> exercises;
 
@@ -31,9 +31,7 @@ public class Workout {
         this.name = name;
     }
 
-    public Set<Exercise> getExercises() {
-        return exercises;
-    }
+    // Getters and Setters
 
     public Long getId() {
         return id;
@@ -57,6 +55,10 @@ public class Workout {
 
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public Set<Exercise> getExercises() {
+        return exercises;
     }
 
     public void setExercises(Set<Exercise> exercises) {

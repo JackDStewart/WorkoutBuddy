@@ -65,20 +65,28 @@ public class WorkoutService {
 
         // Map each ExerciseDTO to Exercise entity
         Set<Exercise> exercises = workoutDTO.getExercises().stream()
-                .map(dto -> {
-                    Exercise exercise = new Exercise();
-                    exercise.setName(dto.getName());
-                    exercise.setEquipment(dto.getEquipment());
-                    exercise.setMuscleGroup(dto.getMuscleGroup());
-                    return exercise;
-                })
+                .map(dto -> exerciseRepository.findByName(dto.getName())
+                        .orElseGet(() -> {
+                            Exercise newExercise = new Exercise();
+                            newExercise.setName(dto.getName());
+                            newExercise.setEquipment(dto.getEquipment());
+                            newExercise.setMuscleGroup(dto.getMuscleGroup());
+                            return newExercise;
+                        }))
                 .collect(Collectors.toSet());
 
         workout.setExercises(exercises); // Set exercises to workout
 
         // Save workout and cascade save exercises
+        for (Exercise exercise : workout.getExercises()) {
+            Optional<Exercise> existingExercise = exerciseRepository.findByName(exercise.getName());
 
-        exerciseRepository.saveAll(workout.getExercises());
+            if (existingExercise.isEmpty()) {
+                exerciseRepository.save(exercise);
+            }
+        }
+
+        //exerciseRepository.saveAll(workout.getExercises());
         Workout savedWorkout = workoutRepository.save(workout);
 
         // Convert saved Workout entity back to WorkoutDTO

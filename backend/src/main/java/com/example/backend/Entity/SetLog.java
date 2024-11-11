@@ -14,12 +14,12 @@ public class SetLog {
 
     private int weight;
 
-    private int sets;
+    private int reps;
 
 
     public SetLog() {}
 
-    public SetLog(int weight, int sets) {}
+    public SetLog(int weight, int reps) {}
 
     public int getWeight() {
         return weight;
@@ -29,12 +29,12 @@ public class SetLog {
         this.weight = weight;
     }
 
-    public int getSets() {
-        return sets;
+    public int getReps() {
+        return reps;
     }
 
-    public void setSets(int sets) {
-        this.sets = sets;
+    public void setReps(int reps) {
+        this.reps = reps;
     }
 
     public void setId(Long id) {

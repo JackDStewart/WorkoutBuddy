@@ -5,8 +5,11 @@ import Modal from "@/components/Modal"; // need modal component for popup
 import { SingleAutocomplete } from "@/components/Autocomplete";
 import { Workout, SetLog, ExerciseLog, WorkoutLog } from "@/types";
 import ExerciseCard from "@/components/ExerciseCard";
+import { saveExerciseLogs } from "@/api/exerciseLogApi";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 const Current = (/*workout: Workout*/) => {
+  const { user, isLoading } = useUser();
   const [isModal1Open, setIsModal1Open] = useState(false);
   const openModal1 = () => {
     setIsModal1Open(true);
@@ -31,29 +34,29 @@ const Current = (/*workout: Workout*/) => {
     name: "Full Body Workout",
     exercises: [
       {
-        name: "Push-up",
-        equipment: "",
-        muscleGroup: "",
+        name: "Push-ups",
+        equipment: "None",
+        muscleGroup: "Chest",
       },
       {
         name: "Squat",
-        equipment: "",
-        muscleGroup: "",
+        equipment: "None",
+        muscleGroup: "Quads",
       },
       {
         name: "Plank",
-        equipment: "",
-        muscleGroup: "",
+        equipment: "None",
+        muscleGroup: "Abs",
       },
       {
         name: "Lat Pulldown",
-        equipment: "",
-        muscleGroup: "",
+        equipment: "Machine",
+        muscleGroup: "Lats",
       },
       {
         name: "Bicep Curls",
-        equipment: "",
-        muscleGroup: "",
+        equipment: "Dumbbell",
+        muscleGroup: "Biceps",
       },
     ],
     favorite: false,
@@ -107,20 +110,28 @@ const Current = (/*workout: Workout*/) => {
       return "col-start-2"; // Places button in the second column
     }
   };
-  const postWorkoutLog = async (workoutLog: WorkoutLog) => {
-    fetch("api.address.here", {
-      //inset API address
-      method: "post",
-      body: JSON.stringify(workoutLog),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json(); // Ensure you parse the response as JSON
-      })
-      .then((response) => response.json())
-      .then((json) => console.log(json));
+  const saveExercises = async () => {
+    const validExercises = exerciseList.filter(
+      (exercise) =>
+        exercise.sets &&
+        exercise.sets.length > 0 &&
+        exercise.sets.every((setLog) => setLog.reps !== 0)
+    );
+
+    if (user?.sub) {
+      const auth0id = user.sub;
+      validExercises.forEach((exercise) => {
+        exercise.userAuth0Id = auth0id;
+      });
+
+      try {
+        await saveExerciseLogs(validExercises); // Wait until the save is complete
+        router.push("/home"); // Route back to the home page
+      } catch (error) {
+        console.error("Error saving exercises:", error);
+        // Optionally, display an error message or handle error here
+      }
+    }
   };
 
   const saveWorkoutLog = () => {
@@ -128,7 +139,7 @@ const Current = (/*workout: Workout*/) => {
       name: workout.name,
       exercises: exerciseList,
     };
-    postWorkoutLog(newWorkoutLog);
+    console.log("log: ", newWorkoutLog);
   };
 
   return (
@@ -200,7 +211,7 @@ const Current = (/*workout: Workout*/) => {
           </h2>
           <button
             className="bg-purple text-lg font-medium text-black py-2 px-4 rounded-full w-1/2"
-            onClick={saveWorkoutLog}
+            onClick={saveExercises}
           >
             Confirm
           </button>
