@@ -26,6 +26,19 @@ export interface ExerciseLog {
   userAuth0Id?: string
 }
 
+export interface ExerciseLogDTO {
+  exercise: Exercise;
+  sets: SetLog[];
+  date: string;
+  userAuth0Id?: User
+}
+
+export interface User {
+  id: number;
+  email: string;
+  name: string
+}
+
 export type Friend = {
   name: string;
   active: boolean;

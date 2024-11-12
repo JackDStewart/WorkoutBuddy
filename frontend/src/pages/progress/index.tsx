@@ -1,170 +1,123 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
-import { getExerciseLogs, getWorkouts } from "@/mockRest";
 import { SingleAutocomplete } from "@/components/Autocomplete";
 import ProgressChart from "@/components/ProgressChart";
+import {
+  fetchExercisesUserHasDone,
+  fetchExerciseLogs,
+} from "@/api/exerciseLogApi";
+import { Exercise, ExerciseLogDTO } from "@/types";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 const Progress = () => {
-  const [selectedExercise, setSelectedExercise] = useState<string | null>(null);
+  const { user } = useUser();
+  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
+    null
+  );
+  const [exercises, setExercises] = useState<Exercise[]>([]);
   const [chartData, setChartData] = useState<{
     xAxis: string[];
     yAxis: number[];
-  }>({
-    xAxis: [],
-    yAxis: [],
-  });
-  const [activeButton, setActiveButton] = useState<string>("YTD"); // New state to track active button
+  }>({ xAxis: [], yAxis: [] });
+  const [activeButton, setActiveButton] = useState("YTD");
 
-  const handleYTDClick = (exercise: string) => {
-    const ytdData: { xAxis: string[]; yAxis: number[] } = getYTD(
-      exercise,
-      2024
-    );
-    setChartData(ytdData);
+  useEffect(() => {
+    const loadExercises = async () => {
+      if (user?.sub) {
+        const fetchedExercises = await fetchExercisesUserHasDone(
+          user.sub.substring(14)
+        );
+        setExercises(fetchedExercises);
+      }
+    };
+    loadExercises();
+  }, [user]);
+
+  const handleExerciseChange = (exerciseName: string | null) => {
+    const selected =
+      exercises.find((exercise) => exercise.name === exerciseName) || null;
+    setSelectedExercise(selected);
+    selected ? loadYTDData(selected) : resetChartData();
+  };
+
+  const loadYTDData = async (exercise: Exercise) => {
+    const data = await getYTDData(exercise, new Date().getFullYear());
+    setChartData(data);
     setActiveButton("YTD");
   };
 
-  const handlePastYearClick = () => {
+  const loadPastYearData = async () => {
     if (selectedExercise) {
-      const pastYearData = getDataForExercisePastYear(selectedExercise);
-      setChartData(pastYearData);
+      const data = await getPastYearData(selectedExercise);
+      setChartData(data);
       setActiveButton("1 Year");
     }
   };
 
-  const workouts = getWorkouts();
-  let exercises = workouts.flatMap((workout) =>
-    workout.exercises.map((exercise) => exercise.name)
-  );
-  exercises = Array.from(new Set(exercises));
-
-  const handleExerciseChange = (exercise: string | null) => {
-    setSelectedExercise(exercise);
-    console.log("Selected Exercise:", exercise);
-    // Automatically fetch YTD data whenever an exercise is selected
-    if (exercise) {
-      handleYTDClick(exercise);
-    } else {
-      // Reset chart data when no exercise is selected
-      setChartData({ xAxis: [], yAxis: [] });
+  const getYTDData = async (exercise: Exercise, year: number) => {
+    if (user?.sub) {
+      const exerciseLogs = await fetchExerciseLogs(
+        user.sub.substring(14),
+        exercise
+      );
+      const xAxis = Array.from({ length: 12 }, (_, i) =>
+        new Date(year, i).toLocaleString("default", { month: "short" })
+      );
+      const yAxis = Array.from({ length: 12 }, (_, i) =>
+        getMaxWeightForMonth(exerciseLogs, year, i)
+      );
+      return { xAxis, yAxis };
     }
+    return { xAxis: [], yAxis: [] };
   };
 
-  // Gets year-to-date data (Jan of current year - Dec of current year)
-  const getYTD = (
-    exerciseName: string,
-    year: number
-  ): { xAxis: string[]; yAxis: number[] } => {
-    const exerciseLogs = getExerciseLogs();
+  const getPastYearData = async (exercise: Exercise) => {
+    if (user?.sub) {
+      const exerciseLogs = await fetchExerciseLogs(
+        user.sub.substring(14),
+        exercise
+      );
+      const currentDate = new Date();
+      const oneYearAgo = new Date(currentDate);
+      oneYearAgo.setFullYear(currentDate.getFullYear() - 1);
 
-    const filteredLogs = exerciseLogs.filter(
-      (log) => log.exercise.name === exerciseName
+      const data = Array.from({ length: 12 }, (_, i) => {
+        const date = new Date(oneYearAgo);
+        date.setMonth(oneYearAgo.getMonth() + i);
+        return {
+          month: date.toLocaleString("default", { month: "short" }),
+          weight: getMaxWeightForMonth(
+            exerciseLogs,
+            date.getFullYear(),
+            date.getMonth()
+          ),
+        };
+      });
+
+      return {
+        xAxis: data.map((d) => d.month),
+        yAxis: data.map((d) => d.weight || 0),
+      };
+    }
+    return { xAxis: [], yAxis: [] };
+  };
+
+  const getMaxWeightForMonth = (
+    logs: ExerciseLogDTO[],
+    year: number,
+    month: number
+  ) => {
+    const monthLogs = logs.filter((log) => {
+      const logDate = new Date(log.date);
+      return logDate.getFullYear() === year && logDate.getMonth() === month;
+    });
+    return Math.max(
+      ...monthLogs.flatMap((log) => log.sets.map((set) => set.weight)),
+      0
     );
-    const monthlyData: { [key: string]: number } = {};
-
-    filteredLogs.forEach((log) => {
-      const monthKey = log.date.toISOString().slice(0, 7); // YYYY-MM format
-      const maxWeight = Math.max(...log.sets.map((set) => set.weight));
-
-      // Store the max weight for the month if it doesn't exist or if the current weight is higher
-      if (!monthlyData[monthKey] || maxWeight > monthlyData[monthKey]) {
-        monthlyData[monthKey] = maxWeight;
-      }
-    });
-
-    // Prepare output arrays for all months of the specified year
-    const yAxis: number[] = [];
-    const xAxis = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-
-    for (let month = 0; month < 12; month++) {
-      const monthKey = `${year}-${String(month + 1).padStart(2, "0")}`; // YYYY-MM format
-
-      // Get the max weight for that month, or 0 if no data is available
-      yAxis.push(monthlyData[monthKey] || 0);
-    }
-
-    return { xAxis, yAxis };
   };
 
-  const getDataForExercisePastYear = (
-    exerciseName: string
-  ): { xAxis: string[]; yAxis: number[] } => {
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-    const oneYearAgo = new Date(currentDate);
-    oneYearAgo.setFullYear(currentDate.getFullYear() - 1);
-
-    const monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    const monthlyMaxWeights = new Array(12).fill(-1);
-
-    const logs = getExerciseLogs(); // Fetch logs from the API
-
-    // Filter logs for the specified exercise within the last year
-    logs.forEach((log) => {
-      if (
-        log.exercise.name === exerciseName &&
-        log.date >= oneYearAgo &&
-        log.date <= currentDate
-      ) {
-        const month = log.date.getMonth();
-        const maxWeight = Math.max(...log.sets.map((set) => set.weight));
-
-        // Update the monthly max weight if it's higher
-        if (maxWeight > monthlyMaxWeights[month]) {
-          monthlyMaxWeights[month] = maxWeight;
-        }
-      }
-    });
-
-    // Create lists for the month abbreviations and the corresponding max weights
-    const xAxis: string[] = [];
-    const yAxis: number[] = [];
-
-    for (let i = 0; i < 12; i++) {
-      const monthIndex = (currentMonth + i) % 12;
-      xAxis.push(monthNames[monthIndex]);
-      yAxis.push(
-        monthlyMaxWeights[monthIndex] === -1 ? 0 : monthlyMaxWeights[monthIndex]
-      ); // Replace -1 with 0 if no weights lifted
-    }
-
-    let firstElementX: string | undefined = xAxis.shift();
-    if (firstElementX) {
-      xAxis.push(firstElementX);
-    }
-    let firstElementY: number | undefined = yAxis.shift();
-    if (firstElementY) {
-      yAxis.push(firstElementY);
-    }
-
-    return { xAxis, yAxis };
-  };
+  const resetChartData = () => setChartData({ xAxis: [], yAxis: [] });
 
   return (
     <div>
@@ -174,7 +127,7 @@ const Progress = () => {
         <div className="w-3/6 mt-5">
           <SingleAutocomplete
             label="Exercise"
-            data={exercises}
+            data={Array.from(new Set(exercises.map((ex) => ex.name)))}
             onExerciseChange={handleExerciseChange}
           />
         </div>
@@ -182,18 +135,18 @@ const Progress = () => {
         {selectedExercise && (
           <div>
             <button
-              className={`mt-5 ml-5 hover:bg-transparent hover:underline hover:text-purple ${
+              className={`mt-5 ml-5 ${
                 activeButton === "YTD" ? "underline text-purple" : ""
               }`}
-              onClick={() => handleYTDClick(selectedExercise)}
+              onClick={() => loadYTDData(selectedExercise)}
             >
               YTD
             </button>
             <button
-              className={`mt-5 ml-5 hover:bg-transparent hover:underline hover:text-purple ${
+              className={`mt-5 ml-5 ${
                 activeButton === "1 Year" ? "underline text-purple" : ""
               }`}
-              onClick={handlePastYearClick}
+              onClick={loadPastYearData}
             >
               1 Year
             </button>

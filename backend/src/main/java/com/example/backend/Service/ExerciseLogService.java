@@ -1,10 +1,8 @@
 package com.example.backend.Service;
 
+import com.example.backend.DTO.ExerciseDTO;
 import com.example.backend.DTO.ExerciseLogDTO;
-import com.example.backend.Entity.Exercise;
-import com.example.backend.Entity.ExerciseLog;
-import com.example.backend.Entity.SetLog;
-import com.example.backend.Entity.User;
+import com.example.backend.Entity.*;
 import com.example.backend.Repository.ExerciseLogRepository;
 import com.example.backend.Repository.ExerciseRepository;
 import com.example.backend.Repository.SetLogRepository;
@@ -35,6 +33,38 @@ public class ExerciseLogService {
         this.exerciseRepository = exerciseRepository;
         this.userRepository = userRepository;
     }
+
+    public List<Exercise> getExercisesByUserAuth0Id(String userAuth0Id) {
+        Optional<User> userOptional = userRepository.findById(new BigInteger(userAuth0Id));
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return exerciseLogRepository.findByUser(user).stream()
+                    .map(ExerciseLog::getExercise)
+                    .collect(Collectors.toList());
+        }
+        throw new IllegalArgumentException("User not found with Auth0 ID: " + userAuth0Id);
+    }
+
+    public List<ExerciseLog> getExerciseLogs(String userAuth0Id, String exerciseName) {
+        Optional<User> userOptional = userRepository.findById(new BigInteger(userAuth0Id));
+        Optional<Exercise> exerciseOptional = exerciseRepository.findByName(exerciseName);
+
+        if (userOptional.isPresent() && exerciseOptional.isPresent()) {
+            User user = userOptional.get();
+            Exercise targetExercise = exerciseOptional.get();
+
+            return exerciseLogRepository.findByUser(user).stream()
+                    .filter(log ->
+                            log.getExercise().getName().equals(targetExercise.getName()) &&
+                                    log.getExercise().getEquipment() == targetExercise.getEquipment() &&
+                                    log.getExercise().getMuscleGroup() == targetExercise.getMuscleGroup()
+                    )
+                    .collect(Collectors.toList());
+        }
+
+        throw new IllegalArgumentException("User not found with Auth0 ID: " + userAuth0Id);
+    }
+
 
     @Transactional
     public List<ExerciseLog> saveAll(List<ExerciseLogDTO> exerciseLogDTOs) {
