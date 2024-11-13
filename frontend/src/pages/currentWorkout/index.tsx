@@ -7,6 +7,7 @@ import { Workout, SetLog, ExerciseLog, WorkoutLog } from "@/types";
 import ExerciseCard from "@/components/ExerciseCard";
 import { saveExerciseLogs } from "@/api/exerciseLogApi";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import ProfileClient from "@/components/ProfileClient";
 
 const Current = (/*workout: Workout*/) => {
   const { user, isLoading } = useUser();
@@ -145,6 +146,7 @@ const Current = (/*workout: Workout*/) => {
   return (
     <div>
       <Header />
+      <ProfileClient />
       <div className="relative bg-darkPurple top-10 rounded-lg p-6 ml-20 mr-20">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-white text-2xl">{workout.name}</h2>

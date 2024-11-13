@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Header from "@/components/Header";
 import AddedExercise from "@/components/AddedExercise";
 import { getWorkouts } from "../../mockRest";
+import ProfileClient from "@/components/ProfileClient";
 
 const Generate = () => {
   const [muscleGroups] = useState<string[]>([
@@ -74,6 +75,7 @@ const Generate = () => {
   return (
     <div>
       <Header />
+      <ProfileClient />
       <div className="relative bg-darkPurple top-5 rounded-lg p-6 ml-20 mr-20">
         <div className="flex">
           <div className="w-1/2 p-4">

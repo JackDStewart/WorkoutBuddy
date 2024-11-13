@@ -9,7 +9,7 @@ export default function ProfileClient() {
   if (error) return <div>{error.message}</div>;
 
   console.log("user: ", user)
-  const profileImage =  '/white_db2.png'; // user?.picture ||
+  const profileImage =  user?.picture || '/white_db2.png';  
 
 
   return (

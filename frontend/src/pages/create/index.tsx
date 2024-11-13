@@ -10,6 +10,7 @@ import EquipmentSelector from "@/components/EquipmentSelector";
 import { createWorkout } from "@/api/workoutApi";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useRouter } from "next/router";
+import ProfileClient from "@/components/ProfileClient";
 
 const Create = () => {
   const { user, isLoading } = useUser();
@@ -229,6 +230,7 @@ const Create = () => {
   return (
     <div>
       <Header />
+      <ProfileClient />
       <div className="relative bg-darkPurple top-5 rounded-lg p-6 ml-20 mr-20">
         <div className="flex">
           <div className="w-1/2 p-4">

@@ -8,6 +8,7 @@ import {
 } from "@/api/exerciseLogApi";
 import { Exercise, ExerciseLogDTO } from "@/types";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import ProfileClient from "@/components/ProfileClient";
 
 const Progress = () => {
   const { user } = useUser();
@@ -122,6 +123,7 @@ const Progress = () => {
   return (
     <div>
       <Header />
+      <ProfileClient />
       <div className="relative bg-darkPurple top-10 rounded-lg p-6 ml-20 mr-20">
         <h1 className="text-white text-2xl mb-6">Workout Name</h1>
         <div className="w-3/6 mt-5">

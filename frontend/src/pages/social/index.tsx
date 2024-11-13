@@ -4,6 +4,7 @@ import React, { useState } from "react"; //  useState for modal state
 import Modal from "@/components/Modal"; // need modal component for popup
 import { FriendCardProps, Friend } from "@/types";
 import { getFriends } from "@/mockFriendRest";
+import ProfileClient from "@/components/ProfileClient";
 
 const Social: React.FC<FriendCardProps> = () => {
   const friends = getFriends();
@@ -22,7 +23,7 @@ const Social: React.FC<FriendCardProps> = () => {
   return (
     <div>
       <Header />
-
+      <ProfileClient />
       <div className="relative bg-darkPurple top-5 rounded-lg p-6 ml-20 mr-20">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-white text-2xl">My Friends</h2>
