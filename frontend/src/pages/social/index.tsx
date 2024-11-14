@@ -20,6 +20,7 @@ const Social: React.FC<FriendCardProps> = () => {
     setIsModalOpen(false);
   };
 
+  
   return (
     <div>
       <Header />
