@@ -54,6 +54,7 @@ function Create() {
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<string[]>(
     []
   );
+  const [filteredExercises, setFilteredExercises] = useState<Exercise[]>([]);
   const [selectedEquipment, setSelectedEquipment] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [customExerciseName, setCustomExerciseName] = useState<string>("");
@@ -65,6 +66,32 @@ function Create() {
     };
     getExercises();
   }, []);
+
+  useEffect(() => {
+    const filterExercises = () => {
+      if (selectedMuscleGroups.length === 0 && selectedEquipment.length === 0) {
+        setFilteredExercises(exercises);
+      } else {
+        const filtered = exercises.filter((exercise) => {
+          const matchesMuscleGroup = selectedMuscleGroups.length === 0 || 
+            selectedMuscleGroups.includes(formatToTitleCase(exercise.muscleGroup));
+          const matchesEquipment = selectedEquipment.length === 0 || 
+            selectedEquipment.includes(formatToTitleCase(exercise.equipment));
+          return matchesMuscleGroup && matchesEquipment;
+        });
+        setFilteredExercises(filtered);
+      }
+    };
+    filterExercises();
+  }, [selectedMuscleGroups, selectedEquipment, exercises]);
+
+  const formatToTitleCase = (value: string) => {
+    return value
+      .toLowerCase()
+      .split("_")
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
 
   const handleAddExercise = (exercise: string | null) => {
     // Update the type here to match the SingleAutocomplete
@@ -184,7 +211,7 @@ function Create() {
             </h2>
             <SingleAutocomplete
               label="Exercise"
-              data={exercises
+              data={filteredExercises
                 .map((exercise) => exercise.name)
                 .filter((name) => !addedExercises.includes(name))}
               onExerciseChange={handleAddExercise}
