@@ -63,30 +63,16 @@ public class WorkoutService {
         workout.setUser(user);
         workout.setFavorite(workoutDTO.isFavorite());
 
-        // Map each ExerciseDTO to Exercise entity
+        // Map each ExerciseDTO to an existing Exercise entity
         Set<Exercise> exercises = workoutDTO.getExercises().stream()
                 .map(dto -> exerciseRepository.findByName(dto.getName())
-                        .orElseGet(() -> {
-                            Exercise newExercise = new Exercise();
-                            newExercise.setName(dto.getName());
-                            newExercise.setEquipment(dto.getEquipment());
-                            newExercise.setMuscleGroup(dto.getMuscleGroup());
-                            return newExercise;
-                        }))
+                        .orElseThrow(() -> new IllegalArgumentException(
+                                "Exercise not found in database: " + dto.getName())))
                 .collect(Collectors.toSet());
 
-        workout.setExercises(exercises); // Set exercises to workout
+        workout.setExercises(exercises);
 
-        // Save workout and cascade save exercises
-        for (Exercise exercise : workout.getExercises()) {
-            Optional<Exercise> existingExercise = exerciseRepository.findByName(exercise.getName());
-
-            if (existingExercise.isEmpty()) {
-                exerciseRepository.save(exercise);
-            }
-        }
-
-        //exerciseRepository.saveAll(workout.getExercises());
+        // Save workout without attempting to save new exercises
         Workout savedWorkout = workoutRepository.save(workout);
 
         // Convert saved Workout entity back to WorkoutDTO
