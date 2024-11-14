@@ -6,12 +6,8 @@ import { SingleAutocomplete } from "@/components/Autocomplete";
 import { Workout, SetLog, ExerciseLog, WorkoutLog } from "@/types";
 import ExerciseCard from "@/components/ExerciseCard";
 import { saveExerciseLogs } from "@/api/exerciseLogApi";
-<<<<<<< Updated upstream
-import { useUser } from "@auth0/nextjs-auth0/client";
 import ProfileClient from "@/components/ProfileClient";
-=======
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
->>>>>>> Stashed changes
 
 function Current() {
   const { user, isLoading } = useUser();
