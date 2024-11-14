@@ -21,8 +21,8 @@ public class WorkoutController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/create")
     public ResponseEntity<?> createWorkout(@RequestBody WorkoutDTO workoutDTO) {
-        System.out.println("recieved create workout request");
-        WorkoutDTO createdWorkout = workoutService.createWorkout(workoutDTO, workoutDTO.getUserAuth0Id());
+        System.out.println("received create workout request");
+        WorkoutDTO createdWorkout = workoutService.createWorkout(workoutDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdWorkout);
     }

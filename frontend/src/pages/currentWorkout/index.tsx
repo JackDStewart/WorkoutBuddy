@@ -6,10 +6,14 @@ import { SingleAutocomplete } from "@/components/Autocomplete";
 import { Workout, SetLog, ExerciseLog, WorkoutLog } from "@/types";
 import ExerciseCard from "@/components/ExerciseCard";
 import { saveExerciseLogs } from "@/api/exerciseLogApi";
+<<<<<<< Updated upstream
 import { useUser } from "@auth0/nextjs-auth0/client";
 import ProfileClient from "@/components/ProfileClient";
+=======
+import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
+>>>>>>> Stashed changes
 
-const Current = (/*workout: Workout*/) => {
+function Current() {
   const { user, isLoading } = useUser();
   const [isModal1Open, setIsModal1Open] = useState(false);
   const openModal1 = () => {
@@ -221,6 +225,6 @@ const Current = (/*workout: Workout*/) => {
       </Modal>
     </div>
   );
-};
+}
 
-export default Current;
+export default withPageAuthRequired(Current);

@@ -49,9 +49,9 @@ public class WorkoutService {
     }
 
 
-    public WorkoutDTO createWorkout(WorkoutDTO workoutDTO, String auth0Id) {
+    public WorkoutDTO createWorkout(WorkoutDTO workoutDTO) {
         // Find the user by Auth0 ID
-        BigInteger auth0idInt = new BigInteger(auth0Id.substring(14));
+        BigInteger auth0idInt = new BigInteger(workoutDTO.getUserAuth0Id().substring(14));
         Optional<User> userOptional = userRepository.findById(auth0idInt);
         if (userOptional.isEmpty()) {
             throw new RuntimeException("User not found with Auth0 ID: " + auth0idInt);

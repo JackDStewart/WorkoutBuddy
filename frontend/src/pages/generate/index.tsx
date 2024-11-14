@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import AddedExercise from "@/components/AddedExercise";
 import { getWorkouts } from "../../mockRest";
 import ProfileClient from "@/components/ProfileClient";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 
 const Generate = () => {
   const [muscleGroups] = useState<string[]>([
@@ -218,4 +219,4 @@ const Generate = () => {
   );
 };
 
-export default Generate;
+export default withPageAuthRequired(Generate);

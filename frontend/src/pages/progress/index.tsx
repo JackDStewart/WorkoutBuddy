@@ -7,8 +7,8 @@ import {
   fetchExerciseLogs,
 } from "@/api/exerciseLogApi";
 import { Exercise, ExerciseLogDTO } from "@/types";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import ProfileClient from "@/components/ProfileClient";
+import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 
 const Progress = () => {
   const { user } = useUser();
@@ -162,4 +162,4 @@ const Progress = () => {
   );
 };
 
-export default Progress;
+export default withPageAuthRequired(Progress);

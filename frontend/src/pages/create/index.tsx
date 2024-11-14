@@ -11,8 +11,9 @@ import { createWorkout } from "@/api/workoutApi";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useRouter } from "next/router";
 import ProfileClient from "@/components/ProfileClient";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 
-const Create = () => {
+function Create() {
   const { user, isLoading } = useUser();
   const router = useRouter();
 
@@ -331,6 +332,7 @@ const Create = () => {
       </Modal>
     </div>
   );
-};
+}
 
+export const getServerSideProps = withPageAuthRequired();
 export default Create;

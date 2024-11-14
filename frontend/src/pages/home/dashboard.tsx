@@ -10,7 +10,7 @@ const Dashboard: React.FC<DashboardProps> = ({ id }) => {
 
   const getWorkouts = async () => {
     if (id) {
-      const fetchedWorkouts = await fetchWorkouts(id);
+      const fetchedWorkouts: Workout[] = await fetchWorkouts(id);
       setWorkouts(fetchedWorkouts);
     }
   };
@@ -47,7 +47,7 @@ const Dashboard: React.FC<DashboardProps> = ({ id }) => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const favWorkouts = workouts.filter((workout) => workout.favorite);
+  const favWorkouts: Workout[] = workouts.filter((workout) => workout.favorite);
 
   return (
     <div>
@@ -63,6 +63,13 @@ const Dashboard: React.FC<DashboardProps> = ({ id }) => {
         </div>
 
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
+          {favWorkouts.length === 0 && (
+            <div className="flex col-span-3 items-center justify-center h-32">
+              <p className="text-lg text-center">
+                Favorite a Workout to see it here!
+              </p>
+            </div>
+          )}
           {favWorkouts?.map((workout) => (
             <WorkoutCard
               key={workout.id}
@@ -77,6 +84,13 @@ const Dashboard: React.FC<DashboardProps> = ({ id }) => {
         <div className="max-h-[80vh] overflow-y-auto p-4">
           <h2 className="text-xl font-bold mb-4">My Workouts</h2>
           <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
+            {favWorkouts.length === 0 && (
+              <div className="flex col-span-3 items-center justify-center h-32">
+                <p className="text-lg text-center">
+                  Complete a Workout to save it!
+                </p>
+              </div>
+            )}
             {workouts?.map((workout) => (
               <WorkoutCard
                 key={workout.id}

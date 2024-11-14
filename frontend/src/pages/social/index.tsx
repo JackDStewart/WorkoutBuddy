@@ -5,6 +5,7 @@ import Modal from "@/components/Modal"; // need modal component for popup
 import { FriendCardProps, Friend } from "@/types";
 import { getFriends } from "@/mockFriendRest";
 import ProfileClient from "@/components/ProfileClient";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 
 const Social: React.FC<FriendCardProps> = () => {
   const friends = getFriends();
@@ -20,7 +21,6 @@ const Social: React.FC<FriendCardProps> = () => {
     setIsModalOpen(false);
   };
 
-  
   return (
     <div>
       <Header />
@@ -57,4 +57,4 @@ const Social: React.FC<FriendCardProps> = () => {
   );
 };
 
-export default Social;
+export default withPageAuthRequired(Social);
