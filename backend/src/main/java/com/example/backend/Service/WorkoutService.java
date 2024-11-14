@@ -105,4 +105,12 @@ public class WorkoutService {
         );
     }
 
+    public Workout getWorkoutById(Long workoutId) {
+        Optional<Workout> workoutOptional = workoutRepository.findById(workoutId);
+        if (workoutOptional.isPresent()) {
+            return workoutOptional.get();
+        }
+        throw new IllegalArgumentException("Workout not found");
+    }
+
 }

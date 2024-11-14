@@ -41,4 +41,9 @@ public class WorkoutController {
         return ResponseEntity.ok(updatedWorkout);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/id/{workoutId}")
+    public Workout getWorkoutByID(@PathVariable Long workoutId) {
+        return workoutService.getWorkoutById(workoutId);
+    }
 }
