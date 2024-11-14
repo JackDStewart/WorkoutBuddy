@@ -1,5 +1,6 @@
 package com.example.backend.Repository;
 
+import com.example.backend.Entity.Enum.Equipment;
 import com.example.backend.Entity.Exercise;
 import com.example.backend.Entity.User;
 import org.springframework.data.repository.CrudRepository;
@@ -11,4 +12,5 @@ import java.util.Optional;
 
 public interface ExerciseRepository extends CrudRepository<Exercise, Long> {
     Optional<Exercise> findByName(String name);
+    Optional<Exercise> findByEquipment(Equipment equipment);
 }
