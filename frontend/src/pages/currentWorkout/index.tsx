@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Header from "@/components/Header";
 import Modal from "@/components/Modal"; // need modal component for popup
 import { SingleAutocomplete } from "@/components/Autocomplete";
 import { Workout, SetLog, ExerciseLog, WorkoutLog } from "@/types";
 import ExerciseCard from "@/components/ExerciseCard";
+import { fetchWorkoutById, createWorkout } from "@/api/workoutApi";
 import { saveExerciseLogs } from "@/api/exerciseLogApi";
 import ProfileClient from "@/components/ProfileClient";
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
@@ -12,6 +13,7 @@ import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 function Current() {
   const { user, isLoading } = useUser();
   const [isModal1Open, setIsModal1Open] = useState(false);
+  const router = useRouter();
   const openModal1 = () => {
     setIsModal1Open(true);
   };
@@ -26,49 +28,49 @@ function Current() {
   const closeModal2 = () => {
     setIsModal2Open(false);
   };
-  const [cur, setCur] = useState<string | null>(null);
 
-  const router = useRouter();
-  //let { workout } = router.query; // Get the selected workout from query parameters
-
-  let workout: Workout = {
-    name: "Full Body Workout",
-    exercises: [
-      {
-        name: "Push-ups",
-        equipment: "None",
-        muscleGroup: "Chest",
-      },
-      {
-        name: "Squat",
-        equipment: "None",
-        muscleGroup: "Quads",
-      },
-      {
-        name: "Plank",
-        equipment: "None",
-        muscleGroup: "Abs",
-      },
-      {
-        name: "Lat Pulldown",
-        equipment: "Machine",
-        muscleGroup: "Lats",
-      },
-      {
-        name: "Bicep Curls",
-        equipment: "Dumbbell",
-        muscleGroup: "Biceps",
-      },
-    ],
-    favorite: false,
+  const [isModal3Open, setIsModal3Open] = useState(false);
+  const openModal3 = () => {
+    setIsModal3Open(true);
+  };
+  const closeModal3 = () => {
+    setIsModal3Open(false);
   };
 
+  const [cur, setCur] = useState<string | null>(null);
+  const [workout, setWorkout] = useState<Workout>();
+  const [workoutName, setWorkoutName] = useState<string>("");
+
+  useEffect(() => {
+    const { workoutId } = router.query;
+    console.log("workout id= " + workoutId);
+    if (workoutId) {
+      if (workoutId === "NewWorkout") {
+        const newWorkout: Workout = {
+          name: "",
+          exercises: [],
+          favorite: false,
+        };
+        setWorkout(newWorkout);
+        openModal3();
+      }
+      const fetchWorkout = async () => {
+        const workoutData = await fetchWorkoutById(Number(workoutId));
+        if (workoutData) {
+          setWorkout(workoutData);
+        }
+      };
+
+      fetchWorkout();
+    }
+  }, [router.query]);
+
   const [exerciseList, setExerciseList] = useState<ExerciseLog[]>(
-    workout.exercises.map((exercise) => ({
+    workout?.exercises?.map((exercise) => ({
       exercise,
       sets: [],
       date: new Date(),
-    }))
+    })) || []
   );
   //let exerciseList = workout.exercises;
 
@@ -135,12 +137,11 @@ function Current() {
     }
   };
 
-  const saveWorkoutLog = () => {
-    let newWorkoutLog: WorkoutLog = {
-      name: workout.name,
-      exercises: exerciseList,
-    };
-    console.log("log: ", newWorkoutLog);
+  const handleSaveWorkoutName = () => {
+    if (workout) {
+      setWorkout({ ...workout, name: workoutName }); // Update workout name
+      closeModal3(); // Close the modal
+    }
   };
 
   return (
@@ -149,7 +150,7 @@ function Current() {
       <ProfileClient />
       <div className="relative bg-darkPurple top-10 rounded-lg p-6 ml-20 mr-20">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-white text-2xl">{workout.name}</h2>
+          <h2 className="text-white text-2xl">{workout?.name}</h2>
         </div>
         <div className="grid grid-cols-2 gap-10 ">
           {exerciseList.map((exerciseLog, index) => (
@@ -161,7 +162,7 @@ function Current() {
             />
           ))}
           {exerciseList.length === 0 && (
-            <div className="justify-center place-self-center col-start-2 text-grey">
+            <div className="justify-center place-self-center col-span-2 text-grey">
               <p className="text-grey-800 text-xl">Add an exercise!</p>
             </div>
           )}
@@ -216,6 +217,31 @@ function Current() {
             onClick={saveExercises}
           >
             Confirm
+          </button>
+        </div>
+      </Modal>
+      {/*Modal3, name for new workout*/}
+      <Modal
+        closeButton={false}
+        isOpen={isModal3Open}
+        onClose={() => setIsModal3Open(false)}
+        width={"w-[350px]"}
+      >
+        <div className="flex flex-col justify-center items-center h-full">
+          <h2 className="text-xl font-bold mt-2 mb-6 text-center">
+            Enter a name for your workout:
+          </h2>
+          <input
+            type="text"
+            value={workoutName}
+            onChange={(e) => setWorkoutName(e.target.value)}
+            className="text-black w-full p-2 border rounded"
+          />
+          <button
+            className="bg-purple text-lg font-medium text-black py-2 px-4 rounded-full w-1/2 mt-4"
+            onClick={handleSaveWorkoutName}
+          >
+            Save
           </button>
         </div>
       </Modal>

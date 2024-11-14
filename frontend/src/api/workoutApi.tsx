@@ -1,12 +1,13 @@
 import { Workout } from "@/types";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAuth0 } from "@auth0/auth0-react";
+import exp from "constants";
 
 export async function createWorkout(workout: Workout) {
   console.log("here");
 
   const name = workout.name;
-  const exercises = workout.exercises.map((exercise) => ({
+  const exercises = workout.exercises?.map((exercise) => ({
     name: exercise.name,
     equipment: exercise.equipment, // Ensure these fields match the backend ExerciseDTO
     muscleGroup: exercise.muscleGroup, // Ensure this is properly formatted
@@ -30,7 +31,9 @@ export async function createWorkout(workout: Workout) {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(`Failed to create workout: ${errorData.message || response.statusText}`);
+      throw new Error(
+        `Failed to create workout: ${errorData.message || response.statusText}`
+      );
     }
 
     const result = await response.json();
@@ -42,7 +45,9 @@ export async function createWorkout(workout: Workout) {
 
 export async function fetchWorkouts(auth0Id: string) {
   try {
-    const response = await fetch(`http://localhost:8080/workout/user/${auth0Id}`);
+    const response = await fetch(
+      `http://localhost:8080/workout/user/${auth0Id}`
+    );
     if (!response.ok) {
       throw new Error("Failed to fetch workouts");
     }
@@ -57,12 +62,15 @@ export async function fetchWorkouts(auth0Id: string) {
 
 export async function toggleFavoriteWorkout(workoutId: number) {
   try {
-    const response = await fetch(`http://localhost:8080/workout/${workoutId}/toggleFavorite`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `http://localhost:8080/workout/${workoutId}/toggleFavorite`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to toggle favorite status");
@@ -74,3 +82,51 @@ export async function toggleFavoriteWorkout(workoutId: number) {
     console.error("Error toggling favorite status:", error);
   }
 }
+
+export async function fetchWorkoutByName(
+  auth0Id: string,
+  workoutName: string
+): Promise<Workout | undefined> {
+  const workouts: Workout[] = await fetchWorkouts(auth0Id);
+  if (workouts.length > 0) {
+    workouts.filter((workout) => {
+      return workout.name === workoutName;
+    });
+    console.log("Workout not found");
+    return;
+  }
+}
+
+export async function fetchWorkoutById(
+  workoutID: number
+): Promise<Workout | undefined> {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/workout/id/${workoutID}`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to find workout ID");
+    }
+    const workouts = await response.json();
+    console.log("Fetched workout by ID:", workouts);
+    return workouts;
+  } catch (error) {
+    console.error("Error fetching workout by ID:", error);
+    return;
+  }
+}
+
+// export async function getNextWorkoutID(): Promise<number | undefined> {
+//   try {
+//     const response = await fetch(`http://localhost:8080/workout/id`);
+//     if (!response.ok) {
+//       throw new Error("Failed to fetch workouts");
+//     }
+//     const nextID: number = await response.json();
+//     console.log("Next Workout ID:", nextID);
+//     return nextID;
+//   } catch (error) {
+//     console.error("Error fetching workouts:", error);
+//     return;
+//   }
+// }

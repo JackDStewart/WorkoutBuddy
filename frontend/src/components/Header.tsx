@@ -3,19 +3,21 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useUser } from "@auth0/nextjs-auth0/client"; // Import useUser
 
-
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
   const { user, isLoading, error } = useUser(); // Use the useUser hook to get user data
 
-
   const getGreetingText = () => {
     const route = router.pathname;
 
+    if (user) {
+      var firstName = user.given_name;
+    }
+
     switch (route) {
       case "/home":
-        return user ? `Hello, ${user.name}` : "Hello, user";
+        return user ? `Hello, ${firstName}` : "Hello, user";
       case "/create":
         return "Create Workout";
       case "/generate":
@@ -25,7 +27,7 @@ const Header = () => {
       case "/progress":
         return "Track Your Progress";
       default:
-        return "Hello, user";
+        return user ? `Hello, ${firstName}` : "Hello, user";
     }
   };
 

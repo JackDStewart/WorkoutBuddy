@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "../../app/globals.css";
 import Dashboard from "./dashboard";
 import Header from "@/components/Header";
-import Link from "next/link";
 import Modal from "@/components/Modal";
 import Radio from "@/components/Radio";
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
@@ -35,10 +34,7 @@ function HomePage() {
     getWorkoutsList();
   }, [user]);
 
-  const favWorkoutNames = workouts
-    .filter((workout) => workout.favorite)
-    .map((workout) => workout.name);
-  favWorkoutNames.push("Start a new workout");
+  const favWorkouts = workouts.filter((workout) => workout.favorite);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -62,7 +58,7 @@ function HomePage() {
         <div className="max-h-[80vh] overflow-y-auto p-4">
           <h2 className="text-xl font-bold mb-4">Start Workout</h2>
           <p>Choose Workout</p>
-          <Radio workouts={favWorkoutNames} />
+          <Radio workouts={favWorkouts} />
         </div>
       </Modal>
     </div>

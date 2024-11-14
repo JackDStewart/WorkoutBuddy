@@ -7,11 +7,11 @@ export interface Exercise {
 }
 
 export interface Workout {
-  id?: number
+  id?: number;
   name: string;
-  exercises: Exercise[];
+  exercises?: Exercise[];
   favorite: boolean;
-  auth0id?: string
+  auth0id?: string;
 }
 
 export interface SetLog {
@@ -23,20 +23,20 @@ export interface ExerciseLog {
   exercise: Exercise;
   sets: SetLog[];
   date: Date;
-  userAuth0Id?: string
+  userAuth0Id?: string;
 }
 
 export interface ExerciseLogDTO {
   exercise: Exercise;
   sets: SetLog[];
   date: string;
-  userAuth0Id?: User
+  userAuth0Id?: User;
 }
 
 export interface User {
   id: number;
   email: string;
-  name: string
+  name: string;
 }
 
 export type Friend = {
@@ -59,15 +59,16 @@ export interface ExerciseCardProps {
 }
 
 export interface DashboardProps {
-  id: string
+  id: string;
   workouts: Workout[];
 }
 
 export interface RadioProps {
-  workouts: string[];
+  workouts: Workout[];
 }
 
 export interface ModalProps {
+  closeButton?: boolean;
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
