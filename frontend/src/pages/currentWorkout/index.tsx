@@ -9,6 +9,8 @@ import { fetchWorkoutById, createWorkout } from "@/api/workoutApi";
 import { saveExerciseLogs } from "@/api/exerciseLogApi";
 import ProfileClient from "@/components/ProfileClient";
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
+import { fetchExercises } from "@/api/exerciseApi";
+import { Exercise } from "@/types";
 
 function Current() {
   const { user, isLoading } = useUser();
@@ -39,7 +41,16 @@ function Current() {
 
   const [cur, setCur] = useState<string | null>(null);
   const [workout, setWorkout] = useState<Workout>();
+  const [exercises, setExercises] = useState<Exercise[]>([]);
   const [workoutName, setWorkoutName] = useState<string>("");
+
+  useEffect(() => {
+    const getExercises = async () => {
+      const fetchedExercises = await fetchExercises();
+      setExercises(fetchedExercises);
+    };
+    getExercises();
+  }, []);
 
   useEffect(() => {
     const { workoutId } = router.query;
@@ -53,24 +64,24 @@ function Current() {
         };
         setWorkout(newWorkout);
         openModal3();
-      }
-      const fetchWorkout = async () => {
-        const workoutData = await fetchWorkoutById(Number(workoutId));
-        if (workoutData) {
-          setWorkout(workoutData);
-          if (workoutData?.exercises) {
-            let logs =
-              workoutData.exercises?.map((exercise) => ({
-                exercise,
-                sets: [],
-                date: new Date(),
-              })) || [];
-              setExerciseList(logs)
+      } else {
+        const fetchWorkout = async () => {
+          const workoutData = await fetchWorkoutById(Number(workoutId));
+          if (workoutData) {
+            setWorkout(workoutData);
+            if (workoutData?.exercises) {
+              let logs =
+                workoutData.exercises?.map((exercise) => ({
+                  exercise,
+                  sets: [],
+                  date: new Date(),
+                })) || [];
+              setExerciseList(logs);
+            }
           }
-        }
-      };
-
-      fetchWorkout();
+        };
+        fetchWorkout();
+      }
     }
   }, [router.query]);
 
@@ -87,17 +98,19 @@ function Current() {
     if (exerciseStr === null) {
       return;
     }
+
+    const newExercise = exercises.filter(
+      (exercise) => exercise.name == exerciseStr
+    )[0];
+    console.log("NEW:", newExercise);
+
     //search database for matching exercise name and use that as input to exerciseLog.exercise
-    const newExercise: ExerciseLog = {
-      exercise: {
-        name: exerciseStr,
-        equipment: "",
-        muscleGroup: "",
-      }, // Default values for the new set
+    const newExerciseLog: ExerciseLog = {
+      exercise: newExercise,
       sets: [],
       date: new Date(),
     };
-    setExerciseList((prev) => [...prev, newExercise]);
+    setExerciseList((prev) => [...prev, newExerciseLog]);
     closeModal1();
   };
 
@@ -201,7 +214,7 @@ function Current() {
           <h2 className="text-xl font-bold mb-4">Add an Excersise:</h2>
           <SingleAutocomplete
             label="Exercise"
-            data={["exercise1", "exercise2"]} //implement api call to get all exercises here
+            data={exercises.map((exercise) => exercise.name)}
             onExerciseChange={setCur}
           ></SingleAutocomplete>
           <br />
