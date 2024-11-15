@@ -27,7 +27,7 @@ const Modal: React.FC<ModalProps> = ({
       <div
         className={`bg-darkPurple p-5 rounded-lg shadow-lg relative ${width}`}
       >
-        {closeButton && (
+        {!closeButton && (
           <button
             className="absolute top-2 right-2 p-2 rounded-full"
             onClick={onClose}

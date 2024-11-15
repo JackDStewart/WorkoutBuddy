@@ -43,7 +43,8 @@ public class WorkoutController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/id/{workoutId}")
-    public Workout getWorkoutByID(@PathVariable Long workoutId) {
-        return workoutService.getWorkoutById(workoutId);
+    public ResponseEntity<Workout> getWorkoutByID(@PathVariable Long workoutId) {
+        Workout workout = workoutService.getWorkoutById(workoutId);
+        return ResponseEntity.ok(workout);
     }
 }

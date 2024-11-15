@@ -58,6 +58,15 @@ function Current() {
         const workoutData = await fetchWorkoutById(Number(workoutId));
         if (workoutData) {
           setWorkout(workoutData);
+          if (workoutData?.exercises) {
+            let logs =
+              workoutData.exercises?.map((exercise) => ({
+                exercise,
+                sets: [],
+                date: new Date(),
+              })) || [];
+              setExerciseList(logs)
+          }
         }
       };
 
@@ -233,6 +242,7 @@ function Current() {
           </h2>
           <input
             type="text"
+            required
             value={workoutName}
             onChange={(e) => setWorkoutName(e.target.value)}
             className="text-black w-full p-2 border rounded"
