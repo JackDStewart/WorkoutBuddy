@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller	// This means that this class is a Controller
+@RestController	// This means that this class is a Controller
 @RequestMapping(path="/user") // This means URL's start with /demo (after Application path)
 public class UserController {
 	@Autowired // This means to get the bean called userRepository
@@ -27,11 +27,7 @@ public class UserController {
 	}
 
 	@PostMapping(path="/add") // Map ONLY POST Requests
-	public @ResponseBody String addNewUser (@RequestParam String name
-			, @RequestParam String email) {
-		// @ResponseBody means the returned String is the response, not a view name
-		// @RequestParam means it is a parameter from the GET or POST request
-
+	public String addNewUser (@RequestParam String name, @RequestParam String email) {
 		User n = new User();
 		n.setName(name);
 		n.setEmail(email);
@@ -41,7 +37,7 @@ public class UserController {
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping(path="/all")
-	public @ResponseBody Iterable<User> getAllUsers() {
+	public Iterable<User> getAllUsers() {
 		// This returns a JSON or XML with the users
 		return userRepository.findAll();
 	}

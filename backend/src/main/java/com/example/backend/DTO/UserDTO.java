@@ -1,5 +1,7 @@
 package com.example.backend.DTO;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class UserDTO {
     private String id;
     private String email;

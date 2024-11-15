@@ -10,7 +10,6 @@ import java.math.BigInteger;
 @Service
 public class UserService {
 
-    @Autowired
     private UserRepository userRepository;
 
     public void syncUser(UserDTO userDTO) {

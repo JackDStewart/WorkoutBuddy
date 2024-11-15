@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping(path="/workout")
 public class WorkoutController {
 
@@ -20,16 +20,14 @@ public class WorkoutController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/create")
-    public ResponseEntity<?> createWorkout(@RequestBody WorkoutDTO workoutDTO) {
-        System.out.println("received create workout request");
+    public ResponseEntity<WorkoutDTO> createWorkout(@RequestBody WorkoutDTO workoutDTO) {
         WorkoutDTO createdWorkout = workoutService.createWorkout(workoutDTO);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(createdWorkout);
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/user/{auth0Id}")
-    public ResponseEntity<?> getWorkouts(@PathVariable String auth0Id) {
+    public ResponseEntity<List<Workout>> getWorkouts(@PathVariable String auth0Id) {
         List<Workout> workouts = workoutService.getWorkoutsByUserAuth0Id(auth0Id);
         return ResponseEntity.ok(workouts);
     }

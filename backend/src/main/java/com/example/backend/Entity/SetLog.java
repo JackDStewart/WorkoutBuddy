@@ -19,7 +19,10 @@ public class SetLog {
 
     public SetLog() {}
 
-    public SetLog(int weight, int reps) {}
+    public SetLog(int weight, int reps) {
+        this.weight = weight;
+        this.reps = reps;
+    }
 
     public int getWeight() {
         return weight;
