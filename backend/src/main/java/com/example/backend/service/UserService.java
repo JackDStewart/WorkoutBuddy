@@ -28,6 +28,6 @@ public class UserService {
             newUser.setEmail(userDTO.getEmail());
             newUser.setName(userDTO.getName());
             userRepository.save(newUser);
-        };
+        }
     }
 }
