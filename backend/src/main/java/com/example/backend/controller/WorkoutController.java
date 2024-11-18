@@ -3,7 +3,6 @@ package com.example.backend.controller;
 import com.example.backend.dto.WorkoutDTO;
 import com.example.backend.entity.Workout;
 import com.example.backend.service.WorkoutService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +13,12 @@ import java.util.List;
 @RequestMapping(path="/workout")
 public class WorkoutController {
 
-    @Autowired
-    private WorkoutService workoutService;
+
+    private final WorkoutService workoutService;
+
+    public WorkoutController(WorkoutService workoutService) {
+        this.workoutService = workoutService;
+    }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/create")

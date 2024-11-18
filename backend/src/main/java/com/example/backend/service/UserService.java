@@ -10,7 +10,11 @@ import java.math.BigInteger;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public void syncUser(UserDTO userDTO) {
         BigInteger newID = new BigInteger(userDTO.getId().substring(14));

@@ -29,7 +29,7 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
       <h2 className="text-white text-xl font-bold mb-4">
         {exerciseLog.exercise.name}
       </h2>
-      <h3 className="text-gray-400 font-bold mb-4">Last Weight: {"50lbs"}</h3>
+      <br />
       <button
         className="absolute top-[1.5rem] right-[1.5rem] text-white rounded-full hover:text-red-500 hover:bg-transparent"
         onClick={() => onDelete(exerciseLog)} // Add functionality to delete a set

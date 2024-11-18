@@ -9,7 +9,6 @@ import com.example.backend.repository.ExerciseRepository;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.repository.WorkoutRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
@@ -20,14 +19,18 @@ import java.util.stream.Collectors;
 @Service
 public class WorkoutService {
 
-    @Autowired
-    private UserRepository userRepository;
 
-    @Autowired
-    private WorkoutRepository workoutRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private ExerciseRepository exerciseRepository;
+    private final WorkoutRepository workoutRepository;
+
+    private final ExerciseRepository exerciseRepository;
+
+    public WorkoutService(UserRepository userRepository, WorkoutRepository workoutRepository, ExerciseRepository exerciseRepository) {
+        this.userRepository = userRepository;
+        this.workoutRepository = workoutRepository;
+        this.exerciseRepository = exerciseRepository;
+    }
 
     public List<Workout> getWorkoutsByUserAuth0Id(String userAuth0Id) {
         Optional<User> userOptional = userRepository.findById(new BigInteger(userAuth0Id));
