@@ -5,6 +5,7 @@ import com.example.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.Optional;
 
 
 @Service
@@ -18,13 +19,15 @@ public class UserService {
 
     public void syncUser(UserDTO userDTO) {
         BigInteger newID = new BigInteger(userDTO.getId().substring(14));
-        userRepository.findById(newID)
-                .orElseGet(() -> {
-                    User newUser = new User();
-                    newUser.setId(newID);
-                    newUser.setEmail(userDTO.getEmail());
-                    newUser.setName(userDTO.getName());
-                    return userRepository.save(newUser);
-                });
+
+        Optional<User> userOptional = userRepository.findById(newID);
+        if (userOptional.isEmpty())
+        {
+            User newUser = new User();
+            newUser.setId(newID);
+            newUser.setEmail(userDTO.getEmail());
+            newUser.setName(userDTO.getName());
+            userRepository.save(newUser);
+        };
     }
 }

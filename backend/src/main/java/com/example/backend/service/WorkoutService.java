@@ -11,6 +11,7 @@ import com.example.backend.repository.WorkoutRepository;
 import org.springframework.stereotype.Service;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,7 +39,7 @@ public class WorkoutService {
             User user = userOptional.get();
             return workoutRepository.findByUser(user);
         }
-        throw new IllegalArgumentException("User not found with Auth0 ID: " + userAuth0Id);
+        throw new IllegalArgumentException("Workouts not found with Auth0 ID: " + userAuth0Id);
     }
 
     public WorkoutDTO toggleFavorite(Long workoutId) {
@@ -57,7 +58,7 @@ public class WorkoutService {
         BigInteger auth0idInt = new BigInteger(workoutDTO.getUserAuth0Id().substring(14));
         Optional<User> userOptional = userRepository.findById(auth0idInt);
         if (userOptional.isEmpty()) {
-            throw new RuntimeException("User not found with Auth0 ID: " + auth0idInt);
+            throw new NoSuchElementException("create failed from Auth0 ID: " + auth0idInt);
         }
         User user = userOptional.get();
 

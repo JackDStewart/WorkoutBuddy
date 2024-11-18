@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,9 +36,9 @@ public class ExerciseLogService {
             User user = userOptional.get();
             return exerciseLogRepository.findByUser(user).stream()
                     .map(ExerciseLog::getExercise)
-                    .collect(Collectors.toList());
+                    .toList();
         }
-        throw new IllegalArgumentException("User not found with Auth0 ID: " + userAuth0Id);
+        throw new IllegalArgumentException("Exercises not found with Auth0 ID: " + userAuth0Id);
     }
 
     public List<ExerciseLog> getExerciseLogs(String userAuth0Id, String exerciseName) {
@@ -58,10 +55,10 @@ public class ExerciseLogService {
                                     log.getExercise().getEquipment() == targetExercise.getEquipment() &&
                                     log.getExercise().getMuscleGroup() == targetExercise.getMuscleGroup()
                     )
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
-        throw new IllegalArgumentException("User not found with Auth0 ID: " + userAuth0Id);
+        throw new IllegalArgumentException("Exercises not found with Auth0 ID: " + userAuth0Id);
     }
 
 
@@ -76,7 +73,7 @@ public class ExerciseLogService {
             BigInteger auth0idInt = new BigInteger(exerciseLogDTO.getUserAuth0Id().substring(14));
             Optional<User> userOptional = userRepository.findById(auth0idInt);
             if (userOptional.isEmpty()) {
-                throw new RuntimeException("User not found with Auth0 ID: " + auth0idInt);
+                throw new NoSuchElementException("ExerciseLogs not saved to Auth0 ID: " + auth0idInt);
             }
             User user = userOptional.get();
             exerciseLog.setUser(user);
