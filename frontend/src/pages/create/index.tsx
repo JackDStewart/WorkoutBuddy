@@ -219,13 +219,13 @@ function Create() {
 
             <button
               onClick={() => setIsModalOpen(true)}
-              className="text-white px-3 py-1 mt-10 border"
+              className="text-white px-3 py-2 mt-10 border rounded-lg"
             >
               Create Custom Exercise
             </button>
             <button
               onClick={handleSaveWorkout}
-              className="bg-purple text-white py-2 px-4 rounded-lg mt-5"
+              className="bg-purple text-white py-2 px-4 rounded-lg mt-5 ml-4"
             >
               Save Workout
             </button>

@@ -1,22 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import AddedExercise from "@/components/AddedExercise";
-import { getWorkouts } from "../../mockRest";
 import ProfileClient from "@/components/ProfileClient";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
+import { fetchExercises } from "@/api/exerciseApi";
+import { Exercise, Workout } from "@/types";
+import MuscleGroupSelector from "@/components/MuscleGroupSelector";
+import EquipmentSelector from "@/components/EquipmentSelector";
+import { createWorkout } from "@/api/workoutApi";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import { useRouter } from "next/router";
+
 
 const Generate = () => {
-  const [muscleGroups] = useState<string[]>([
-    "Chest",
-    "Back",
-    "Shoulders",
+  const { user, isLoading } = useUser();
+
+  const muscleGroups = [
+    "Abs",
+    "Adductors",
+    "Abductors",
     "Biceps",
-    "Triceps",
-    "Quads",
-    "Hamstrings",
     "Calves",
-    "Cardio",
-  ]);
+    "Chest",
+    "Forearms",
+    "Glutes",
+    "Hamstrings",
+    "Lats",
+    "Lower Back",
+    "Middle Back",
+    "Traps",
+    "Quads",
+    "Shoulders",
+    "Triceps",
+  ];
+  const equipmentOptions = [
+    "None",
+    "Barbell",
+    "Dumbbell",
+    "Kettlebell",
+    "Medicine Ball",
+    "Machine",
+    "Resistance Band",
+    "Cable",
+    "Other",
+  ];
+
+  const router = useRouter();
+
   const [equipment] = useState<string[]>(["Barbell", "Dumbells", "Machine"]);
   const [addedExercises, setAddedExercises] = useState<string[]>([]);
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<string[]>(
@@ -24,15 +54,43 @@ const Generate = () => {
   );
   const [selectedEquipment, setSelectedEquipment] = useState<string[]>([]);
   const [numExercises, setNumExercises] = useState<number>(6);
+  const [exercises, setExercises] = useState<Exercise[]>([]);
+  const [filteredExercises, setFilteredExercises] = useState<Exercise[]>([]);
 
-  const workouts = getWorkouts();
-  // const workoutNames = workouts.map(workout => workout.name);
-  let exerciseNames = workouts.flatMap((workout) =>
-    workout.exercises.map((exercise) => exercise.name)
-  );
-  exerciseNames = Array.from(new Set(exerciseNames));
 
-  //const exerciseNames = exercises.map((exercise) => exercise.name);
+  useEffect(() => {
+    const getExercises = async () => {
+      const fetchedExercises = await fetchExercises();
+      setExercises(fetchedExercises);
+    };
+    getExercises();
+  }, []);
+
+  useEffect(() => {
+    const filterExercises = () => {
+      if (selectedMuscleGroups.length === 0 && selectedEquipment.length === 0) {
+        setFilteredExercises(exercises);
+      } else {
+        const filtered = exercises.filter((exercise) => {
+          const matchesMuscleGroup = selectedMuscleGroups.length === 0 || 
+            selectedMuscleGroups.includes(formatToTitleCase(exercise.muscleGroup));
+          const matchesEquipment = selectedEquipment.length === 0 || 
+            selectedEquipment.includes(formatToTitleCase(exercise.equipment));
+          return matchesMuscleGroup && matchesEquipment;
+        });
+        setFilteredExercises(filtered);
+      }
+    };
+    filterExercises();
+  }, [selectedMuscleGroups, selectedEquipment, exercises]);
+
+  const formatToTitleCase = (value: string) => {
+    return value
+      .toLowerCase()
+      .split("_")
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
 
   const handleMuscleSelectOption = (option: string) => {
     // Add the option to the selected muscleGroups list if it's not already there
@@ -63,14 +121,74 @@ const Generate = () => {
   };
 
   const getRandomUniqueSelections = (numSelections: number) => {
-    const shuffled = [...exerciseNames].sort(() => 0.5 - Math.random());
+    const shuffled = [...filteredExercises].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, numSelections);
   };
 
   const handleGenerate = () => {
-    const exercises = getRandomUniqueSelections(numExercises);
-    setAddedExercises(exercises);
-    console.log("Generated Exercises:", exercises);
+    const selectedExercises = getRandomUniqueSelections(numExercises);
+    if (selectedExercises.length === 0) {
+      console.log("No exercises with selected filters.");
+      alert("No Exercises match current filters. Select new ones.")
+      return;
+    }
+    setAddedExercises(selectedExercises.map((exercise) => exercise.name));
+    console.log("Generated Exercises:", selectedExercises);
+  };
+
+  const handleSaveWorkout = async () => {
+    const workoutName = (
+      document.querySelector('input[type="text"]') as HTMLInputElement
+    )?.value.trim();
+    if (!workoutName) {
+      alert("Please enter a workout name.");
+      return;
+    }
+
+    const workoutExercises = addedExercises
+      .map((exerciseName) => {
+        const matchedExercise = exercises.find(
+          (exercise) => exercise.name === exerciseName
+        );
+        return matchedExercise
+          ? {
+              name: exerciseName,
+              muscleGroup: muscleGroups.includes(
+                matchedExercise.muscleGroup as (typeof muscleGroups)[number]
+              )
+                ? matchedExercise.muscleGroup
+                : "Other",
+              equipment: equipmentOptions.includes(
+                matchedExercise.equipment as (typeof equipmentOptions)[number]
+              )
+                ? matchedExercise.equipment
+                : "None",
+            }
+          : undefined;
+      })
+      .filter(Boolean) as Exercise[];
+
+    if (workoutExercises.length === 0) {
+      alert("No valid exercises added.");
+      return;
+    }
+
+    if (user?.sub) {
+      const workout: Workout = {
+        name: workoutName,
+        exercises: workoutExercises,
+        favorite: true,
+        auth0id: user.sub,
+      };
+      try {
+        await createWorkout(workout);
+        alert("Workout saved successfully!");
+        router.push("/home");
+      } catch (error) {
+        console.error("Error saving workout:", error);
+        alert("Error saving your workout. Please try again.");
+      }
+    }
   };
 
   return (
@@ -80,114 +198,38 @@ const Generate = () => {
       <div className="relative bg-darkPurple top-5 rounded-lg p-6 ml-20 mr-20">
         <div className="flex">
           <div className="w-1/2 p-4">
-            <h2 className="block text-white text-sm mb-1">Workout Name</h2>
+            <h2 className="text-white text-sm mb-1">Workout Name</h2>
             <input
               type="text"
               placeholder="Ex: Chest and Back Day"
-              className="text-white bg-darkPurple w-full p-2 border border-white rounded-lg focus:outline-none focus:ring-2 focus:border-transparent focus:ring-purple"
+              className="text-white bg-darkPurple w-full p-2 border border-white rounded-lg"
             />
 
-            {/* Muscle Groups */}
-            <h2 className="block text-white text-sm mb-1 mt-8">
-              Filter Exercises By Muscle Groups
-            </h2>
+            <MuscleGroupSelector
+              selectedMuscleGroups={selectedMuscleGroups}
+              muscleGroups={muscleGroups}
+              onSelect={(option) =>
+                setSelectedMuscleGroups((prev) => [...prev, option])
+              }
+              onRemove={(option) =>
+                setSelectedMuscleGroups((prev) =>
+                  prev.filter((mg) => mg !== option)
+                )
+              }
+            />
 
-            {/* Input container with selected muscleGroups inside */}
-            <div className="flex flex-wrap bg-darkPurple p-2 border border-white rounded-lg focus:outline-none focus:ring-2 focus:border-transparent focus:ring-purple mb-4">
-              {/* Render selected muscleGroups as bubbles */}
-              <div className="flex flex-wrap">
-                {selectedMuscleGroups.map((option) => (
-                  <div
-                    key={option}
-                    className="flex items-center text-white rounded-full px-3 py-1 mr-2 mb-1 mt-1 border"
-                  >
-                    <span className="mr-2">{option}</span>
-                    <button
-                      className="text-white hover:bg-transparent hover:text-purple hover:scale-125"
-                      onClick={() => handleMuscleRemoveOption(option)}
-                    >
-                      &times;
-                    </button>
-                  </div>
-                ))}
-              </div>
-
-              {/* Conditional Placeholder */}
-              {selectedMuscleGroups.length === 0 && (
-                <input
-                  type="text"
-                  placeholder="Select Muscle Groups Below"
-                  className="bg-transparent outline-none flex-grow text-white"
-                  readOnly
-                />
-              )}
-            </div>
-
-            {/* Dropdown or list of muscleGroups */}
-            <div className="mt-4">
-              {muscleGroups
-                .filter((option) => !selectedMuscleGroups.includes(option)) // Filter out selected muscleGroups
-                .map((option) => (
-                  <button
-                    key={option}
-                    className="bg-darkPurple text-white rounded-full px-4 py-2 mr-2 mb-2 hover:bg-white hover:text-black transition border"
-                    onClick={() => handleMuscleSelectOption(option)}
-                  >
-                    {option}
-                  </button>
-                ))}
-            </div>
-            {/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */}
-            {/* Equipment */}
-            <h2 className="block text-white text-sm mb-1 mt-8">
-              Filter Exercises By Equipment
-            </h2>
-
-            {/* Input container with selected muscleGroups inside */}
-            <div className="flex flex-wrap bg-darkPurple p-2 border border-white rounded-lg focus:outline-none focus:ring-2 focus:border-transparent focus:ring-purple mb-4">
-              {/* Render selected muscleGroups as bubbles */}
-              <div className="flex flex-wrap">
-                {selectedEquipment.map((option) => (
-                  <div
-                    key={option}
-                    className="flex items-center text-white rounded-full px-3 py-1 mr-2 mb-1 mt-1 border"
-                  >
-                    <span className="mr-2">{option}</span>
-                    <button
-                      className="text-white hover:bg-transparent hover:text-purple hover:scale-125"
-                      onClick={() => handleEquipmentRemoveOption(option)}
-                    >
-                      &times;
-                    </button>
-                  </div>
-                ))}
-              </div>
-
-              {/* Conditional Placeholder */}
-              {selectedEquipment.length === 0 && (
-                <input
-                  type="text"
-                  placeholder="Select Equipment Below"
-                  className="bg-transparent outline-none flex-grow text-white"
-                  readOnly
-                />
-              )}
-            </div>
-
-            {/* Dropdown or list of equipment */}
-            <div className="mt-4">
-              {equipment
-                .filter((option) => !selectedEquipment.includes(option)) // Filter out selected equipment
-                .map((option) => (
-                  <button
-                    key={option}
-                    className="bg-darkPurple text-white rounded-full px-4 py-2 mr-2 mb-2 hover:bg-white hover:text-black transition border"
-                    onClick={() => handleEquipmentSelectOption(option)}
-                  >
-                    {option}
-                  </button>
-                ))}
-            </div>
+            <EquipmentSelector
+              selectedEquipment={selectedEquipment}
+              equipment={equipmentOptions}
+              onSelect={(option) =>
+                setSelectedEquipment((prev) => [...prev, option])
+              }
+              onRemove={(option) =>
+                setSelectedEquipment((prev) =>
+                  prev.filter((eq) => eq !== option)
+                )
+              }
+            />
             <div className="flex items-center space-x-4 space-y-6">
               <button
                 className="bg-purple font-bold text-white p-3 rounded-lg mt-6"
@@ -203,20 +245,25 @@ const Generate = () => {
                 className="text-white bg-darkPurple p-3 border border-white rounded-lg focus:outline-none focus:ring-2 focus:border-transparent focus:ring-purple"
               />
             </div>
+            <button
+              onClick={handleSaveWorkout}
+              className="bg-purple text-white py-2 px-4 rounded-lg mt-5"
+            >
+              Save Workout
+            </button>
           </div>
-          {/* Right Column for Added Exercises */}
+
           <div className="w-1/2 p-4 ml-auto">
             <h2 className="font-bold text-2xl border-b-2">Added Exercises</h2>
             <AddedExercise
               exercises={addedExercises}
               addedList={addedExercises}
               setter={setAddedExercises}
-            ></AddedExercise>
+            />
           </div>
         </div>
       </div>
     </div>
   );
-};
-
+}
 export default withPageAuthRequired(Generate);
