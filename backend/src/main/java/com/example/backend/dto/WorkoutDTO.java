@@ -17,7 +17,7 @@ public class WorkoutDTO {
         this.favorite = workout.isFavorite();
         this.exercises = new HashSet<>();
         for(Exercise exercise : workout.getExercises()) {
-            this.exercises.add(new ExerciseDTO(exercise.getName(), exercise.getEquipment().getDisplayName(), exercise.getMuscleGroup().getDisplayName()));
+            this.exercises.add(new ExerciseDTO(exercise.getName(), exercise.getEquipment().getDisplayName(), exercise.getMuscleGroup().getDisplayName(), ""));
         }
         this.userAuth0Id = workout.getUser().getId().toString();
     }

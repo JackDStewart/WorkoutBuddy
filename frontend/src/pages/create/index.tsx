@@ -9,9 +9,10 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import { useRouter } from "next/router";
 import ProfileClient from "@/components/ProfileClient";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import { fetchExercises } from "@/api/exerciseApi";
+import { fetchExercises, fetchExercisesWithCustoms } from "@/api/exerciseApi";
 import { createWorkout } from "@/api/workoutApi";
 import { Exercise, Workout } from "@/types";
+import { createExercise } from "@/api/exerciseApi";
 
 function Create() {
   const { user, isLoading } = useUser();
@@ -61,11 +62,19 @@ function Create() {
 
   useEffect(() => {
     const getExercises = async () => {
-      const fetchedExercises = await fetchExercises();
-      setExercises(fetchedExercises);
+      if (user?.sub) {
+        console.log(user);
+        const fetchedExercises = await fetchExercisesWithCustoms(
+          user.sub.substring(14)
+        );
+        setExercises(fetchedExercises);
+      }
     };
-    getExercises();
-  }, []);
+
+    if (user) {
+      getExercises();
+    }
+  }, [user]);
 
   useEffect(() => {
     const filterExercises = () => {
@@ -73,9 +82,13 @@ function Create() {
         setFilteredExercises(exercises);
       } else {
         const filtered = exercises.filter((exercise) => {
-          const matchesMuscleGroup = selectedMuscleGroups.length === 0 || 
-            selectedMuscleGroups.includes(formatToTitleCase(exercise.muscleGroup));
-          const matchesEquipment = selectedEquipment.length === 0 || 
+          const matchesMuscleGroup =
+            selectedMuscleGroups.length === 0 ||
+            selectedMuscleGroups.includes(
+              formatToTitleCase(exercise.muscleGroup)
+            );
+          const matchesEquipment =
+            selectedEquipment.length === 0 ||
             selectedEquipment.includes(formatToTitleCase(exercise.equipment));
           return matchesMuscleGroup && matchesEquipment;
         });
@@ -89,7 +102,7 @@ function Create() {
     return value
       .toLowerCase()
       .split("_")
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
   };
 
@@ -155,15 +168,42 @@ function Create() {
     }
   };
 
-  const handleSaveExercise = () => {
+  const handleSaveExercise = async () => {
     if (!customExerciseName.trim()) {
       alert("Please enter an exercise name.");
       return;
     }
 
-    setAddedExercises([...addedExercises, customExerciseName]);
-    setCustomExerciseName("");
-    setIsModalOpen(false);
+    if (user?.sub) {
+      const newExercise: Exercise = {
+        name: customExerciseName,
+        muscleGroup:
+          selectedMuscleGroups.length > 0 ? selectedMuscleGroups[0] : "Other",
+        equipment: selectedEquipment.length > 0 ? selectedEquipment[0] : "None",
+        userAuth0Id: user.sub,
+      };
+
+      try {
+        const createdExercise = await createExercise(newExercise);
+
+        // Validate `createdExercise` is defined before updating state
+        if (createdExercise) {
+          setExercises((prev) => [...prev, createdExercise]);
+          setAddedExercises([...addedExercises, createdExercise.name]);
+        }
+
+        // Reset modal inputs
+        setCustomExerciseName("");
+        setSelectedMuscleGroups([]);
+        setSelectedEquipment([]);
+        setIsModalOpen(false);
+      } catch (error) {
+        console.error("Error creating exercise:", error);
+        alert("Failed to create exercise. Please try again.");
+      }
+    } else {
+      alert("You need to be logged in to create a custom exercise.");
+    }
   };
 
   return (

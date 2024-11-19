@@ -84,7 +84,8 @@ public class WorkoutService {
                 .map(exercise -> new ExerciseDTO(
                         exercise.getName(),
                         exercise.getEquipment().getDisplayName(),
-                        exercise.getMuscleGroup().getDisplayName()
+                        exercise.getMuscleGroup().getDisplayName(),
+                        ""
                 ))
                 .collect(Collectors.toSet());
 

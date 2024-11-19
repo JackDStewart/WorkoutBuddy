@@ -4,6 +4,7 @@ export interface Exercise {
   name: string;
   equipment: string;
   muscleGroup: string;
+  userAuth0Id?: string;
 }
 
 export interface Workout {
