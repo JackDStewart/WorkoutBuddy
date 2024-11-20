@@ -18,7 +18,8 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const toggleFavorite = () => {
+  const toggleFavorite = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (workout.id) {
       onUpdateFavorite(workout.id);
     }
