@@ -17,7 +17,7 @@ import java.util.Optional;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTests {
+class UserServiceTests {
 
     @Mock
     private UserRepository userRepository;
@@ -26,7 +26,7 @@ public class UserServiceTests {
     private UserService userService;
 
     @Test
-    public void SyncUser_NewUser() {
+    void SyncUser_NewUser() {
         // Arrange
         String mockId = "1111111111111112345678901234"; // Example ID string
         BigInteger newId = new BigInteger(mockId);
@@ -51,7 +51,7 @@ public class UserServiceTests {
 
 
     @Test
-    public void SyncUser_UserPresent(){
+    void SyncUser_UserPresent(){
         //Arrange
         String mockId = "1111111111111112345678901234"; // Example ID string
         BigInteger existingId = new BigInteger(mockId);

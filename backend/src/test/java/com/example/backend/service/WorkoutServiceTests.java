@@ -27,7 +27,7 @@ import java.util.Set;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class WorkoutServiceTests {
+class WorkoutServiceTests {
 
     @InjectMocks
     WorkoutService workoutService;
@@ -46,7 +46,7 @@ public class WorkoutServiceTests {
         private final BigInteger userId = new BigInteger("12345678901234");
 
         @Test
-        public void getWorkoutsByUserAuth0Id_UserFound() {
+        void getWorkoutsByUserAuth0Id_UserFound() {
 
             //Arrange
             User user = new User("testName", "testEmail", userId);
@@ -68,13 +68,14 @@ public class WorkoutServiceTests {
         }
 
         @Test
-        public void getWorkoutsByUserAuth0Id_UserNotFound() {
+        void getWorkoutsByUserAuth0Id_UserNotFound() {
 
             //Arrange
             when(userRepository.findById(userId)).thenReturn(Optional.empty()); // User does not exist
 
             //Act Assert
-            Exception e = Assertions.assertThrows(IllegalArgumentException.class, () -> workoutService.getWorkoutsByUserAuth0Id(userId.toString()));
+            String userIdStr = userId.toString();
+            Exception e = Assertions.assertThrows(IllegalArgumentException.class, () -> workoutService.getWorkoutsByUserAuth0Id(userIdStr));
 
             Assertions.assertEquals("Workouts not found with Auth0 ID: " + userId, e.getMessage());
 
@@ -93,7 +94,7 @@ public class WorkoutServiceTests {
 
 
         @Test
-        public void toggleFavorite_WorkoutFound() {
+        void toggleFavorite_WorkoutFound() {
             workout.setExercises(Set.of(
                     new Exercise("testExercise1", Equipment.BARBELL, MuscleGroup.BICEPS, user),
                     new Exercise("testExercise2", Equipment.BARBELL, MuscleGroup.BICEPS, user)));
@@ -102,7 +103,7 @@ public class WorkoutServiceTests {
             when(workoutRepository.save(Mockito.any(Workout.class))).thenReturn(workout);
 
             //act
-            WorkoutDTO savedWorkoutDTO = workoutService.toggleFavorite(workout.getId()); // started true, asserting to false
+            WorkoutDTO savedWorkoutDTO = workoutService.toggleFavorite(workoutId); // started true, asserting to false
 
             //Assert
             Assertions.assertFalse(savedWorkoutDTO.isFavorite());
@@ -111,7 +112,7 @@ public class WorkoutServiceTests {
         }
 
         @Test
-        public void toggleFavorite_WorkoutNotFound() {
+        void toggleFavorite_WorkoutNotFound() {
             when(workoutRepository.findById(workoutId)).thenReturn(Optional.empty());
             Exception e = Assertions.assertThrows(RuntimeException.class, () -> workoutService.toggleFavorite(workoutId));
             Assertions.assertEquals("Workout not found with ID: " + workoutId, e.getMessage());
