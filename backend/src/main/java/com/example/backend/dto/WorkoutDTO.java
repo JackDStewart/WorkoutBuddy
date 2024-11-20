@@ -2,13 +2,21 @@ package com.example.backend.dto;
 
 import com.example.backend.entity.Exercise;
 import com.example.backend.entity.Workout;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Getter
+@Data
 public class WorkoutDTO {
+    @Setter
     private String name;
+    @Setter
     private boolean favorite;
+    @Setter
     private Set<ExerciseDTO> exercises;
     private String userAuth0Id;
 
@@ -22,37 +30,10 @@ public class WorkoutDTO {
         this.userAuth0Id = workout.getUser().getId().toString();
     }
 
-    public String getUserAuth0Id() {
-        return userAuth0Id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isFavorite() {
-        return favorite;
-    }
-
-    public void setFavorite(boolean favorite) {
-        this.favorite = favorite;
-    }
-
     public WorkoutDTO(String name, boolean favorite, Set<ExerciseDTO> exercises) {
         this.name = name;
         this.favorite = favorite;
         this.exercises = exercises;
     }
 
-    public Set<ExerciseDTO> getExercises() {
-        return exercises;
-    }
-
-    public void setExercises(Set<ExerciseDTO> exercises) {
-        this.exercises = exercises;
-    }
 }

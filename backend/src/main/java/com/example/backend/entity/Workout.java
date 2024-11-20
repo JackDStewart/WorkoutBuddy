@@ -27,8 +27,11 @@ public class Workout {
 
     public Workout() {}
 
-    public Workout(String name) {
+    public Workout(String name, Long id, User user, boolean favorite) {
+        this.id = id;
         this.name = name;
+        this.user = user;
+        this.favorite = favorite;
     }
 
     // Getters and Setters

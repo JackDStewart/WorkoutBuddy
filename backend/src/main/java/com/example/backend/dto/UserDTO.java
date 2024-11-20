@@ -1,33 +1,17 @@
 package com.example.backend.dto;
 
+import com.example.backend.entity.User;
+import lombok.Data;
+
+@Data
 public class UserDTO {
     private String id;
     private String email;
     private String name;
 
-    // Getters and Setters
-
-    public String getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public UserDTO(User user) {
+        this.id = String.valueOf(user.getId());
+        this.email = user.getEmail();
+        this.name = user.getName();
     }
 }

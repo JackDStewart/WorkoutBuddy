@@ -17,7 +17,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void syncUser(UserDTO userDTO) {
+    public User syncUser(UserDTO userDTO) {
         BigInteger newID = new BigInteger(userDTO.getId().substring(14));
 
         Optional<User> userOptional = userRepository.findById(newID);
@@ -27,7 +27,10 @@ public class UserService {
             newUser.setId(newID);
             newUser.setEmail(userDTO.getEmail());
             newUser.setName(userDTO.getName());
-            userRepository.save(newUser);
+            return userRepository.save(newUser);
+        }
+        else {
+            return userOptional.get();
         }
     }
 }

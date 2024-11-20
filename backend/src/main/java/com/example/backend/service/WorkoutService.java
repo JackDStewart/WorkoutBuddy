@@ -45,7 +45,7 @@ public class WorkoutService {
     public WorkoutDTO toggleFavorite(Long workoutId) {
         // Fetch workout by ID
         Workout workout = workoutRepository.findById(workoutId)
-                .orElseThrow(() -> new RuntimeException("Workout not found"));
+                .orElseThrow(() -> new RuntimeException("Workout not found with ID: " + workoutId));
 
         workout.setFavorite(!workout.isFavorite());
         workout = workoutRepository.save(workout);
