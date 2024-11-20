@@ -126,37 +126,26 @@ const Progress = () => {
       <ProfileClient />
       <div className="relative bg-darkPurple top-10 rounded-lg p-6 ml-20 mr-20">
         <h1 className="text-white text-2xl mb-6">Workout Name</h1>
-        <div className="w-3/6 mt-5">
-          <SingleAutocomplete
-            label="Exercise"
-            data={Array.from(new Set(exercises.map((ex) => ex.name)))}
-            onExerciseChange={handleExerciseChange}
-          />
-        </div>
-
-        {selectedExercise && (
-          <div>
-            <button
-              className={`mt-5 ml-5 ${
-                activeButton === "YTD" ? "underline text-purple" : ""
-              }`}
-              onClick={() => loadYTDData(selectedExercise)}
-            >
-              YTD
-            </button>
-            <button
-              className={`mt-5 ml-5 ${
-                activeButton === "1 Year" ? "underline text-purple" : ""
-              }`}
-              onClick={loadPastYearData}
-            >
-              1 Year
-            </button>
-            <div className="w-3/6">
+        <div className="flex flex-row justify-between items-start">
+          {/* Left Side: SingleAutocomplete */}
+          <div className="w-1/2">
+            <SingleAutocomplete
+              label="Exercise"
+              data={Array.from(new Set(exercises.map((ex) => ex.name)))}
+              onExerciseChange={handleExerciseChange}
+            />
+          </div>
+          
+          {/* Right Side: ProgressChart */}
+          {selectedExercise && (
+            <div className="w-1/2">
+                <h1 className="text-xl text-center underline">
+                  Year To Date
+                </h1>
               <ProgressChart xAxis={chartData.xAxis} yAxis={chartData.yAxis} />
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
