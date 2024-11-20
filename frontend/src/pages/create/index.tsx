@@ -287,45 +287,47 @@ function Create() {
         onClose={() => setIsModalOpen(false)}
         width="w-[400px]"
       >
-        <h2 className="font-bold text-xl mb-4">Create Custom Exercise</h2>
-        <input
-          type="text"
-          placeholder="Ex: Oscillating Owens"
-          className="text-white bg-darkPurple w-full p-2 border border-white rounded-lg"
-          value={customExerciseName}
-          onChange={(e) => setCustomExerciseName(e.target.value)}
-        />
+        <div className="max-h-[75vh] overflow-y-auto p-4">
+          <h2 className="font-bold text-xl mb-4">Create Custom Exercise</h2>
+          <input
+            type="text"
+            placeholder="Ex: Oscillating Owens"
+            className="text-white bg-darkPurple w-full p-2 border border-white rounded-lg"
+            value={customExerciseName}
+            onChange={(e) => setCustomExerciseName(e.target.value)}
+          />
 
-        <MuscleGroupSelector
-          selectedMuscleGroups={selectedMuscleGroups}
-          muscleGroups={muscleGroups}
-          onSelect={(option) =>
-            setSelectedMuscleGroups((prev) => [...prev, option])
-          }
-          onRemove={(option) =>
-            setSelectedMuscleGroups((prev) =>
-              prev.filter((mg) => mg !== option)
-            )
-          }
-        />
+          <MuscleGroupSelector
+            selectedMuscleGroups={selectedMuscleGroups}
+            muscleGroups={muscleGroups}
+            onSelect={(option) =>
+              setSelectedMuscleGroups((prev) => [...prev, option])
+            }
+            onRemove={(option) =>
+              setSelectedMuscleGroups((prev) =>
+                prev.filter((mg) => mg !== option)
+              )
+            }
+          />
 
-        <EquipmentSelector
-          selectedEquipment={selectedEquipment}
-          equipment={equipmentOptions}
-          onSelect={(option) =>
-            setSelectedEquipment((prev) => [...prev, option])
-          }
-          onRemove={(option) =>
-            setSelectedEquipment((prev) => prev.filter((eq) => eq !== option))
-          }
-        />
+          <EquipmentSelector
+            selectedEquipment={selectedEquipment}
+            equipment={equipmentOptions}
+            onSelect={(option) =>
+              setSelectedEquipment((prev) => [...prev, option])
+            }
+            onRemove={(option) =>
+              setSelectedEquipment((prev) => prev.filter((eq) => eq !== option))
+            }
+          />
 
-        <button
-          onClick={handleSaveExercise}
-          className="bg-purple text-white py-2 px-4 rounded-lg mt-5"
-        >
-          Save Exercise
-        </button>
+          <button
+            onClick={handleSaveExercise}
+            className="bg-purple text-white py-2 px-4 rounded-lg mt-5"
+          >
+            Save Exercise
+          </button>
+        </div>
       </Modal>
     </div>
   );

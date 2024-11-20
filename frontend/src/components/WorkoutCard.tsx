@@ -1,5 +1,7 @@
 import { Workout } from "@/types";
 import React, { useState } from "react";
+import Modal from "@/components/Modal";
+import Link from "next/link";
 
 interface WorkoutCardProps {
   workout: Workout;
@@ -11,20 +13,29 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({
   onUpdateFavorite,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const toggleFavorite = () => {
-    if(workout.id){
+    if (workout.id) {
       onUpdateFavorite(workout.id);
     }
   };
 
   let exercises = workout.exercises;
   return (
-    <div className="relative flex flex-col bg-black text-gray-300 rounded-lg shadow-left-purple p-4 md:p-6 lg:p-8 h-full max-w-full md:max-w-md lg:max-w-lg">
-      <h2 className="text-white text-lg md:text-xl lg:text-2xl font-bold mb-2 md:mb-4">
-        {workout.name}
-      </h2>
-        <button className="absolute top-[2rem] right-[2rem]"
+    <>
+      <div
+        onClick={openModal}
+        className="relative flex flex-col bg-black text-gray-300 rounded-lg shadow-left-purple p-4 md:p-6 lg:p-8 h-full max-w-full md:max-w-md lg:max-w-lg hover:ring hover:ring-purple hover:ring-2 hover:cursor-pointer transition duration-300"
+      >
+        <h2 className="text-white text-lg md:text-xl lg:text-2xl font-bold mb-2 md:mb-4">
+          {workout.name}
+        </h2>
+        <button
+          className="absolute top-[2rem] right-[2rem]"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onClick={toggleFavorite} // Handle click to toggle favorite
@@ -53,27 +64,40 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({
           )}
         </button>
 
-      <ul className="space-y-1 md:space-y-2 text-gray-400 mb-2 md:mb-4">
-        {exercises.slice(0, 4).map((exercise, index) => (
-          <li key={index}>
-            {exercise.name}
-            {index === 3 && exercises.length > 4 && "..."}
-          </li>
-        ))}
-      </ul>
-
-      <div className="footer flex justify-between w-full mt-auto h-10 space-x-2 overflow-hidden">
-        <button className="bg-purple text-xs sm:text-sm md:text-base text-black h-full px-2 sm:px-3 md:px-4 lg:px-6 rounded-full flex-1 min-w-0">
-          Start
-        </button>
-        <button className="bg-purple text-xs sm:text-sm md:text-base text-black h-full px-2 sm:px-3 md:px-4 lg:px-6 rounded-full flex-1 min-w-0">
-          Expand
-        </button>
-        <button className="bg-purple text-xs sm:text-sm md:text-base text-black h-full px-2 sm:px-3 md:px-4 lg:px-6 rounded-full flex-1 min-w-0">
-          Edit
-        </button>
+        <ul className="space-y-1 md:space-y-2 text-gray-400 mb-2 md:mb-4">
+          {exercises &&
+            exercises.slice(0, 4).map((exercise, index) => (
+              <li key={index}>
+                {exercise.name}
+                {exercises && index === 3 && exercises.length > 4 && "..."}
+              </li>
+            ))}
+        </ul>
       </div>
-    </div>
+
+      <Modal isOpen={isModalOpen} onClose={closeModal} width="w-[400px]">
+        <h2 className="text-white text-2xl font-bold mb-4">{workout.name}</h2>
+        <ul className="space-y-2 text-gray-400 mb-6">
+          {workout &&
+            workout.exercises &&
+            workout.exercises.map((exercise, index) => (
+              <li key={index} className="text-lg">
+                {exercise.name}
+              </li>
+            ))}
+        </ul>
+        <Link
+          className="bg-purple text-white text-lg font-bold px-6 py-2 rounded-full text-l bg-purple border-none transition-transform duration-500 hover:bg-transitionPurple hover:scale-125"
+          href={{
+            pathname: "/currentWorkout",
+            query: { workoutId: workout.id ? workout.id : "NewWorkout" },
+          }}
+          passHref
+        >
+          Start
+        </Link>
+      </Modal>
+    </>
   );
 };
 

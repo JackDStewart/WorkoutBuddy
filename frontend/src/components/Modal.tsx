@@ -23,7 +23,7 @@ const Modal: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[999]">
       <div
         className={`bg-darkPurple p-5 rounded-lg shadow-lg relative ${width}`}
       >
