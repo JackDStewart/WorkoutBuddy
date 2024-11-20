@@ -95,8 +95,8 @@ public class WorkoutServiceTests {
         @Test
         public void toggleFavorite_WorkoutFound() {
             workout.setExercises(Set.of(
-                    new Exercise("testExercise1", Equipment.BARBELL, MuscleGroup.BICEPS),
-                    new Exercise("testExercise2", Equipment.BARBELL, MuscleGroup.BICEPS)));
+                    new Exercise("testExercise1", Equipment.BARBELL, MuscleGroup.BICEPS, user),
+                    new Exercise("testExercise2", Equipment.BARBELL, MuscleGroup.BICEPS, user)));
 
             when(workoutRepository.findById(workoutId)).thenReturn(Optional.of(workout));
             when(workoutRepository.save(Mockito.any(Workout.class))).thenReturn(workout);

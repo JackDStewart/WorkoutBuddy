@@ -2,7 +2,9 @@ package com.example.backend.dto;
 
 import com.example.backend.entity.enums.Equipment;
 import com.example.backend.entity.enums.MuscleGroup;
+import lombok.Data;
 
+@Data
 public class ExerciseDTO {
     private String name;
     private String equipment;

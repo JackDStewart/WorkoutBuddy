@@ -3,7 +3,11 @@ package com.example.backend.entity;
 import com.example.backend.entity.enums.Equipment;
 import com.example.backend.entity.enums.MuscleGroup;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity // This tells Hibernate to make a table out of this class
 public class Exercise {
 
@@ -32,43 +36,4 @@ public class Exercise {
         this.createdBy = createdBy;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Equipment getEquipment() {
-        return equipment;
-    }
-
-    public void setEquipment(Equipment equipment) {
-        this.equipment = equipment;
-    }
-
-    public MuscleGroup getMuscleGroup() {
-        return muscleGroup;
-    }
-
-    public void setMuscleGroup(MuscleGroup muscleGroup) {
-        this.muscleGroup = muscleGroup;
-    }
-
-    public User getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
-    }
 }

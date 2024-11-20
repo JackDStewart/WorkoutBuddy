@@ -1,39 +1,19 @@
 package com.example.backend.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 import java.util.Set;
 
+@Getter
 public class ExerciseLogDTO {
+    @Setter
     private Set<SetLogDTO> sets;
+    @Setter
     private Date date;
+    @Setter
     private ExerciseDTO exercise;
     private String userAuth0Id;
 
-    public Set<SetLogDTO> getSets() {
-        return sets;
-    }
-
-    public void setSets(Set<SetLogDTO> sets) {
-        this.sets = sets;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public ExerciseDTO getExercise() {
-        return exercise;
-    }
-
-    public void setExercise(ExerciseDTO exercise) {
-        this.exercise = exercise;
-    }
-
-    public String getUserAuth0Id() {
-        return userAuth0Id;
-    }
 }

@@ -1,8 +1,13 @@
 package com.example.backend.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Set;
 
+@Setter
+@Getter
 @Entity
 public class Workout {
 
@@ -36,43 +41,4 @@ public class Workout {
 
     // Getters and Setters
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isFavorite() {
-        return favorite;
-    }
-
-    public void setFavorite(boolean favorite) {
-        this.favorite = favorite;
-    }
-
-    public Set<Exercise> getExercises() {
-        return exercises;
-    }
-
-    public void setExercises(Set<Exercise> exercises) {
-        this.exercises = exercises;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

@@ -1,10 +1,14 @@
 package com.example.backend.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.Set;
 
+@Setter
+@Getter
 @Entity
 public class ExerciseLog {
 
@@ -25,14 +29,6 @@ public class ExerciseLog {
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public ExerciseLog() {}
 
     public ExerciseLog(Exercise exercise, Set<SetLog> sets, Date date) {
@@ -41,35 +37,4 @@ public class ExerciseLog {
         this.date = date;
     }
 
-    public Set<SetLog> getSets() {
-        return sets;
-    }
-
-    public void setSets(Set<SetLog> sets) {
-        this.sets = sets;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Exercise getExercise() {
-        return exercise;
-    }
-
-    public void setExercise(Exercise exercise) {
-        this.exercise = exercise;
-    }
 }
