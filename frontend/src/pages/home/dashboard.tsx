@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import WorkoutCard from "@/components/WorkoutCard";
-import { fetchWorkouts, toggleFavoriteWorkout } from "@/api/workoutApi";
+import {
+  fetchWorkouts,
+  toggleFavoriteWorkout,
+  deleteWorkout,
+} from "@/api/workoutApi";
 import { DashboardProps, Workout } from "../../types";
 import Modal from "@/components/Modal";
 
@@ -44,6 +48,19 @@ const Dashboard: React.FC<DashboardProps> = ({ id }) => {
     }
   };
 
+  const handleDeleteWorkout = async (workoutId: number) => {
+    setWorkouts((prevWorkouts) =>
+      prevWorkouts.filter((workout) => workout.id !== workoutId)
+    );
+
+    try {
+      await deleteWorkout(workoutId);
+    } catch (error) {
+      console.error("Failed to delete workout:", error);
+      getWorkouts();
+    }
+  };
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -75,6 +92,7 @@ const Dashboard: React.FC<DashboardProps> = ({ id }) => {
               key={workout.id}
               workout={workout}
               onUpdateFavorite={handleUpdateFavorite}
+              onDeleteWorkout={handleDeleteWorkout}
             />
           ))}
         </div>
@@ -96,6 +114,7 @@ const Dashboard: React.FC<DashboardProps> = ({ id }) => {
                 key={workout.id}
                 workout={workout}
                 onUpdateFavorite={handleUpdateFavorite}
+                onDeleteWorkout={handleDeleteWorkout}
               />
             ))}
           </div>

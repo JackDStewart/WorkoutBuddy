@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity // This tells Hibernate to make a table out of this class
@@ -26,6 +28,14 @@ public class Exercise {
     @ManyToOne // Many exercises can be created by one user
     @JoinColumn(name = "created_by", nullable = true) // Customizes the foreign key column
     private User createdBy;
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})  // Avoid PERSIST to prevent duplication
+    @JoinTable(
+            name = "workout_exercises",  // Name of the join table
+            joinColumns = @JoinColumn(name = "workout_id"),  // Foreign key column in join table for Workout
+            inverseJoinColumns = @JoinColumn(name = "exercise_id")  // Foreign key column in join table for Exercise
+    )
+    private Set<Workout> workouts;
 
     public Exercise() {}
 

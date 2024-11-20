@@ -116,6 +116,28 @@ export async function fetchWorkoutById(
   }
 }
 
+export async function deleteWorkout(workoutID: number): Promise<void> {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/workout/delete/${workoutID}`,
+      {
+        method: "DELETE", // Use DELETE method for deletion
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to delete workout");
+    }
+
+    console.log(`Workout with ID ${workoutID} has been deleted successfully.`);
+  } catch (error) {
+    console.error("Error deleting workout:", error);
+  }
+}
+
 // export async function getNextWorkoutID(): Promise<number | undefined> {
 //   try {
 //     const response = await fetch(`http://localhost:8080/workout/id`);

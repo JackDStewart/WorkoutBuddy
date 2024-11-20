@@ -16,7 +16,7 @@ public class ExerciseLog {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany
     private Set<SetLog> sets;
 
     @Temporal(TemporalType.DATE)
@@ -26,7 +26,7 @@ public class ExerciseLog {
     @JoinColumn(name = "exercise_id") // Foreign key in ExerciseLog table
     private Exercise exercise;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private User user;
 
     public ExerciseLog() {}
