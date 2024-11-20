@@ -285,7 +285,7 @@ function Create() {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        width="w-[400px]"
+        width="w-[700px]"
       >
         <div className="max-h-[75vh] overflow-y-auto p-4">
           <h2 className="font-bold text-xl mb-4">Create Custom Exercise</h2>
