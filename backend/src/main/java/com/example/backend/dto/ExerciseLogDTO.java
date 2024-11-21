@@ -1,19 +1,19 @@
 package com.example.backend.dto;
 
+import com.example.backend.entity.ExerciseLog;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
 import java.util.Set;
 
+@Setter
 @Getter
 public class ExerciseLogDTO {
-    @Setter
     private Set<SetLogDTO> sets;
-    @Setter
     private Date date;
-    @Setter
     private ExerciseDTO exercise;
     private String userAuth0Id;
+
 
 }

@@ -27,15 +27,6 @@ public class UserController {
 		return ResponseEntity.ok("User synced successfully");
 	}
 
-	@PostMapping(path="/add") // Map ONLY POST Requests
-	public String addNewUser (@RequestParam String name, @RequestParam String email) {
-		User n = new User();
-		n.setName(name);
-		n.setEmail(email);
-		userRepository.save(n);
-		return "Saved";
-	}
-
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping(path="/all")
 	public Iterable<User> getAllUsers() {

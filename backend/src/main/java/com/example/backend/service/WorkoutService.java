@@ -92,7 +92,8 @@ public class WorkoutService {
         return new WorkoutDTO(
                 savedWorkout.getName(),
                 savedWorkout.isFavorite(),
-                exerciseDTOs
+                exerciseDTOs,
+                savedWorkout.getName()
         );
     }
 
