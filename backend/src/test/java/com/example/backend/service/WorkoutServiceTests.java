@@ -20,10 +20,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static java.lang.Long.valueOf;
 import static org.mockito.Mockito.when;
@@ -175,5 +172,38 @@ class WorkoutServiceTests {
         Assertions.assertTrue(foundWorkout.isFavorite());
 
         Mockito.verify(workoutRepository, Mockito.times(1)).findById(Mockito.any(Long.class));
+    }
+
+    @Test
+    void deleteWorkout_Success() {
+        // Arrange
+        Long workoutId = 12345L;
+        Workout workout = new Workout();
+        workout.setId(workoutId);
+        workout.setName("Test Workout");
+
+        when(workoutRepository.findById(workoutId)).thenReturn(Optional.of(workout));
+
+        // Act
+        workoutService.deleteWorkout(workoutId);
+
+        // Assert
+        Mockito.verify(workoutRepository, Mockito.times(1)).findById(workoutId);
+        Mockito.verify(workoutRepository, Mockito.times(1)).delete(workout);
+    }
+
+    @Test
+    void deleteWorkout_WorkoutNotFound() {
+        // Arrange
+        Long workoutId = 12345L;
+
+        when(workoutRepository.findById(workoutId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        Assertions.assertThrows(NoSuchElementException.class, () -> workoutService.deleteWorkout(workoutId));
+
+        // Verify
+        Mockito.verify(workoutRepository, Mockito.times(1)).findById(workoutId);
+        Mockito.verify(workoutRepository, Mockito.never()).delete(Mockito.any(Workout.class));
     }
 }

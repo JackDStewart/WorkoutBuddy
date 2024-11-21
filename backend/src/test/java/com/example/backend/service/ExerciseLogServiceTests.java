@@ -13,7 +13,6 @@ import com.example.backend.repository.ExerciseLogRepository;
 import com.example.backend.repository.ExerciseRepository;
 import com.example.backend.repository.SetLogRepository;
 import com.example.backend.repository.UserRepository;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +23,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigInteger;
 import java.util.*;
-import java.util.stream.Stream;
 
 import static org.mockito.Mockito.when;
 
