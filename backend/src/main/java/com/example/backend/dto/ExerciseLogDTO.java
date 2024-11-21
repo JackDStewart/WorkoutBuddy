@@ -1,6 +1,5 @@
 package com.example.backend.dto;
 
-import com.example.backend.entity.ExerciseLog;
 import lombok.Getter;
 import lombok.Setter;
 

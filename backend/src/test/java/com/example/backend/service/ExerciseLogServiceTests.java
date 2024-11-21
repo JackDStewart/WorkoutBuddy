@@ -27,7 +27,7 @@ import java.util.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ExerciseLogServiceTests {
+class ExerciseLogServiceTests {
 
     @Mock
     UserRepository userRepository;
@@ -52,8 +52,8 @@ public class ExerciseLogServiceTests {
     void getExercisesByUserAuth0IdTest_Success() {
         //Arrange
 
-        Set<SetLog> SetLogs =  Set.of(new SetLog(1,2));
-        ExerciseLog exerciseLog = new ExerciseLog(exercise, SetLogs, new Date());
+        Set<SetLog> setLogs =  Set.of(new SetLog(1,2));
+        ExerciseLog exerciseLog = new ExerciseLog(exercise, setLogs, new Date());
 
         when(userRepository.findById(Mockito.any(BigInteger.class))).thenReturn(Optional.of(user));
         when(exerciseLogRepository.findByUser(Mockito.any(User.class))).thenReturn(List.of(exerciseLog));
