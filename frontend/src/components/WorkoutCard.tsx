@@ -6,22 +6,34 @@ import Link from "next/link";
 interface WorkoutCardProps {
   workout: Workout;
   onUpdateFavorite: (workoutId: number) => void;
+  onDeleteWorkout: (workoutId: number) => void;
 }
 
 const WorkoutCard: React.FC<WorkoutCardProps> = ({
   workout,
   onUpdateFavorite,
+  onDeleteWorkout
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = () => setIsModalOpen(true);
+  const openModal = () => {
+    setIsModalOpen(true);
+    console.log(workout.id);
+  };
   const closeModal = () => setIsModalOpen(false);
 
   const toggleFavorite = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (workout.id) {
       onUpdateFavorite(workout.id);
+    }
+  };
+
+  const handleDelete = () => {
+    if (workout.id) {
+      onDeleteWorkout(workout.id); // Trigger the delete function passed as a prop
+      closeModal(); // Close the modal after deletion
     }
   };
 
@@ -97,6 +109,12 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({
         >
           Start
         </Link>
+        <button
+          onClick={handleDelete}
+          className="absolute bottom-4 right-4 bg-red-600 text-white px-4 py-2 rounded-full text-lg hover:bg-red-700 transition duration-300"
+        >
+          Delete
+        </button>
       </Modal>
     </>
   );

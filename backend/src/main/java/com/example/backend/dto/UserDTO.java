@@ -9,6 +9,8 @@ public class UserDTO {
     private String email;
     private String name;
 
+    public UserDTO() {}
+
     public UserDTO(User user) {
         this.id = String.valueOf(user.getId());
         this.email = user.getEmail();

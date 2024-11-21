@@ -47,4 +47,11 @@ public class WorkoutController {
         Workout workout = workoutService.getWorkoutById(workoutId);
         return ResponseEntity.ok(workout);
     }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @DeleteMapping("/delete/{workoutId}")
+    public ResponseEntity<Void> deleteWorkout(@PathVariable Long workoutId) {
+        workoutService.deleteWorkout(workoutId);
+        return ResponseEntity.noContent().build();
+    }
 }

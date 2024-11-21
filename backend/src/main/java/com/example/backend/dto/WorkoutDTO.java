@@ -20,6 +20,7 @@ public class WorkoutDTO {
     private Set<ExerciseDTO> exercises;
     @Getter
     private String userAuth0Id;
+    private Long id;
 
     public WorkoutDTO(Workout workout) {
         this.name = workout.getName();
@@ -29,6 +30,7 @@ public class WorkoutDTO {
             this.exercises.add(new ExerciseDTO(exercise.getName(), exercise.getEquipment().getDisplayName(), exercise.getMuscleGroup().getDisplayName(), ""));
         }
         this.userAuth0Id = workout.getUser().getId().toString();
+        this.id = workout.getId();
     }
 
     public WorkoutDTO(String name, boolean favorite, Set<ExerciseDTO> exercises, String userAuth0Id) {

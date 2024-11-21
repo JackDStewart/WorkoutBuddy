@@ -19,7 +19,7 @@ public class Workout {
 
     private boolean favorite;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private User user;
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})  // Avoid PERSIST to prevent duplication
@@ -40,5 +40,11 @@ public class Workout {
     }
 
     // Getters and Setters
-
+    @PreRemove
+    public void removeExercisesFromJoinTable() {
+        // Nullify the association between the workout and exercises
+        if (exercises != null) {
+            exercises.forEach(exercise -> exercise.getWorkouts().remove(this));
+        }
+    }
 }

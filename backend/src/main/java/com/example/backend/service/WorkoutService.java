@@ -105,4 +105,11 @@ public class WorkoutService {
         throw new IllegalArgumentException("Workout not found");
     }
 
+    public void deleteWorkout(Long workoutId) {
+        Workout workout = workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new NoSuchElementException("Workout not found with ID: " + workoutId));
+
+        workoutRepository.delete(workout);
+    }
+
 }
