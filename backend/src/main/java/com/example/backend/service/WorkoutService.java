@@ -9,9 +9,9 @@ import com.example.backend.repository.ExerciseRepository;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.repository.WorkoutRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.math.BigInteger;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,18 +20,14 @@ import java.util.stream.Collectors;
 @Service
 public class WorkoutService {
 
+    @Autowired
+    private UserRepository userRepository;
 
-    private final UserRepository userRepository;
+    @Autowired
+    private WorkoutRepository workoutRepository;
 
-    private final WorkoutRepository workoutRepository;
-
-    private final ExerciseRepository exerciseRepository;
-
-    public WorkoutService(UserRepository userRepository, WorkoutRepository workoutRepository, ExerciseRepository exerciseRepository) {
-        this.userRepository = userRepository;
-        this.workoutRepository = workoutRepository;
-        this.exerciseRepository = exerciseRepository;
-    }
+    @Autowired
+    private ExerciseRepository exerciseRepository;
 
     public List<Workout> getWorkoutsByUserAuth0Id(String userAuth0Id) {
         Optional<User> userOptional = userRepository.findById(new BigInteger(userAuth0Id));
@@ -39,13 +35,13 @@ public class WorkoutService {
             User user = userOptional.get();
             return workoutRepository.findByUser(user);
         }
-        throw new IllegalArgumentException("Workouts not found with Auth0 ID: " + userAuth0Id);
+        throw new IllegalArgumentException("User not found with Auth0 ID: " + userAuth0Id);
     }
 
     public WorkoutDTO toggleFavorite(Long workoutId) {
         // Fetch workout by ID
         Workout workout = workoutRepository.findById(workoutId)
-                .orElseThrow(() -> new RuntimeException("Workout not found with ID: " + workoutId));
+                .orElseThrow(() -> new RuntimeException("Workout not found"));
 
         workout.setFavorite(!workout.isFavorite());
         workout = workoutRepository.save(workout);
@@ -58,7 +54,7 @@ public class WorkoutService {
         BigInteger auth0idInt = new BigInteger(workoutDTO.getUserAuth0Id().substring(14));
         Optional<User> userOptional = userRepository.findById(auth0idInt);
         if (userOptional.isEmpty()) {
-            throw new NoSuchElementException("create failed from Auth0 ID: " + auth0idInt);
+            throw new RuntimeException("User not found with Auth0 ID: " + auth0idInt);
         }
         User user = userOptional.get();
 
@@ -84,16 +80,14 @@ public class WorkoutService {
                 .map(exercise -> new ExerciseDTO(
                         exercise.getName(),
                         exercise.getEquipment().getDisplayName(),
-                        exercise.getMuscleGroup().getDisplayName(),
-                        ""
+                        exercise.getMuscleGroup().getDisplayName()
                 ))
                 .collect(Collectors.toSet());
 
         return new WorkoutDTO(
                 savedWorkout.getName(),
                 savedWorkout.isFavorite(),
-                exerciseDTOs,
-                savedWorkout.getName()
+                exerciseDTOs
         );
     }
 
@@ -103,13 +97,6 @@ public class WorkoutService {
             return workoutOptional.get();
         }
         throw new IllegalArgumentException("Workout not found");
-    }
-
-    public void deleteWorkout(Long workoutId) {
-        Workout workout = workoutRepository.findById(workoutId)
-                .orElseThrow(() -> new NoSuchElementException("Workout not found with ID: " + workoutId));
-
-        workoutRepository.delete(workout);
     }
 
 }
