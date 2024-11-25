@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -43,22 +44,87 @@ class ExerciseServiceTests {
     List<Exercise> exercises = List.of(exercise);
 
     @Nested
-    class getExerciseByUserIdTests {
+    class GetExerciseByUserIdTests {
+
         @Test
-        void getExerciseByUserIdTest_UserExist() {
-            when(exerciseRepository.findByCreatedByIsNullOrUserId(Mockito.any())).thenReturn(exercises);
+        void getExerciseByUserIdTest_ZeroExercises() {
+            // Arrange
+            when(exerciseRepository.findByCreatedByIsNullOrUserId(Mockito.any())).thenReturn(List.of());
 
+            // Act
             List<Exercise> foundExercises = exerciseService.getExercisesByUserIdOrNull(mockId);
-            Assertions.assertEquals(1, foundExercises.size());
-            Assertions.assertEquals(exercises, foundExercises);
-            Assertions.assertEquals(exercise, foundExercises.getFirst());
 
+            // Assert
+            Assertions.assertNotNull(foundExercises);
+            Assertions.assertTrue(foundExercises.isEmpty()); // Zero exercises
+
+            // Verify
+            Mockito.verify(exerciseRepository, Mockito.times(1)).findByCreatedByIsNullOrUserId(Mockito.any());
+        }
+
+        @Test
+        void getExerciseByUserIdTest_OneExercise() {
+            // Arrange
+            when(exerciseRepository.findByCreatedByIsNullOrUserId(Mockito.any())).thenReturn(List.of(exercise));
+
+            // Act
+            List<Exercise> foundExercises = exerciseService.getExercisesByUserIdOrNull(mockId);
+
+            // Assert
+            Assertions.assertNotNull(foundExercises);
+            Assertions.assertEquals(1, foundExercises.size()); // One exercise
+            Assertions.assertEquals(exercise, foundExercises.getFirst()); // Verify the single exercise
+
+            // Verify
+            Mockito.verify(exerciseRepository, Mockito.times(1)).findByCreatedByIsNullOrUserId(Mockito.any());
+        }
+
+        @Test
+        void getExerciseByUserIdTest_TwoExercises() {
+            // Arrange
+            Exercise secondExercise = new Exercise("secondExercise", Equipment.DUMBBELL, MuscleGroup.CHEST, user);
+            when(exerciseRepository.findByCreatedByIsNullOrUserId(Mockito.any())).thenReturn(List.of(exercise, secondExercise));
+
+            // Act
+            List<Exercise> foundExercises = exerciseService.getExercisesByUserIdOrNull(mockId);
+
+            // Assert
+            Assertions.assertNotNull(foundExercises);
+            Assertions.assertEquals(2, foundExercises.size()); // Two exercises
+            Assertions.assertEquals(exercise, foundExercises.get(0)); // First exercise
+            Assertions.assertEquals(secondExercise, foundExercises.get(1)); // Second exercise
+
+            // Verify
+            Mockito.verify(exerciseRepository, Mockito.times(1)).findByCreatedByIsNullOrUserId(Mockito.any());
+        }
+
+        @Test
+        void getExerciseByUserIdTest_TenExercises() {
+            // Arrange
+            List<Exercise> tenExercises = new ArrayList<>();
+            for (int i = 1; i <= 10; i++) {
+                tenExercises.add(new Exercise("exercise" + i, Equipment.NONE, MuscleGroup.CHEST, user));
+            }
+            when(exerciseRepository.findByCreatedByIsNullOrUserId(Mockito.any())).thenReturn(tenExercises);
+
+            // Act
+            List<Exercise> foundExercises = exerciseService.getExercisesByUserIdOrNull(mockId);
+
+            // Assert
+            Assertions.assertNotNull(foundExercises);
+            Assertions.assertEquals(10, foundExercises.size()); // Ten exercises
+            for (int i = 0; i < 10; i++) {
+                Assertions.assertEquals("exercise" + (i + 1), foundExercises.get(i).getName());
+            }
+
+            // Verify
             Mockito.verify(exerciseRepository, Mockito.times(1)).findByCreatedByIsNullOrUserId(Mockito.any());
         }
 
         @Test
         void getExerciseByUserIdTest_UserNull() {
             when(exerciseRepository.findByCreatedByIsNullOrUserId(Mockito.any())).thenReturn(exercises);
+
 
             List<Exercise> foundExercises = exerciseService.getExercisesByUserIdOrNull(mockId);
             Assertions.assertEquals(1, foundExercises.size());
