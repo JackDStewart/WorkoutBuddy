@@ -157,7 +157,7 @@ class ExerciseServiceTests {
         }
 
         @Test
-        public void createExerciseFailureTest() {
+        void createExerciseFailureTest() {
 
             // Mocking behavior
             when(userRepository.findById(userId)).thenReturn(Optional.empty());
