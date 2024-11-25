@@ -37,7 +37,4 @@ public class User {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Workout> workouts;
-
-	public BigInteger getId() {
-	}
 }

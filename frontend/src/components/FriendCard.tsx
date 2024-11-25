@@ -1,11 +1,12 @@
 import React from "react";
 import { FriendCardProps } from "../types";
 
-const FriendCard: React.FC<FriendCardProps & { onClick?: () => void }> = ({
-  friend,
-  onClick,
-  className,
-}) => {
+const FriendCard: React.FC<
+  FriendCardProps & { 
+    onClick?: () => void; 
+    onAddFriend?: () => void; // Add the onAddFriend prop
+  }
+> = ({ friend, onClick, onAddFriend, className }) => {
   return (
     <div
       className={`bg-black p-4 rounded-lg shadow-left-purple hover:ring-2 hover:ring-purple hover:cursor-pointer transition duration-300 ${className}`}
@@ -17,6 +18,18 @@ const FriendCard: React.FC<FriendCardProps & { onClick?: () => void }> = ({
         <li>Last logged: {friend.lastLogged} days ago</li>
         <li>Favorite Exercise: {friend.favExercise.name}</li>
       </ul>
+      {/* Add Friend Button */}
+      {onAddFriend && (
+        <button
+          className="bg-purple text-white py-1 px-4 mt-2 rounded hover:bg-darkpurple"
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent triggering the onClick for the card
+            onAddFriend();
+          }}
+        >
+          Add Friend
+        </button>
+      )}
     </div>
   );
 };

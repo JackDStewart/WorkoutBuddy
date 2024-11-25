@@ -3,33 +3,33 @@ package com.example.backend.controller;
 import com.example.backend.dto.WorkoutDTO;
 import com.example.backend.entity.Workout;
 import com.example.backend.service.WorkoutService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping(path="/workout")
 public class WorkoutController {
 
-    @Autowired
-    private WorkoutService workoutService;
+
+    private final WorkoutService workoutService;
+
+    public WorkoutController(WorkoutService workoutService) {
+        this.workoutService = workoutService;
+    }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/create")
-    public ResponseEntity<?> createWorkout(@RequestBody WorkoutDTO workoutDTO) {
-        System.out.println("received create workout request");
+    public ResponseEntity<WorkoutDTO> createWorkout(@RequestBody WorkoutDTO workoutDTO) {
         WorkoutDTO createdWorkout = workoutService.createWorkout(workoutDTO);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(createdWorkout);
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/user/{auth0Id}")
-    public ResponseEntity<?> getWorkouts(@PathVariable String auth0Id) {
+    public ResponseEntity<List<Workout>> getWorkouts(@PathVariable String auth0Id) {
         List<Workout> workouts = workoutService.getWorkoutsByUserAuth0Id(auth0Id);
         return ResponseEntity.ok(workouts);
     }
@@ -46,5 +46,12 @@ public class WorkoutController {
     public ResponseEntity<Workout> getWorkoutByID(@PathVariable Long workoutId) {
         Workout workout = workoutService.getWorkoutById(workoutId);
         return ResponseEntity.ok(workout);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @DeleteMapping("/delete/{workoutId}")
+    public ResponseEntity<Void> deleteWorkout(@PathVariable Long workoutId) {
+        workoutService.deleteWorkout(workoutId);
+        return ResponseEntity.noContent().build();
     }
 }
