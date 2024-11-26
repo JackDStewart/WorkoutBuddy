@@ -11,7 +11,7 @@ import {
   acceptFriendRequest,
   declineFriendRequest,
 } from "@/api/friendshipApi";
-import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { Friendship, User } from "@/types";
 
 const Social: React.FC = () => {
@@ -144,18 +144,23 @@ const Social: React.FC = () => {
             className="bg-purple text-white py-2 px-4 rounded hover:bg-purple"
           >
             Notifications
+            {/* Display the red circle if there are pending friend requests */}
+            {pendingRequests.length > 0 && (
+              <span className="absolute top-4 right-4 inline-block w-6 h-6 bg-red-500 text-white text-xs rounded-full flex justify-center items-center">
+                {pendingRequests.length}
+              </span>
+            )}
           </button>
         </div>
 
         <div className="grid grid-cols-1 gap-4">
           {friends.length > 0 ? (
             friends.map((friend) => (
-              <div
+              <FriendCard
                 key={friend.id}
-                className="flex justify-between items-center bg-gray-800 p-4 rounded-lg"
-              >
-                <span className="text-white">{friend.name}</span>
-              </div>
+                friend={friend}
+                onClick={() => openUserDetailsModal(friend)} // You can add modal opening logic here
+              />
             ))
           ) : (
             <p className="text-white">You have no friends yet.</p>
@@ -187,7 +192,6 @@ const Social: React.FC = () => {
           <div>
             <h2 className="text-xl font-bold mb-4">User Details</h2>
             <p>Name: {selectedUser.name}</p>
-            <p>Id: {selectedUser.id}</p>
           </div>
         )}
         {modalType === "friendRequests" && (
@@ -227,4 +231,4 @@ const Social: React.FC = () => {
   );
 };
 
-export default withPageAuthRequired(Social);
+export default Social;
