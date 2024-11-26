@@ -13,6 +13,7 @@ import {
 } from "@/api/friendshipApi";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Friendship, User } from "@/types";
+import ProgressPage from "../progress/progress";
 
 const Social: React.FC = () => {
   const { user, isLoading } = useUser();
@@ -108,6 +109,8 @@ const Social: React.FC = () => {
     try {
       await acceptFriendRequest(requestId); // Your API call
       setPendingRequests((prev) => prev.filter((req) => req.id !== requestId));
+      const updatedFriends = await fetchUserFriends(user!.sub!.substring(14));
+      setFriends(updatedFriends);
     } catch (error) {
       console.error("Error accepting friend request:", error);
     }
@@ -127,8 +130,9 @@ const Social: React.FC = () => {
       ? []
       : users.filter((u: User) => {
           return (
-            u.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-            u.id !== user?.sub?.substring(14) // Exclude the current user
+            u.name.toLowerCase().startsWith(searchQuery.toLowerCase()) &&
+            u.id !== user?.sub?.substring(14) && // Exclude the current user
+            !friends.some((friend) => friend.id === u.id)
           );
         });
 
@@ -146,14 +150,31 @@ const Social: React.FC = () => {
             Notifications
             {/* Display the red circle if there are pending friend requests */}
             {pendingRequests.length > 0 && (
-              <span className="absolute top-4 right-4 inline-block w-6 h-6 bg-red-500 text-white text-xs rounded-full flex justify-center items-center">
+              <span className="absolute top-4 right-4 w-6 h-6 bg-red-500 text-white text-xs rounded-full flex justify-center items-center">
                 {pendingRequests.length}
               </span>
             )}
           </button>
         </div>
-
-        <div className="grid grid-cols-1 gap-4">
+        <input
+          type="text"
+          placeholder="Search by username..."
+          className="text-white bg-darkPurple p-2 border border-white rounded-lg hover:border-purple mb-2"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <br />
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
+          {filteredUsers.map((user) => (
+            <FriendCard
+              key={user.id}
+              friend={user}
+              onAddFriend={() => handleAddFriend(user.id)}
+            />
+          ))}
+        </div>
+        <br />
+        <div className="grid grid-cols-3 gap-4">
           {friends.length > 0 ? (
             friends.map((friend) => (
               <FriendCard
@@ -166,32 +187,18 @@ const Social: React.FC = () => {
             <p className="text-white">You have no friends yet.</p>
           )}
         </div>
-
-        <input
-          type="text"
-          placeholder="Search by username..."
-          className="text-white bg-darkPurple p-2 border border-white rounded-lg hover:border-purple"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
-          {filteredUsers.map((user) => (
-            <FriendCard
-              key={user.id}
-              friend={user}
-              onClick={() => openUserDetailsModal(user)}
-              onAddFriend={() => handleAddFriend(user.id)}
-            />
-          ))}
-        </div>
+        <br />
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={closeModal} width="w-[400px]">
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        width={modalType === "userDetails" ? "w-[1200px]" : "w-[400px]"}
+      >
         {modalType === "userDetails" && selectedUser && (
           <div>
-            <h2 className="text-xl font-bold mb-4">User Details</h2>
-            <p>Name: {selectedUser.name}</p>
+            <h2 className="text-xl font-bold">{selectedUser.name}</h2>
+            <ProgressPage user={selectedUser} />
           </div>
         )}
         {modalType === "friendRequests" && (
@@ -203,7 +210,6 @@ const Social: React.FC = () => {
                   key={request.id}
                   className="flex items-center justify-between bg-darkPurple p-3 mb-4 rounded-lg border border-gray-600"
                 >
-                  <p className="text-white">{request.id}</p>
                   <p className="text-white">{request.sender.name}</p>
                   <div className="flex gap-2">
                     <button

@@ -117,7 +117,7 @@ const ProgressPage: React.FC<ProgressPageProps> = ({ user }) => {
 
   return (
     <div>
-      <div className="relative bg-darkPurple top-10 rounded-lg p-6 ml-20 mr-20">
+      <div className="relative bg-darkPurple rounded-lg p-6 ml-20 mr-20">
         <h1 className="text-white text-2xl mb-6">Workout Name</h1>
         <div className="flex flex-row justify-between items-start">
           {/* Left Side: SingleAutocomplete */}

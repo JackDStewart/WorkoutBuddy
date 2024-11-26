@@ -29,6 +29,7 @@ const Progress = () => {
     <div>
       <Header />
       <ProfileClient />
+      <br />
       <ProgressPage user={user} />
     </div>
   );
