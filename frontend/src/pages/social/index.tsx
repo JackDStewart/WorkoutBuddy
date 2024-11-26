@@ -198,7 +198,7 @@ const Social: React.FC = () => {
         {modalType === "userDetails" && selectedUser && (
           <div>
             <h2 className="text-xl font-bold">{selectedUser.name}</h2>
-            <ProgressPage user={selectedUser} />
+            <ProgressPage user={selectedUser} compareUser={user} />
           </div>
         )}
         {modalType === "friendRequests" && (

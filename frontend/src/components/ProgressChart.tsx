@@ -15,6 +15,13 @@ const ProgressChart: React.FC<ProgressChartProps> = ({ xAxis, yAxes }) => {
         color: yAxis.color || `hsl(${(index * 360) / yAxes.length}, 70%, 50%)`, // Default color generation
         label: yAxis.label,
       }))}
+      slotProps={{
+        legend: {
+          labelStyle: {
+            fill: "white"
+          }
+        }
+      }}
       height={300}
       sx={(theme) => ({
         [`.${axisClasses.root}`]: {
@@ -22,8 +29,9 @@ const ProgressChart: React.FC<ProgressChartProps> = ({ xAxis, yAxes }) => {
             stroke: "white",
             strokeWidth: 3,
           },
-          [`.${axisClasses.tickLabel}`]: {
-            fill: "white",
+          [`.${axisClasses.tickLabel}, .${axisClasses.label}`]: {
+            fill: "white", 
+            fontSize: "14px",
           },
         },
       })}
