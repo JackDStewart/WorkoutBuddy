@@ -7,6 +7,8 @@ import com.example.backend.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController	// This means that this class is a Controller
 @RequestMapping(path="/user") // This means URL's start with /demo (after Application path)
 public class UserController {
@@ -29,8 +31,7 @@ public class UserController {
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping(path="/all")
-	public Iterable<User> getAllUsers() {
-		// This returns a JSON or XML with the users
-		return userRepository.findAll();
+	public List<User> getAllUsers() {
+        return userService.getAllUsers();
 	}
 }

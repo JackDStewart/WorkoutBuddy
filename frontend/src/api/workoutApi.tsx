@@ -1,6 +1,5 @@
 import { Workout } from "@/types";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { useAuth0 } from "@auth0/auth0-react";
 import exp from "constants";
 
 export async function createWorkout(workout: Workout) {

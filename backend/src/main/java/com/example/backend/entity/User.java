@@ -1,6 +1,8 @@
 package com.example.backend.entity;
 import java.math.BigInteger;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +15,7 @@ public class User {
 	@Setter
     @Getter
     @Id
+	@JsonSerialize(using = ToStringSerializer.class)
 	private BigInteger id;
 
 	@Setter
@@ -37,5 +40,4 @@ public class User {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Workout> workouts;
-
 }

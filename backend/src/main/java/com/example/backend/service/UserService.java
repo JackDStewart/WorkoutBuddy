@@ -1,10 +1,12 @@
 package com.example.backend.service;
 import com.example.backend.dto.UserDTO;
+import com.example.backend.entity.Exercise;
 import com.example.backend.entity.User;
 import com.example.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -33,4 +35,9 @@ public class UserService {
             return userOptional.get();
         }
     }
+
+    public List<User> getAllUsers() {
+        return (List<User>) userRepository.findAll();
+    }
+
 }
