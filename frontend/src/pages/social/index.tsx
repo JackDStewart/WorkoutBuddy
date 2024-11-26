@@ -11,7 +11,7 @@ import {
   acceptFriendRequest,
   declineFriendRequest,
 } from "@/api/friendshipApi";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Friendship, User } from "@/types";
 
 const Social: React.FC = () => {
@@ -155,7 +155,6 @@ const Social: React.FC = () => {
                 className="flex justify-between items-center bg-gray-800 p-4 rounded-lg"
               >
                 <span className="text-white">{friend.name}</span>
-                
               </div>
             ))
           ) : (
@@ -228,4 +227,4 @@ const Social: React.FC = () => {
   );
 };
 
-export default Social;
+export default withPageAuthRequired(Social);
