@@ -1,67 +1,41 @@
 package com.example.backend.entity;
 
+import com.example.backend.entity.enums.FriendshipStatus;
 import jakarta.persistence.*;
-import java.io.Serializable;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-public class Friendship implements Serializable {
+public class Friendship {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    @Setter
     private Long id;
 
+    @Getter
+    @Setter
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User sender;
 
+    @Getter
+    @Setter
     @ManyToOne
-    @JoinColumn(name = "friend_id", nullable = false)
-    private User friend;
+    @JoinColumn(name = "receiver_id", nullable = false)
+    private User receiver;
 
-    @Column(nullable = false)
-    private String status; // e.g., 'pending', 'accepted'
+    @Getter
+    @Setter
+    @Enumerated(EnumType.STRING)
+    private FriendshipStatus status;
 
-    // Default constructor
-    public Friendship() {
-    }
+    public Friendship() {}
 
-    // Constructor with parameters
-    public Friendship(User user, User friend, String status) {
-        this.user = user;
-        this.friend = friend;
-        this.status = status;
-    }
-
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public User getFriend() {
-        return friend;
-    }
-
-    public void setFriend(User friend) {
-        this.friend = friend;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
+    public Friendship(User sender, User receiver, FriendshipStatus status) {
+        this.sender = sender;
+        this.receiver = receiver;
         this.status = status;
     }
 }

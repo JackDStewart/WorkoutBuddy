@@ -2,14 +2,14 @@ package com.example.backend.service;
 
 import com.example.backend.entity.Friendship;
 import com.example.backend.entity.User;
+import com.example.backend.entity.enums.FriendshipStatus;
 import com.example.backend.repository.FriendshipRepository;
 import com.example.backend.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FriendshipService {
@@ -17,73 +17,89 @@ public class FriendshipService {
     private final FriendshipRepository friendshipRepository;
     private final UserRepository userRepository;
 
-    @Autowired
     public FriendshipService(FriendshipRepository friendshipRepository, UserRepository userRepository) {
         this.friendshipRepository = friendshipRepository;
         this.userRepository = userRepository;
     }
 
-    // Helper method to convert BigInteger to Long safely
-    private Long toLong(BigInteger bigInteger) {
-        if (bigInteger == null) {
-            throw new IllegalArgumentException("ID cannot be null");
-        }
-        if (bigInteger.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0 || bigInteger.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) < 0) {
-            throw new IllegalArgumentException("BigInteger is too large to fit into a Long");
-        }
-        return bigInteger.longValue();  // Convert safely
+    public List<User> getAllFriendsForUser(BigInteger userId) {
+        List<Friendship> friendships = friendshipRepository.findByUserAndStatus(userId, FriendshipStatus.ACCEPTED);
+
+        return friendships.stream()
+                .map(friendship -> friendship.getSender().getId().equals(userId)
+                        ? friendship.getReceiver()
+                        : friendship.getSender())
+                .toList();
     }
 
-    // Send a friend request (insert into Friendships table)
-    @Transactional
-    public void sendFriendRequest(BigInteger userId, BigInteger friendId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        User friend = userRepository.findById(friendId).orElseThrow(() -> new IllegalArgumentException("Friend not found"));
+    public List<Friendship> getIncomingFriendRequests(String receiverId) {
+        Optional<User> receiver = userRepository.findById(new java.math.BigInteger(receiverId));
+        if (receiver.isEmpty()) {
+            throw new IllegalArgumentException("User not found for the provided ID.");
+        }
 
-        // Create and save the friendship with 'pending' status
+        return friendshipRepository.findByReceiverAndStatus(receiver.get(), FriendshipStatus.PENDING);
+    }
+
+    /*public void sendFriendRequest(String senderId, String receiverId) {
+        User sender = userRepository.findById(new java.math.BigInteger(senderId))
+                .orElseThrow(() -> new IllegalArgumentException("Sender not found"));
+
+        User receiver = userRepository.findById(new java.math.BigInteger(receiverId))
+                .orElseThrow(() -> new IllegalArgumentException("Receiver not found"));
+
+        Friendship friendship = new Friendship(sender, receiver, FriendshipStatus.PENDING);
+        friendshipRepository.save(friendship);
+    }*/
+
+    public String sendFriendRequest(String senderId, String receiverId) {
+        if (senderId.equals(receiverId)) {
+            throw new IllegalArgumentException("Cannot send a friend request to yourself.");
+        }
+
+        BigInteger senderIdInt = new BigInteger(senderId);
+        BigInteger receiverIdInt = new BigInteger(receiverId);
+
+        Optional<Friendship> existingFriendship = friendshipRepository.findExistingFriendship(senderIdInt, receiverIdInt);
+        if (existingFriendship.isPresent()) {
+            return "Friend request already exists or the users are already friends.";
+        }
+
+        User sender = userRepository.findById(senderIdInt)
+                .orElseThrow(() -> new IllegalArgumentException("Sender not found."));
+        User receiver = userRepository.findById(receiverIdInt)
+                .orElseThrow(() -> new IllegalArgumentException("Receiver not found."));
+
         Friendship friendship = new Friendship();
-        friendship.setUser(user);
-        friendship.setFriend(friend);
-        friendship.setStatus("pending");
+        friendship.setSender(sender);
+        friendship.setReceiver(receiver);
+        friendship.setStatus(FriendshipStatus.PENDING);
+        friendshipRepository.save(friendship);
+
+        return "Friend request sent successfully";
+    }
+
+    public void acceptFriendRequest(Long requestId) {
+        Friendship friendship = friendshipRepository.findById(requestId)
+                .orElseThrow(() -> new IllegalArgumentException("Friendship request not found"));
+
+        if (!friendship.getStatus().equals(FriendshipStatus.PENDING)) {
+            throw new IllegalStateException("Only pending requests can be accepted");
+        }
+
+        friendship.setStatus(FriendshipStatus.ACCEPTED);
         friendshipRepository.save(friendship);
     }
 
-    // Accept a friend request (update status to 'accepted')
-    @Transactional
-    public void acceptFriendRequest(BigInteger userId, BigInteger friendId) {
-                // Find the friendship with 'pending' status
-        Friendship friendship = friendshipRepository.findByUserAndFriendAndStatus(
-                        userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found")),
-                        friendId,
-                        "pending")
-                .orElseThrow(() -> new IllegalArgumentException("Friend request not found or already accepted"));
+    public void declineFriendRequest(Long requestId) {
+        Friendship friendship = friendshipRepository.findById(requestId)
+                .orElseThrow(() -> new IllegalArgumentException("Friendship request not found"));
 
-        // Update the status to 'accepted'
-        friendship.setStatus("accepted");
+        if (!friendship.getStatus().equals(FriendshipStatus.PENDING)) {
+            throw new IllegalStateException("Only pending requests can be declined");
+        }
+
+        friendship.setStatus(FriendshipStatus.DECLINED);
         friendshipRepository.save(friendship);
-    }
-
-    // Reject a friend request (delete the friendship record)
-    @Transactional
-    public void rejectFriendRequest(BigInteger userId, BigInteger friendId) {
-        Friendship friendship = friendshipRepository.findByUserAndFriendAndStatus(
-                        userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found")),
-                        friendId,
-                        "pending")
-                .orElseThrow(() -> new IllegalArgumentException("Friend request not found"));
-
-        // Delete the friendship record (request is rejected)
-        friendshipRepository.delete(friendship);
-    }
-
-    // Get all friendships for a user
-    public List<Friendship> getFriendshipsByUser(BigInteger userId) {
-
-
-        // Get the user to ensure they exist
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        // Return all friendships where the user is involved
-        return friendshipRepository.findAllByUser(user);
     }
 }

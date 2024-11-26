@@ -1,8 +1,8 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.FriendshipDTO;
+import com.example.backend.entity.Friendship;
+import com.example.backend.entity.User;
 import com.example.backend.service.FriendshipService;
-import com.example.backend.mapper.FriendshipMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/friendships")
+@RequestMapping("/friendship")
 public class FriendshipController {
 
     private final FriendshipService friendshipService;
@@ -23,53 +22,52 @@ public class FriendshipController {
         this.friendshipService = friendshipService;
     }
 
-    // Endpoint to send a friend request
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/send")
-    public ResponseEntity<String> sendFriendRequest(@RequestParam BigInteger userId, @RequestParam BigInteger friendId) {
+    public String sendFriendRequest(
+            @RequestParam String senderId,
+            @RequestParam String receiverId) {
+
+        return friendshipService.sendFriendRequest(senderId, receiverId);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/{userId}/friends")
+    public ResponseEntity<List<User>> getAllFriends(@PathVariable String userId) {
         try {
-            friendshipService.sendFriendRequest(userId, friendId);
-            return new ResponseEntity<>("Friend request sent successfully.", HttpStatus.CREATED);
+            List<User> friends = friendshipService.getAllFriendsForUser(new BigInteger(userId));
+            return ResponseEntity.ok(friends);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error sending friend request: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
-    // Endpoint to accept a friend request
     @CrossOrigin(origins = "http://localhost:3000")
-    @PostMapping("/accept")
-    public ResponseEntity<String> acceptFriendRequest(@RequestParam BigInteger userId, @RequestParam BigInteger friendId) {
+    @GetMapping("/incoming/{receiverId}")
+    public ResponseEntity<List<Friendship>> getIncomingFriendRequests(@PathVariable String receiverId) {
+        List<Friendship> incomingRequests = friendshipService.getIncomingFriendRequests(receiverId);
+        return ResponseEntity.ok(incomingRequests);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/{requestId}/accept")
+    public ResponseEntity<String> acceptFriendRequest(@PathVariable Long requestId) {
         try {
-            friendshipService.acceptFriendRequest(userId, friendId);
-            return new ResponseEntity<>("Friend request accepted.", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error accepting friend request: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            friendshipService.acceptFriendRequest(requestId);
+            return ResponseEntity.ok("Friend request accepted");
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    // Endpoint to reject a friend request
     @CrossOrigin(origins = "http://localhost:3000")
-    @PostMapping("/reject")
-    public ResponseEntity<String> rejectFriendRequest(@RequestParam BigInteger userId, @RequestParam BigInteger friendId) {
+    @PostMapping("/{requestId}/decline")
+    public ResponseEntity<String> declineFriendRequest(@PathVariable Long requestId) {
         try {
-            friendshipService.rejectFriendRequest(userId, friendId);
-            return new ResponseEntity<>("Friend request rejected.", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error rejecting friend request: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    // Endpoint to get all friendships of a user
-    @CrossOrigin(origins = "http://localhost:3000")
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<FriendshipDTO>> getFriendships(@PathVariable BigInteger userId) {
-        try {
-            List<FriendshipDTO> friendshipDTOs = friendshipService.getFriendshipsByUser(userId).stream()
-                    .map(friendship -> FriendshipMapper.toDTO(friendship))
-                    .collect(Collectors.toList());
-            return new ResponseEntity<>(friendshipDTOs, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            friendshipService.declineFriendRequest(requestId);
+            return ResponseEntity.ok("Friend request declined");
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

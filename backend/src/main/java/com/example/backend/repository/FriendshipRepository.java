@@ -2,7 +2,10 @@ package com.example.backend.repository;
 
 import com.example.backend.entity.Friendship;
 import com.example.backend.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.backend.entity.enums.FriendshipStatus;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
@@ -10,17 +13,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
+public interface FriendshipRepository extends CrudRepository<Friendship, Long> {
+    List<Friendship> findByReceiverAndStatus(User receiver, FriendshipStatus status);
 
-    // Find a friendship between two users with a specific status
-    Optional<Friendship> findByUserAndFriendAndStatus(User user, BigInteger friend, String status);
+    @Query("SELECT f FROM Friendship f WHERE (f.sender.id = :userId OR f.receiver.id = :userId) AND f.status = :status")
+    List<Friendship> findByUserAndStatus(@Param("userId") BigInteger userId, @Param("status") FriendshipStatus status);
 
-    // Check if a friendship exists between two users (ignoring the status)
-    boolean existsByUserAndFriendOrFriendAndUser(User user, User friend);
+    @Query("SELECT f FROM Friendship f WHERE " +
+            "(f.sender.id = :userId1 AND f.receiver.id = :userId2) OR " +
+            "(f.sender.id = :userId2 AND f.receiver.id = :userId1)")
+    Optional<Friendship> findExistingFriendship(@Param("userId1") BigInteger userId1, @Param("userId2") BigInteger userId2);
 
-    // Find all friendships for a user (both pending and accepted)
-    List<Friendship> findAllByUser(User user);
 
-    // Find all friendships for a friend (both pending and accepted)
-    List<Friendship> findAllByFriend(User friend);
 }

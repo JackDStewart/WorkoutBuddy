@@ -3,100 +3,134 @@ import FriendCard from "@/components/FriendCard";
 import Modal from "@/components/Modal";
 import Header from "@/components/Header";
 import ProfileClient from "@/components/ProfileClient";
-import { fetchUserNames } from "@/api/usersApi"; // Import the fetchUserNames function
+import { fetchUsers } from "@/api/userApi";
+import {
+  fetchUserFriends,
+  fetchIncomingFriendRequests,
+  sendFriendRequest,
+  acceptFriendRequest,
+  declineFriendRequest,
+} from "@/api/friendshipApi";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { Friendship, User } from "@/types";
 
 const Social: React.FC = () => {
   const { user, isLoading } = useUser();
-  const [userNames, setUserNames] = useState<string[]>([]); // State to hold user names
-  const [searchQuery, setSearchQuery] = useState<string>(""); // Search query
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
-  const [selectedUser, setSelectedUser] = useState<string | null>(null); // Selected user
+  const [users, setUsers] = useState<User[]>([]);
+  const [friends, setFriends] = useState<User[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<"userDetails" | "friendRequests">(
+    "userDetails"
+  );
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [pendingRequests, setPendingRequests] = useState<Friendship[]>([]);
 
   useEffect(() => {
-    // Fetch user names using the new API function
-    const getUserNames = async () => {
+    const getFriendsAndUsers = async () => {
       try {
-        const fetchedUserNames = await fetchUserNames();
-        setUserNames(fetchedUserNames); // Update the state with the fetched user names
+        if (user?.sub) {
+          const userId = user.sub.substring(14);
+          const fetchedFriends = await fetchUserFriends(userId);
+          const fetchedUsers = await fetchUsers();
+          setFriends(fetchedFriends);
+          setUsers(fetchedUsers);
+        }
       } catch (error) {
-        console.error("Error fetching user names:", error);
-        setUserNames([]); // Set to an empty array if there's an error
+        console.error("Error fetching friends or users:", error);
+        setFriends([]);
+        setUsers([]);
       }
     };
-    getUserNames();
-  }, []); // Run on component mount
 
-  // Handle modal opening
-  const openModal = (userName: string) => {
-    setSelectedUser(userName);
+    getFriendsAndUsers();
+  }, [user]);
+
+  useEffect(() => {
+    const getUsers = async () => {
+      try {
+        const fetchedUsers = await fetchUsers();
+        setUsers(fetchedUsers);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        setUsers([]);
+      }
+    };
+
+    const getFriendRequests = async () => {
+      try {
+        if (user?.sub) {
+          const requests = await fetchIncomingFriendRequests(
+            user.sub.substring(14)
+          );
+          setPendingRequests(requests);
+        }
+      } catch (error) {
+        console.error("Error fetching friend requests:", error);
+        setPendingRequests([]);
+      }
+    };
+
+    getUsers();
+    getFriendRequests();
+  }, [user]);
+
+  const openUserDetailsModal = (user: User) => {
+    setSelectedUser(user);
+    setModalType("userDetails");
     setIsModalOpen(true);
   };
 
-  // Handle modal closing
+  const openFriendRequestsModal = () => {
+    setModalType("friendRequests");
+    setIsModalOpen(true);
+  };
+
   const closeModal = () => {
     setSelectedUser(null);
     setIsModalOpen(false);
   };
 
-  const fetchUserIdByUserName = async (userName: string): Promise<string | null> => {
+  const handleAddFriend = async (friendUserId: string) => {
+    if (!user || !user.sub) return;
     try {
-      const response = await fetch(
-        `http://localhost:8080/friendship/userIdByUserName?userName=${userName}`
+      const responseMessage = await sendFriendRequest(
+        user.sub.substring(14),
+        friendUserId
       );
-  
-      if (response.ok) {
-        const userId = await response.json();
-        return userId; // Return the userId
-      } else {
-        console.error("Error fetching userId");
-        return null; // Return null if not found
-      }
-    } catch (error) {
-      console.error("Error fetching userId:", error);
-      return null; // Return null in case of error
-    }
-  };
-  
-
-  // Handle "Add Friend" button click
-  const handleAddFriend = async (userName: string) => {
-    try {
-      const friendUserId = await fetchUserIdByUserName(userName);
-  
-      if (friendUserId && user) {
-        const response = await fetch("http://localhost:8080/friendship/send", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userId: user?.sub,  // Assuming `user?.sub` is your logged-in user's unique ID from Auth0
-            friendId: friendUserId,
-          }),
-        });
-  
-        if (response.ok) {
-          console.log(`Friend request sent to ${userName}`);
-          alert(`Friend request sent to ${userName}`);
-        } else {
-          console.error("Failed to send friend request");
-          alert("Failed to send friend request");
-        }
-      } else {
-        console.error("User not found");
-        alert("User not found");
-      }
+      alert(responseMessage);
     } catch (error) {
       console.error("Error sending friend request:", error);
     }
   };
-  
 
-  // Filter user names based on search query
-  const filteredUserNames = userNames.filter((name) =>
-    name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const handleAccept = async (requestId: number) => {
+    try {
+      await acceptFriendRequest(requestId); // Your API call
+      setPendingRequests((prev) => prev.filter((req) => req.id !== requestId));
+    } catch (error) {
+      console.error("Error accepting friend request:", error);
+    }
+  };
+
+  const handleDecline = async (requestId: number) => {
+    try {
+      await declineFriendRequest(requestId); // Your API call
+      setPendingRequests((prev) => prev.filter((req) => req.id !== requestId));
+    } catch (error) {
+      console.error("Error declining friend request:", error);
+    }
+  };
+
+  const filteredUsers =
+    searchQuery.trim() === ""
+      ? []
+      : users.filter((u: User) => {
+          return (
+            u.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+            u.id !== user?.sub?.substring(14) // Exclude the current user
+          );
+        });
 
   return (
     <div>
@@ -105,12 +139,30 @@ const Social: React.FC = () => {
       <div className="relative bg-darkPurple top-5 rounded-lg p-6 ml-20 mr-20">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-white text-2xl">My Friends</h2>
-          <button className="bg-purple text-white py-2 px-4 rounded hover:bg-purple">
-            View All
+          <button
+            onClick={openFriendRequestsModal}
+            className="bg-purple text-white py-2 px-4 rounded hover:bg-purple"
+          >
+            Notifications
           </button>
         </div>
 
-        {/* Search Bar */}
+        <div className="grid grid-cols-1 gap-4">
+          {friends.length > 0 ? (
+            friends.map((friend) => (
+              <div
+                key={friend.id}
+                className="flex justify-between items-center bg-gray-800 p-4 rounded-lg"
+              >
+                <span className="text-white">{friend.name}</span>
+                
+              </div>
+            ))
+          ) : (
+            <p className="text-white">You have no friends yet.</p>
+          )}
+        </div>
+
         <input
           type="text"
           placeholder="Search by username..."
@@ -119,31 +171,56 @@ const Social: React.FC = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
 
-        {/* Display filtered user names */}
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
-          {filteredUserNames.map((userName) => (
+          {filteredUsers.map((user) => (
             <FriendCard
-              key={userName}
-              friend={{
-                name: userName,
-                active: false,
-                lastLogged: 2,
-                favExercise: { name: "Unknown", equipment: "k", muscleGroup: "l" },
-              }}
-              onClick={() => openModal(userName)}
-              onAddFriend={() => handleAddFriend(userName)} // Pass the handler
+              key={user.id}
+              friend={user}
+              onClick={() => openUserDetailsModal(user)}
+              onAddFriend={() => handleAddFriend(user.id)}
             />
           ))}
         </div>
       </div>
 
-      {/* Modal for User Details */}
       <Modal isOpen={isModalOpen} onClose={closeModal} width="w-[400px]">
-        {selectedUser && (
+        {modalType === "userDetails" && selectedUser && (
           <div>
             <h2 className="text-xl font-bold mb-4">User Details</h2>
-            <p>Name: {selectedUser}</p>
-            {/* Add additional details if available */}
+            <p>Name: {selectedUser.name}</p>
+            <p>Id: {selectedUser.id}</p>
+          </div>
+        )}
+        {modalType === "friendRequests" && (
+          <div>
+            <h2 className="text-xl font-bold mb-4">Pending Friend Requests</h2>
+            {pendingRequests.length > 0 ? (
+              pendingRequests.map((request) => (
+                <div
+                  key={request.id}
+                  className="flex items-center justify-between bg-darkPurple p-3 mb-4 rounded-lg border border-gray-600"
+                >
+                  <p className="text-white">{request.id}</p>
+                  <p className="text-white">{request.sender.name}</p>
+                  <div className="flex gap-2">
+                    <button
+                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                      onClick={() => handleAccept(request.id)}
+                    >
+                      Accept
+                    </button>
+                    <button
+                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                      onClick={() => handleDecline(request.id)}
+                    >
+                      Decline
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-white">No pending requests.</p>
+            )}
           </div>
         )}
       </Modal>

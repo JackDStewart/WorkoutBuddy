@@ -35,17 +35,17 @@ export interface ExerciseLogDTO {
 }
 
 export interface User {
-  id: number;
+  id: string;
   email: string;
   name: string;
 }
 
-export type Friend = {
-  name: string;
-  active: boolean;
-  lastLogged: number;
-  favExercise: Exercise;
-};
+export interface Friendship {
+  id: number
+  sender: User;
+  reciever: User;
+  status: string;
+}
 
 export interface AddedExerciseProps {
   exercises: string[];
@@ -77,9 +77,9 @@ export interface ModalProps {
 }
 
 export interface FriendCardProps {
-  friend: Friend;
+  friend: User;
   onClick: () => void;
-  className?: string;
+  onAddFriend: () => void;
 }
 
 export interface ProgressChartProps {
