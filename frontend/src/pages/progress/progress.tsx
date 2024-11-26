@@ -133,7 +133,10 @@ const ProgressPage: React.FC<ProgressPageProps> = ({ user }) => {
           {selectedExercise && (
             <div className="w-1/2">
               <h1 className="text-xl text-center underline">Year To Date</h1>
-              <ProgressChart xAxis={chartData.xAxis} yAxis={chartData.yAxis} />
+              <ProgressChart
+                xAxis={chartData.xAxis}
+                yAxes={[{ data: chartData.yAxis, color: "#BB86FC" }]}
+              />
             </div>
           )}
         </div>
