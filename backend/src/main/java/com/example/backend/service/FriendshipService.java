@@ -41,17 +41,6 @@ public class FriendshipService {
         return friendshipRepository.findByReceiverAndStatus(receiver.get(), FriendshipStatus.PENDING);
     }
 
-    /*public void sendFriendRequest(String senderId, String receiverId) {
-        User sender = userRepository.findById(new java.math.BigInteger(senderId))
-                .orElseThrow(() -> new IllegalArgumentException("Sender not found"));
-
-        User receiver = userRepository.findById(new java.math.BigInteger(receiverId))
-                .orElseThrow(() -> new IllegalArgumentException("Receiver not found"));
-
-        Friendship friendship = new Friendship(sender, receiver, FriendshipStatus.PENDING);
-        friendshipRepository.save(friendship);
-    }*/
-
     public String sendFriendRequest(String senderId, String receiverId) {
         if (senderId.equals(receiverId)) {
             throw new IllegalArgumentException("Cannot send a friend request to yourself.");
